@@ -68,13 +68,71 @@ flutter doctor
 flutter run
 ```
 
-### Installation from a release
+### Installation from a release on Android
 
 Download the latest version from the [releases page](https://github.com/CapgePau-Uppa/DinoPet-Walker/releases):
 
 1. Download the `.apk` file (Android)
 2. Install on your device
 3. Authorize sensor access permissions
+
+### Installation from a release on iOS
+
+#### I. Activate developer mode on an iPhone
+
+1. Plug your iPhone into your Mac with the USB cable. 
+2. Unlock your iPhone screen. If prompted with "Trust This Computer?", tap Trust and enter your passcode. 
+3. On your Mac, open Xcode (just keep it open in the background). 
+4. Now, on your iPhone, go to Settings. 
+5. Scroll down and tap on Privacy & Security. 
+6. Scroll all the way down to the "Security" section, and tap on Developer Mode. (It should now be visible!)
+7. Toggle the switch to turn it on. 
+8. The iPhone will ask you to restart. Accept. 
+9. After restarting, unlock your iPhone. An alert will appear on the screen: tap Turn On and enter your usual passcode.
+
+#### II. Install Dependencies (Brew)
+
+1. On your Mac, open the Terminal app
+2. Install Brew by copying and pasting this line:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Once Homebrew is installed, it will enable us to install Flutter on the Mac with this command :
+```
+brew install flutter
+```
+
+#### III. Configure the Project in Xcode
+
+1. In Finder, go to your project's ios folder. 
+2. Double-click on the white file named Runner.xcworkspace. (Warning: Never open the blue Runner.xcodeproj file). 
+3. In the left sidebar of Xcode, click on the blue Runner folder at the very top. 
+4. In the center of the screen, click on the Signing & Capabilities tab. 
+5. Look at the Team row:
+   - Click on Add an Account... 
+   - Log in with your Apple ID (iCloud email and password). 
+   - Close the small window once logged in. 
+   - Back on the Team row, now select "Your Name (Personal Team)". 
+6. Look at the Bundle Identifier row just below:
+   - Replace the default text with something unique.
+   Example: change com.example.dinopet to com.your_firstname.dinopet.
+
+#### IV. Launch the Installation on the iPhone
+
+Copy / Paste this command in your terminal :
+```
+flutter run --release
+```
+This command will install the application on your iPhone
+
+#### V. Final Security Step (On the iPhone)
+
+1. On the iPhone, go to Settings. 
+2. Go to General > VPN & Device Management (near the bottom). 
+3. Under the "Developer App" section, tap on your email address. 
+4. Tap the blue text "Trust [Your Email]" and confirm.
+
+Important Note on the 7-Day Limit: Because you are using a free Apple Developer account, the application certificate is only valid for 7 days. After this period, the app will no longer open. To continue using it, simply plug your iPhone back into your Mac, open your Terminal, and repeat Step IV (flutter run --release) to refresh the certificate.
 
 ## Architecture
 
