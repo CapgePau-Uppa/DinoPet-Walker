@@ -4,8 +4,6 @@ TER project topic for the year 2026
 
 ## Project Explanation
 
-**DinoPet Walker**
-
 **DinoPet Walker** is a fun mobile step-tracking application that transforms your daily physical activity into an interactive experience with a virtual dinosaur pet. The more you walk, the more your dino grows and evolves!
 
 ## Features
@@ -39,13 +37,31 @@ TER project topic for the year 2026
 ## Installation
 
 ### Prerequisites
-- **Flutter SDK**: ≥ 3.0.0
-- **Dart SDK**: ≥ 3.0.0
-- **Android Studio / Xcode** 
-- **Phone : Android 8+ / iPhone iOS 13+**
-- **Accounts** : Google (Firebase)
-- **Permissions** : Movement, GPS
-### Installation Steps
+
+#### Required Software
+- **Flutter SDK**: version 3.10.7 or higher
+  - Download from: https://docs.flutter.dev/get-started/install
+- **Code Editor**: 
+  - VS Code (recommended) with Flutter and Dart extensions
+  - OR Android Studio with Flutter plugin
+- **For Android**:
+  - Android Studio (for Android SDK and emulator)
+  - Java Development Kit (JDK) 17 or higher
+- **For iOS**:
+  - macOS computer
+  - Xcode 14 or higher
+  - CocoaPods
+
+#### Physical Device Required
+ **Important**: The pedometer does **NOT** work on emulators. You **MUST** use a real smartphone:
+- Android 6.0 (API 23) or higher
+- OR iPhone with iOS 12 or higher
+
+#### Required Accounts
+- **Google Account** (for Firebase)
+
+  
+### Installation Steps for Development 
 
 #### 1. Clone the repository
 ```bash
@@ -62,19 +78,70 @@ flutter pub get
 ```bash
 flutter doctor
 ```
+This command checks your Flutter installation. Fix any issues marked with ❌ before continuing.
 
-#### 4. Launch the application
+#### 4. Configure Android Permissions
+Open `android/app/src/main/AndroidManifest.xml` and verify these permissions are present:
+```bash
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
+    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
+    <!-- /Permissions -->
+    <application
+      ...
+```
+
+### 5. Connect Your Physical Device
+
+1. Enable **Developer Options** on your phone:
+   - Go to Settings → About Phone
+   - Tap "Build Number" 7 times until you see "You are now a developer!"
+2. Enable **USB Debugging**:
+   - Go to Settings → Developer Options
+   - Enable "USB Debugging"
+3. Connect your phone via USB cable
+4. When prompted on your phone, tap "Allow USB debugging"
+5. Verify connection:
+```bash
+   flutter devices
+```
+   You should see your device listed.
+
+#### 6. Launch the application
 ```bash
 flutter run
 ```
 
-### Installation from a release on Android
+## Installation from Release (Pre-built App)
 
-Download the latest version from the [releases page](https://github.com/CapgePau-Uppa/DinoPet-Walker/releases):
+### Android Installation (.apk)
 
-1. Download the `.apk` file (Android)
-2. Install on your device
-3. Authorize sensor access permissions
+1. **Download the APK**:
+   - Go to [Releases page](https://github.com/CapgePau-Uppa/DinoPet-Walker/releases)
+   - Download the latest `.apk` file
+
+2. **Enable Unknown Sources**:
+   - Go to Settings → Security (or Privacy)
+   - Enable "Install unknown apps" for your browser or file manager
+
+3. **Install the APK**:
+   - Open the downloaded `.apk` file
+   - Tap "Install"
+   - Tap "Open" when installation completes
+
+4. **Grant Permissions**:
+   - When the app launches, grant:
+     - Physical Activity (required for step counting)
+     - Location (required for map feature)
+   - If you miss the prompts:
+     - Go to Settings → Apps → DinoPet Walker → Permissions
+     - Enable "Physical activity" and "Location"
+
+5. **Start Walking!**:
+   - Your steps should now be counted automatically
+   - Check the home screen to see your step count
 
 ### Installation from a release on iOS
 
