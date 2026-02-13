@@ -25,9 +25,22 @@ class DatabaseHelper {
       CREATE TABLE daily_steps(
         date TEXT PRIMARY KEY,
         steps INTEGER NOT NULL,
-        timestamp TEXT NOT NULL
+        timestamp TEXT NOT NULL,
+        last_sensor_value INTEGER NOT NULL DEFAULT 0
       )
     ''');
+  }
+
+
+  Future<void> deleteDB() async {
+    final dbpath = await getDatabasesPath();
+    final path = join(dbpath, 'steps.db');
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+    await deleteDatabase(path);
+    print("BDD supprimée");
   }
 
   Future<void> close() async {
