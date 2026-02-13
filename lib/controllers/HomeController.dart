@@ -1,27 +1,41 @@
 import 'dart:async';
+import 'package:dinopet_walker/services/PedometerService.dart';
 import 'package:flutter/material.dart';
-import '../services/PedometerService.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+// ce controller sert a notifier l'interface quand des changements ont lieu
 class HomeController extends ChangeNotifier {
   final PedometerService _pedometerService = PedometerService();
 
   int currentSteps = 0;
   int userLevel = 10;
-  final int goalSteps = 1000;
+  final int goalSteps = 10000;
 
   StreamSubscription<int>? _stepsSubscription;
+  bool _isInitialized = false;// on initialise le controlleur qu'une seule fois
 
   Future<void> init() async {
-    await _pedometerService.requestPermission();
+    if (_isInitialized) return; 
+
+    await Permission.activityRecognition.request();
+    await Permission.notification.request();
+
+    // pour ignorer exempter l'app de l'optimisation de batterie
+    if (await Permission.ignoreBatteryOptimizations.isDenied) {
+      await Permission.ignoreBatteryOptimizations.request();
+    }
+
     await _pedometerService.initialize();
-
     currentSteps = _pedometerService.todaySteps;
-    notifyListeners();
+    notifyListeners(); // HomePage se met a jour
 
+    // Écouter les mises à jour des pas
     _stepsSubscription = _pedometerService.stepsStream.listen((steps) {
       currentSteps = steps;
       notifyListeners();
     });
+
+    _isInitialized = true;
   }
 
   void increaseLevel() {
@@ -30,13 +44,20 @@ class HomeController extends ChangeNotifier {
   }
 
   void decreaseLevel() {
-    userLevel -= 5;
-    notifyListeners();
+    if (userLevel > 5) {
+      userLevel -= 5;
+      notifyListeners();
+    }
+  }
+
+  Future<void> stopService() async {
+    await _pedometerService.stopService();
   }
 
   @override
   void dispose() {
     _stepsSubscription?.cancel();
+    _pedometerService.dispose();
     super.dispose();
   }
 }

@@ -1,3 +1,4 @@
+// lib/pages/HomeScreen.dart
 import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/database/DatabaseHelper.dart';
 import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
@@ -8,6 +9,8 @@ import '../widgets/UserHeader.dart';
 import '../widgets/GaugeWidget.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -18,14 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeController>().init();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<HomeController>();
+    final controller = context.watch<HomeController>(); // écouter le controller
 
     return SingleChildScrollView(
       child: Center(
@@ -37,19 +40,15 @@ class _HomeScreenState extends State<HomeScreen> {
               userLevel: controller.userLevel,
               streak: 5,
             ),
-
             const SizedBox(height: 20),
-
             GaugeWidget(
               value: controller.currentSteps,
               maxValue: controller.goalSteps,
             ),
-
             Transform.translate(
               offset: const Offset(0, -60),
               child: DinoWidget(userLevel: controller.userLevel),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -63,16 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Text("+5"),
                 ),
               ],
-            ),
-            // pour tester la bdd
-            ElevatedButton(
-              onPressed: () async {
-                final data = await _dailyStepsDao.getLastDays(7);
-                for (var item in data) {
-                  print("${item.date} / ${item.steps} /${item.timestamp}");
-                }
-              },
-              child: const Text("history"),
             ),
           ],
         ),

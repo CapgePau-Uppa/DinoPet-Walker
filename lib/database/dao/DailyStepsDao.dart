@@ -35,4 +35,22 @@ class DailyStepsDao {
     );
     return data.map(DailySteps.fromMap).toList();
   }
+  
+  Future<void> updateStepsAndSensor(
+    String date,
+    int steps,
+    int sensorValue,
+  ) async {
+    final db = await _dbHelper.database;
+    await db.update(
+      'daily_steps',
+      {
+        'steps': steps,
+        'last_sensor_value': sensorValue,
+        'timestamp': DateTime.now().toIso8601String(),
+      },
+      where: 'date = ?',
+      whereArgs: [date],
+    );
+  }
 }

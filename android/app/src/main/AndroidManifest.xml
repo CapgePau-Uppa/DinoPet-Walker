@@ -1,6 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- code ajouté -->
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true"/>
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true"/>
     <!-- /code ajouté -->
@@ -8,6 +15,12 @@
         android:label="dinopet_walker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- service foreground-->
+        <service
+            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+            android:foregroundServiceType="health"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
