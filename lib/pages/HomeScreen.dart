@@ -1,6 +1,5 @@
 // lib/pages/HomeScreen.dart
 import 'package:dinopet_walker/controllers/HomeController.dart';
-import 'package:dinopet_walker/database/DatabaseHelper.dart';
 import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
