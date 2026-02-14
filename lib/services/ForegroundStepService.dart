@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/utils/DateFormatter.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
@@ -24,7 +25,7 @@ class ForegroundStepService extends TaskHandler {
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     print('service démarré');
-    _currentDate = _getTodayString(); // on fixe la date de départ
+    _currentDate = DateFormater.todayString(); // on fixe la date de départ
     await _loadSavedData();
     _startListening();
     _scheduleMidnightReset(); // programmer le reset de minuit
@@ -34,7 +35,7 @@ class ForegroundStepService extends TaskHandler {
   @override
   void onRepeatEvent(DateTime timestamp) {
     // sécurité : vérifier si on a changé de jour
-    if (_getTodayString() != _currentDate) {
+    if (DateFormater.todayString() != _currentDate) {
       _handleMidnightReset();
     }
 
@@ -57,12 +58,6 @@ class ForegroundStepService extends TaskHandler {
     FlutterForegroundTask.launchApp('/');
   }
 
-  // format ann-mm-jj
-  String _getTodayString() {
-    final now = DateTime.now();
-    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-  }
-
   Future<void> _loadSavedData() async {
     final todayData = await _dailyStepsDao.getByDate(_currentDate);
     if (todayData != null) {
@@ -72,7 +67,7 @@ class ForegroundStepService extends TaskHandler {
     } else {
       _todaySteps = 0;
       _lastTotalSteps = 0;
-      print('nouveau jour, démarrage à 0');
+      print('nouveau jour');
     }
   }
 
@@ -109,14 +104,14 @@ class ForegroundStepService extends TaskHandler {
   Future<void> _handleMidnightReset() async {
     print('nouveau jour ');
     await _saveTodayData();
-    _currentDate = _getTodayString();
+    _currentDate = DateFormater.todayString();
     _todaySteps = 0; 
     await _saveTodayData();
   }
 
   // traitement du nombre pas reçus
   Future<void> _onStepCount(int totalSteps) async {
-    if (_getTodayString() != _currentDate) {
+    if (DateFormater.todayString() != _currentDate) {
       await _handleMidnightReset();
       return; 
     }
