@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class Myappbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const Myappbar({super.key, required this.title});
+  final bool showBackButton;
+
+  const Myappbar({super.key, required this.title, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -13,32 +15,36 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        leading: Center(
-          child: Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              color: const Color(0xFFEDFFEA),
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                size: 24,
-                color: Color(0xFF007984),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-        ),
+        leading: showBackButton
+            ? Center(
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFEDFFEA),
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 24,
+                      color: Color(0xFF007984),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              )
+            : null,
+
         title: Text(
-          '$title',
-          style: TextStyle(
-            color: const Color(0xFF007984),
+          title,
+          style: const TextStyle(
+            color: Color(0xFF007984),
             fontWeight: FontWeight.w900,
             fontSize: 28,
           ),
         ),
+
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
           child: Container(color: Colors.grey.withOpacity(0.1), height: 4.0),
@@ -48,10 +54,5 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement child
-  Widget get child => throw UnimplementedError();
-
-  @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(75);
 }

@@ -3,9 +3,8 @@ import 'package:dinopet_walker/services/PedometerService.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// ce controller sert a notifier l'interface quand des changements ont lieu
 class HomeController extends ChangeNotifier {
-  final PedometerService _pedometerService = PedometerService();
+  late PedometerService _pedometerService;
 
   int currentSteps = 0;
   int userLevel = 10;
@@ -17,6 +16,9 @@ class HomeController extends ChangeNotifier {
   Future<void> init() async {
     if (_isInitialized) return; 
 
+    _pedometerService = PedometerService();
+
+    //demander les permessions
     await Permission.activityRecognition.request();
     await Permission.notification.request();
 
@@ -25,18 +27,25 @@ class HomeController extends ChangeNotifier {
       await Permission.ignoreBatteryOptimizations.request();
     }
 
-    await _pedometerService.initialize();
-    currentSteps = _pedometerService.todaySteps;
-    notifyListeners(); // HomePage se met a jour
-
-    // Écouter les mises à jour des pas
-    _stepsSubscription = _pedometerService.stepsStream.listen((steps) {
-      currentSteps = steps;
-      notifyListeners();
-    });
-
+    _initService();
     _isInitialized = true;
   }
+
+  void _initService() {
+    Future(() async {
+      await _pedometerService.initialize();
+
+      currentSteps = _pedometerService.todaySteps;
+      notifyListeners();
+
+      // Écouter les mises à jour des pas
+      _stepsSubscription = _pedometerService.stepsStream.listen((steps) {
+        currentSteps = steps;
+        notifyListeners();
+      });
+    });
+  }
+
 
   void increaseLevel() {
     userLevel += 5;

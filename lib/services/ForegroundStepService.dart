@@ -34,7 +34,6 @@ class ForegroundStepService extends TaskHandler {
   // appelée périodiquement pour actualiser le nombre de pas en temps réel
   @override
   void onRepeatEvent(DateTime timestamp) {
-    // sécurité : vérifier si on a changé de jour
     if (DateFormater.todayString() != _currentDate) {
       _handleMidnightReset();
     }
