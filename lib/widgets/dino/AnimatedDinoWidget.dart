@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:dinopet_walker/controllers/DinoAnimationController.dart';
 import 'package:dinopet_walker/models/DinoPet.dart';
+import 'package:dinopet_walker/models/LifeStage.dart';
 import 'package:dinopet_walker/models/StarParticle.dart';
-import 'package:dinopet_walker/pages/DinoAnimationConfig.dart';
 import 'package:dinopet_walker/widgets/dino/CircularArcWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +25,44 @@ class AnimatedDinoWidget extends StatefulWidget {
 class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
     with TickerProviderStateMixin {
   late DinoAnimationController _controller;
+
+  static const double _boxSize = 420.0;
+  static const double _baseCircle = 200.0;
+  static const double _imgRatioMin = 0.58;
+  static const double _imgRatioMax = 0.84;
+
+  static const Map<LifeStage, List<int>> _levelBounds = {
+    LifeStage.baby: [1, 10],
+    LifeStage.child: [11, 25],
+    LifeStage.teenager: [26, 40],
+    LifeStage.adult: [41, 50],
+  };
+
+  static const Map<LifeStage, double> _circleScales = {
+    LifeStage.baby: 1.00,
+    LifeStage.child: 1.28,
+    LifeStage.teenager: 1.40,
+    LifeStage.adult: 1.50,
+  };
+
+  double _imgRatioFor(LifeStage stage, int level) {
+    final b = _levelBounds[stage]!;
+    final t = ((level - b[0]) / (b[1] - b[0])).clamp(0.0, 1.0);
+    return _imgRatioMin + t * (_imgRatioMax - _imgRatioMin);
+  }
+
+  double _circleRadiusFor(LifeStage stage, int level) {
+    final b = _levelBounds[stage]!;
+    final t = ((level - b[0]) / (b[1] - b[0])).clamp(0.0, 1.0);
+
+    final double minRadius = _baseCircle * _circleScales[stage]!;
+    final nextStage = stage.nextStage;
+    final double maxRadius = nextStage != null
+        ? _baseCircle * _circleScales[nextStage]!
+        : _baseCircle * _circleScales[stage]!;
+
+    return minRadius + t * (maxRadius - minRadius);
+  }
 
   static final List<StarParticle> _stars = List.generate(6, (i) {
     final rng = Random(i * 42);
@@ -52,13 +90,13 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
   Widget build(BuildContext context) {
     final innerColor = widget.dinoPet.type.innerColor;
 
-    final circleDimension = DinoAnimationConfig.circleRadiusFor(
+    final circleDimension = _circleRadiusFor(
       widget.dinoPet.currentStage,
       widget.dinoPet.level,
     );
     final imgDinoDimension =
         circleDimension *
-        DinoAnimationConfig.imgRatioFor(
+        _imgRatioFor(
           widget.dinoPet.currentStage,
           widget.dinoPet.level,
         );
@@ -76,8 +114,8 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
         final totalOffsetY = _controller.floatY + _controller.idleJumpOffsetY;
 
         return SizedBox(
-          width: DinoAnimationConfig.boxSize,
-          height: DinoAnimationConfig.boxSize,
+          width: _boxSize,
+          height: _boxSize,
           child: Center(
             child: Transform.translate(
               offset: Offset(0, totalOffsetY),
