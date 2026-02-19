@@ -1,13 +1,15 @@
+import 'package:dinopet_walker/models/DinoType.dart';
+
 import '../models/DinoPet.dart';
 
 class DinoService {
-  static DinoPetInstance createNewDinoPet(
+  static DinoPet createNewDinoPet(
     DinoType type,{
     int level = 1,
     int currentSteps = 0,
     int dailyStepsGoal = 5000,
   }) {
-    return DinoPetInstance(
+    return DinoPet(
       id: 'dino_${DateTime.now().millisecondsSinceEpoch}',
       type: type,
       level: level,

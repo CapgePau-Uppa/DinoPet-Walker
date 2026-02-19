@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/widgets/NavItem.dart';
+import 'package:dinopet_walker/widgets/common/BottomNavBarItem.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -31,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              NavItem(
+              BottomNavBarItem(
                 index: 0,
                 currentIndex: currentIndex,
                 icon: LucideIcons.home,
@@ -39,7 +39,7 @@ class BottomNavBar extends StatelessWidget {
                 label: 'Accueil',
                 onTap: onTap,
               ),
-              NavItem(
+              BottomNavBarItem(
                 index: 1,
                 currentIndex: currentIndex,
                 icon: LucideIcons.barChart4,
@@ -47,7 +47,7 @@ class BottomNavBar extends StatelessWidget {
                 label: 'Statistiques',
                 onTap: onTap,
               ),
-              NavItem(
+              BottomNavBarItem(
                 index: 2,
                 currentIndex: currentIndex,
                 icon: Icons.map_outlined,
@@ -55,7 +55,7 @@ class BottomNavBar extends StatelessWidget {
                 label: 'Map',
                 onTap: onTap,
               ),
-              NavItem(
+              BottomNavBarItem(
                 index: 3,
                 currentIndex: currentIndex,
                 icon: Icons.settings_outlined,

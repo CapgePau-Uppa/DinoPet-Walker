@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
-import 'package:dinopet_walker/services/ForegroundStepService.dart';
+import 'package:dinopet_walker/services/BackgroundStepsService.dart';
 
 // ce service recoit les données envoyées par le service en arrière plan et met a jour l'interface
 class PedometerService {
@@ -22,7 +22,7 @@ class PedometerService {
     _startPeriodicUpdate();
   }
 
-  // recevoir les données directement du ForegroundStepService
+  // recevoir les données directement du BackgroundStepsService
   void _onReceiveTaskData(Object data) {
     if (data is Map<String, dynamic>) {
       final newSteps = data['todaySteps'] as int?;
@@ -42,7 +42,7 @@ class PedometerService {
         channelName: 'step counter service',
         channelDescription: 'ce canal est pour compter les pas en arrière plan',
         // Notification discrete ni son ni vibration
-        channelImportance: NotificationChannelImportance.DEFAULT,
+        channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
       ),
       iosNotificationOptions: const IOSNotificationOptions(

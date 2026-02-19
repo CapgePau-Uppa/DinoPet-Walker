@@ -1,3 +1,5 @@
+import 'package:dinopet_walker/models/DinoType.dart';
+import 'package:dinopet_walker/models/LifeStage.dart';
 import 'package:flutter/material.dart';
 import '../models/DinoPet.dart';
 

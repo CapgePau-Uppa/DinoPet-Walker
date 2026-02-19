@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class NavItem extends StatelessWidget {
+class BottomNavBarItem extends StatelessWidget {
   final int index;
   final int currentIndex;
   final IconData icon;
   final IconData activeIcon;
   final String label;
   final Function(int) onTap;
-  const NavItem({super.key, required this.index, required this.currentIndex, required this.icon, required this.activeIcon, required this.label, required this.onTap});
+  const BottomNavBarItem({super.key, required this.index, required this.currentIndex, required this.icon, required this.activeIcon, required this.label, required this.onTap});
 
   
   @override

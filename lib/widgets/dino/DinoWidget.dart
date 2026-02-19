@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/DinoPet.dart';
+import '../../models/DinoPet.dart';
 
 class DinoWidget extends StatelessWidget {
-  final DinoPetInstance dinoPet;
+  final DinoPet dinoPet;
 
-  const DinoWidget({Key? key, required this.dinoPet}) : super(key: key);
+  const DinoWidget({super.key, required this.dinoPet});
 
   @override
   Widget build(BuildContext context) {

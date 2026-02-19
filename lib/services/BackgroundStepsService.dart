@@ -7,11 +7,11 @@ import 'dart:async';
 
 @pragma('vm:entry-point')
 void startCallback() {
-  FlutterForegroundTask.setTaskHandler(ForegroundStepService());
+  FlutterForegroundTask.setTaskHandler(BackgroundStepsService());
 }
 
 // c'est le service qui tourne en arrière plan
-class ForegroundStepService extends TaskHandler {
+class BackgroundStepsService extends TaskHandler {
   StreamSubscription<StepCount>? _stepSubscription;
   final _dailyStepsDao = DailyStepsDao();
 

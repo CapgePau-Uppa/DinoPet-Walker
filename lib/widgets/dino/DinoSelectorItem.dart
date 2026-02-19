@@ -1,5 +1,7 @@
+import 'package:dinopet_walker/models/DinoType.dart';
+import 'package:dinopet_walker/models/LifeStage.dart';
 import 'package:flutter/material.dart';
-import '../models/DinoPet.dart';
+import '../../models/DinoPet.dart';
 
 class DinoSelectorItem extends StatelessWidget {
   final DinoType dinoType;
@@ -7,11 +9,11 @@ class DinoSelectorItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const DinoSelectorItem({
-    Key? key,
+    super.key,
     required this.dinoType,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +21,14 @@ class DinoSelectorItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        width: 100,
+       
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
-          width: isSelected ? 100 : 80,
-          height: isSelected ? 100 : 80,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          padding: const EdgeInsets.all(8),
+          width: isSelected ? 110 : 80,
+          height: isSelected ? 110 : 80,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+
           decoration: BoxDecoration(
             color: isSelected ? dinoType.innerColor : Colors.transparent,
             borderRadius: BorderRadius.circular(20),

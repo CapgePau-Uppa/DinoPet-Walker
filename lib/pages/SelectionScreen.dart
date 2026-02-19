@@ -1,14 +1,15 @@
 import 'package:dinopet_walker/controllers/SelectionController.dart';
 import 'package:dinopet_walker/data/dinoData.dart';
+import 'package:dinopet_walker/models/LifeStage.dart';
 import 'package:dinopet_walker/pages/MainScreen.dart';
-import 'package:dinopet_walker/widgets/MyAppBar.dart';
+import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/DinoPet.dart';
-import '../widgets/DinoSelectorItem.dart';
+import '../widgets/dino/DinoSelectorItem.dart';
 
 class SelectionScreen extends StatelessWidget {
-  const SelectionScreen({Key? key}) : super(key: key);
+  const SelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class SelectionScreen extends StatelessWidget {
 }
 
 class _SelectionBody extends StatelessWidget {
-  const _SelectionBody({Key? key}) : super(key: key);
+  const _SelectionBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +76,20 @@ class _SelectionBody extends StatelessWidget {
                   const Spacer(),
 
                   SizedBox(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: availableDinos.length,
-                      itemBuilder: (context, index) {
-                        return DinoSelectorItem(
-                          dinoType: availableDinos[index],
-                          isSelected: controller.getSelectedIndex == index,
-                          onTap: () => controller.selectDino(index),
-                        );
-                      },
+                    height: 140,
+                    child: Center(
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: availableDinos.length,
+                        itemBuilder: (context, index) {
+                          return DinoSelectorItem(
+                            dinoType: availableDinos[index],
+                            isSelected: controller.getSelectedIndex == index,
+                            onTap: () => controller.selectDino(index),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),

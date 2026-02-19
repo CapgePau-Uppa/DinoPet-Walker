@@ -127,7 +127,7 @@ class UserHeader extends StatelessWidget {
               Text(
                 '$streak',
                 style: const TextStyle(
-                  color: const Color(0xFF007984),
+                  color: Color(0xFF007984),
                   fontWeight: FontWeight.w800,
                   fontSize: 18,
                 ),

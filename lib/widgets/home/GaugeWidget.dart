@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/widgets/GaugePainter.dart';
+import 'package:dinopet_walker/widgets/home/GaugePainter.dart';
 import 'package:flutter/material.dart';
 
 class GaugeWidget extends StatelessWidget {
@@ -9,15 +9,16 @@ class GaugeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 280,
       height: 280,
       child: CustomPaint(
         painter: GaugePainter(value: value, maxValue: maxValue),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 90),
               RichText(
                 text: TextSpan(
                   children: [
@@ -53,7 +54,6 @@ class GaugeWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 8),
               Text(
                 'Pas Aujourd\'hui',
                 style: TextStyle(
@@ -62,7 +62,6 @@ class GaugeWidget extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              SizedBox(height: 35),
             ],
           ),
         ),

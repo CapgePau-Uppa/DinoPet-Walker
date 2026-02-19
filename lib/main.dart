@@ -1,11 +1,5 @@
 import 'package:dinopet_walker/controllers/HomeController.dart';
-import 'package:dinopet_walker/pages/HomeScreen.dart';
-import 'package:dinopet_walker/pages/MapScreen.dart';
-import 'package:dinopet_walker/pages/SettingsScreen.dart';
-import 'package:dinopet_walker/pages/StatisticsScreen.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
-import 'package:dinopet_walker/widgets/BottomNavBar.dart';
-import 'package:dinopet_walker/widgets/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
