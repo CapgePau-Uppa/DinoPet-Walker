@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: Myappbar(title: titles[currentIndex]),
-      body: screens[currentIndex],
+      body: IndexedStack(index: currentIndex, children: screens),
       bottomNavigationBar: BottomNavBar(
         currentIndex: currentIndex,
         onTap: onTap,
