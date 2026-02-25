@@ -1,4 +1,6 @@
+import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserHeader extends StatelessWidget {
   final String username;
@@ -14,16 +16,20 @@ class UserHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dinoController = context.watch<DinoController>();
+    final dino = dinoController.dinoPet!;
+    final String dinoAsset = dino.getCurrentAsset();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [_buildLeftContainer(), _buildRightContainer()],
+        children: [_buildLeftContainer(dinoAsset), _buildRightContainer()],
       ),
     );
   }
 
-  Widget _buildLeftContainer() {
+  Widget _buildLeftContainer(String image) {
     return Row(
       children: [
         Container(
@@ -53,7 +59,7 @@ class UserHeader extends StatelessWidget {
             child: CircleAvatar(
               radius: 18,
               backgroundColor: Colors.white,
-              child: Image.asset("assets/images/dino_vert_bebe.png"),
+              child: Image.asset(image),
             ),
           ),
         ),

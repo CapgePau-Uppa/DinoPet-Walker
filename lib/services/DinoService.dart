@@ -4,17 +4,15 @@ import '../models/DinoPet.dart';
 
 class DinoService {
   static DinoPet createNewDinoPet(
-    DinoType type,{
+    DinoType type, {
     int level = 1,
-    int currentSteps = 0,
-    int dailyStepsGoal = 5000,
+    int xpSteps = 0,
   }) {
     return DinoPet(
       id: 'dino_${DateTime.now().millisecondsSinceEpoch}',
       type: type,
       level: level,
-      currentSteps: currentSteps,
-      dailyStepsGoal: dailyStepsGoal,
+      xpSteps: xpSteps
     );
   }
 

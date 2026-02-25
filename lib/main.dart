@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/controllers/StatisticsController.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
@@ -10,8 +11,16 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => HomeController()),
+        ChangeNotifierProvider(create: (_) => DinoController()),
+        ChangeNotifierProxyProvider<DinoController, HomeController>(
+          create: (ctx) => HomeController(dinoController: ctx.read<DinoController>()),
+          update: (ctx, dino, previous) {
+            previous!.dinoController = dino;
+            return previous;
+          }
+        ),
         ChangeNotifierProvider(create: (_) => StatisticsController())
+
       ],
       child: const MyApp(),
     ),
