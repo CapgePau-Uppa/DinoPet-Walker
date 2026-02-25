@@ -62,27 +62,27 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
               ),
               const SizedBox(height: 30),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   children: [
                     Expanded(
                       child: AverageCardWidget(
                         title: "Moyenne\nHebdomadaire",
-                        steps: "8500",
-                        percentage: "+ 15%",
+                        steps: statController.weeklyAverage,
+                        percentage: statController.weeklyPercentage,
                         subtitle: "par rapport à la\ndernière semaine",
-                        isUp: true,
+                        isUp: statController.isWeeklyUp,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: AverageCardWidget(
                         title: "Moyenne\nMensuelle",
-                        steps: "6400",
-                        percentage: "- 7%",
+                        steps: statController.monthlyAverage,
+                        percentage: statController.monthlyPercentage,
                         subtitle: "par rapport au\ndernier mois",
-                        isUp: false,
+                        isUp: statController.isMonthlyUp,
                       ),
                     ),
                   ],
@@ -91,7 +91,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
               const SizedBox(height: 40),
 
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300), // Durée du fondu
+                duration: const Duration(milliseconds: 300),
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return FadeTransition(opacity: animation, child: child);
                 },

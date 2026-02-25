@@ -16,6 +16,14 @@ class StatisticsController extends ChangeNotifier {
 
   List<int?> weekStepsData = List.filled(7, null);
 
+  String weeklyAverage = "0";
+  String weeklyPercentage = "0%";
+  bool isWeeklyUp = true;
+
+  String monthlyAverage = "0";
+  String monthlyPercentage = "0%";
+  bool isMonthlyUp = true;
+
   Future<void> loadStats(int liveStepsToday) async {
     isLoading = true;
     notifyListeners();
@@ -33,6 +41,8 @@ class StatisticsController extends ChangeNotifier {
     }
 
     await selectDate(selectedDate, liveStepsToday);
+
+    await _calculateAverages(liveStepsToday);
 
     isLoading = false;
     notifyListeners();
@@ -63,6 +73,63 @@ class StatisticsController extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> _calculateAverages(int liveStepsToday) async {
+    List<DailySteps> history = await _dailyStepsDao.getLastDays(90);
+
+    Map<String, int> stepsByDate = {};
+    for (var day in history) {
+      stepsByDate[day.date] = day.steps;
+    }
+    stepsByDate[_formatDateForDb(DateTime.now())] = liveStepsToday;
+
+    // Moyenne hebdomadaire (Basée sur la semaine affichée)
+    int currentWeekTotal = 0;
+    int previousWeekTotal = 0;
+
+    for (int i = 0; i < 7; i++) {
+      currentWeekTotal += stepsByDate[_formatDateForDb(currentWeekStart.add(Duration(days: i)))] ?? 0;
+      previousWeekTotal += stepsByDate[_formatDateForDb(currentWeekStart.subtract(Duration(days: 7 - i)))] ?? 0;
+    }
+
+    int currentWeekAvg = currentWeekTotal ~/ 7;
+    int previousWeekAvg = previousWeekTotal ~/ 7;
+
+    weeklyAverage = currentWeekAvg.toString();
+    if (previousWeekAvg == 0) {
+      weeklyPercentage = "+ 100%";
+      isWeeklyUp = true;
+    } else {
+      double diff = (currentWeekAvg - previousWeekAvg) / previousWeekAvg * 100;
+      isWeeklyUp = diff >= 0;
+      weeklyPercentage = "${isWeeklyUp ? '+' : ''} ${diff.toStringAsFixed(1)}%";
+    }
+
+    // Moyenne mensuelle (Basée sur les 30 jours précédant le dimanche de la semaine affichée)
+    int currentMonthTotal = 0;
+    int previousMonthTotal = 0;
+
+    // On prend le dimanche de la semaine affichée comme point de départ
+    DateTime endOfDisplayedWeek = currentWeekStart.add(const Duration(days: 6));
+
+    for (int i = 0; i < 30; i++) {
+      currentMonthTotal += stepsByDate[_formatDateForDb(endOfDisplayedWeek.subtract(Duration(days: i)))] ?? 0;
+      previousMonthTotal += stepsByDate[_formatDateForDb(endOfDisplayedWeek.subtract(Duration(days: i + 30)))] ?? 0;
+    }
+
+    int currentMonthAvg = currentMonthTotal ~/ 30;
+    int previousMonthAvg = previousMonthTotal ~/ 30;
+
+    monthlyAverage = currentMonthAvg.toString();
+    if (previousMonthAvg == 0) {
+      monthlyPercentage = "+ 100%";
+      isMonthlyUp = true;
+    } else {
+      double diff = (currentMonthAvg - previousMonthAvg) / previousMonthAvg * 100;
+      isMonthlyUp = diff >= 0;
+      monthlyPercentage = "${isMonthlyUp ? '+' : ''} ${diff.toStringAsFixed(1)}%";
+    }
   }
 
   void changeWeek(int offsetWeeks, int liveStepsToday) {
