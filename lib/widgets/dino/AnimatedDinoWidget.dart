@@ -7,7 +7,6 @@ import 'package:dinopet_walker/models/StarParticle.dart';
 import 'package:dinopet_walker/widgets/dino/CircularArcWidget.dart';
 import 'package:flutter/material.dart';
 
-
 class AnimatedDinoWidget extends StatefulWidget {
   final DinoPet dinoPet;
   final VoidCallback? onStageEvolved;
@@ -30,6 +29,45 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
   static const double _baseCircle = 200.0;
   static const double _imgRatioMin = 0.58;
   static const double _imgRatioMax = 0.84;
+
+  DinoPet? _previousDino;
+  bool _isEvolving = false;
+  LifeStage? _lastStage;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = DinoAnimationController(vsync: this);
+    _lastStage = widget.dinoPet.currentStage;
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedDinoWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final newStage = widget.dinoPet.currentStage;
+
+    if (_lastStage != newStage) {
+      _previousDino = oldWidget.dinoPet;
+      _lastStage = newStage;
+      Future.microtask(() {
+        _triggerEvolutionAnimation(widget.dinoPet);
+      });
+    }
+  }
+
+  Future<void> _triggerEvolutionAnimation(DinoPet oldDino) async {
+    setState(() {
+      _previousDino = oldDino;
+      _isEvolving = true;
+    });
+    await _controller.triggerEvolution();
+    setState(() {
+      _previousDino = null;
+      _isEvolving = false;
+    });
+    widget.onStageEvolved?.call();
+  }
 
   static const Map<LifeStage, List<int>> _levelBounds = {
     LifeStage.baby: [1, 10],
@@ -54,13 +92,11 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
   double _circleRadiusFor(LifeStage stage, int level) {
     final b = _levelBounds[stage]!;
     final t = ((level - b[0]) / (b[1] - b[0])).clamp(0.0, 1.0);
-
     final double minRadius = _baseCircle * _circleScales[stage]!;
     final nextStage = stage.nextStage;
     final double maxRadius = nextStage != null
         ? _baseCircle * _circleScales[nextStage]!
         : _baseCircle * _circleScales[stage]!;
-
     return minRadius + t * (maxRadius - minRadius);
   }
 
@@ -74,11 +110,7 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
     );
   });
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = DinoAnimationController(vsync: this);
-  }
+  
 
   @override
   void dispose() {
@@ -89,29 +121,41 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
   @override
   Widget build(BuildContext context) {
     final innerColor = widget.dinoPet.type.innerColor;
-
     final circleDimension = _circleRadiusFor(
       widget.dinoPet.currentStage,
       widget.dinoPet.level,
     );
-    final imgDinoDimension =
-        circleDimension *
-        _imgRatioFor(
-          widget.dinoPet.currentStage,
-          widget.dinoPet.level,
-        );
 
     return AnimatedBuilder(
       animation: Listenable.merge([
         _controller.breath,
+        _controller.breathIntensity,
         _controller.float,
         _controller.pulse,
         _controller.orbit,
-        _controller.idleJump,
+        _controller.jump,
         _controller.starParticle,
+        _controller.evolveOut,
+        _controller.evolveIn,
+        _controller.evolveInCurved,
       ]),
       builder: (_, __) {
         final totalOffsetY = _controller.floatY + _controller.idleJumpOffsetY;
+
+        final evolveOutDone =
+            _controller.evolveOut.status == AnimationStatus.completed;
+
+        final oldOpacity = _isEvolving
+            ? (1.0 - _controller.evolveOut.value).clamp(0.0, 1.0)
+            : 0.0;
+
+        final newOpacity = (!_isEvolving || evolveOutDone) ? 1.0 : 0.0;
+
+        final isPopping = _controller.evolveIn.value > 0;
+
+        final finalScale = _isEvolving
+            ? _controller.popScale
+            : _controller.breathScale;
 
         return SizedBox(
           width: _boxSize,
@@ -122,43 +166,30 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(
-                    height: circleDimension,
-                    width: circleDimension,
-                    decoration: BoxDecoration(
-                      color: widget.dinoPet.type.outColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: innerColor.withOpacity(0.9),
-                          blurRadius: 25 + _controller.pulseGlow * 50,
-                          offset: const Offset(0, 7),
-                        ),
-                      ],
+                  if (_isEvolving && _previousDino != null)
+                    Opacity(
+                      opacity: oldOpacity,
+                      child: _buildDinoCircle(
+                        dino: _previousDino!,
+                        innerColor: _previousDino!.type.innerColor,
+                      ),
                     ),
-                    child: ClipOval(
-                      child: Center(
-                        child: Transform.scale(
-                          scale: _controller.breathScale,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Image.asset(
-                                widget.dinoPet.getCurrentAsset(),
-                                width: imgDinoDimension,
-                                height: imgDinoDimension,
-                                fit: BoxFit.contain,
-                                gaplessPlayback: true,
-                              ),
-                            ],
-                          ),
-                        ),
+
+                  Opacity(
+                    opacity: (_isEvolving && !_controller.evolveOut.isAnimating)
+                        ? 1.0
+                        : (!_isEvolving ? 1.0 : 0.0),
+                    child: Transform.scale(
+                      scale: finalScale,
+                      child: _buildDinoCircle(
+                        dino: widget.dinoPet,
+                        innerColor: innerColor,
                       ),
                     ),
                   ),
 
                   CircularArcWidget(
-                    angle: _controller.orbit.value * 2 * pi,
+                    angle: _controller.orbitAngle,
                     radius: circleDimension / 2,
                     color: innerColor,
                   ),
@@ -170,6 +201,39 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDinoCircle({required DinoPet dino, required Color innerColor}) {
+    final circleDimension = _circleRadiusFor(dino.currentStage, dino.level);
+    final imgDinoDimension =
+        circleDimension * _imgRatioFor(dino.currentStage, dino.level);
+
+    return Container(
+      height: circleDimension,
+      width: circleDimension,
+      decoration: BoxDecoration(
+        color: dino.type.outColor,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: innerColor.withOpacity(0.9),
+            blurRadius: 25 + _controller.pulseGlow * 50,
+            offset: const Offset(0, 7),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: Center(
+          child: Image.asset(
+            dino.getCurrentAsset(),
+            width: imgDinoDimension,
+            height: imgDinoDimension,
+            fit: BoxFit.contain,
+            gaplessPlayback: true,
+          ),
+        ),
+      ),
     );
   }
 

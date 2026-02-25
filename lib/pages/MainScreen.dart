@@ -1,4 +1,3 @@
-import 'package:dinopet_walker/models/DinoPet.dart';
 import 'package:dinopet_walker/pages/HomeScreen.dart';
 import 'package:dinopet_walker/pages/MapScreen.dart';
 import 'package:dinopet_walker/pages/SettingsScreen.dart';
@@ -8,9 +7,8 @@ import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
-  final DinoPet dinoPet; 
 
-  const MainScreen({super.key, required this.dinoPet});
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -32,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     screens = [
-      HomeScreen(dinoPet: widget.dinoPet), 
+      HomeScreen(), 
       StatisticsScreen(),
       MapScreen(),
       SettingsScreen(),

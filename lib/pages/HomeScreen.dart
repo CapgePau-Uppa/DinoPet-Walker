@@ -1,6 +1,5 @@
+import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
-import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
-import 'package:dinopet_walker/models/DinoPet.dart';
 import 'package:dinopet_walker/widgets/dino/AnimatedDinoWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,23 +7,16 @@ import '../widgets/home/UserHeader.dart';
 import '../widgets/home/GaugeWidget.dart';
 
 class HomeScreen extends StatefulWidget {
-  final DinoPet dinoPet;
-
-  const HomeScreen({super.key, required this.dinoPet});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _dailyStepsDao = DailyStepsDao();
-  late DinoPet currentDino;
-
   @override
   void initState() {
     super.initState();
-    currentDino = widget.dinoPet;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeController>().init();
     });
@@ -32,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<HomeController>();
+    final homeController = context.watch<HomeController>();
+    final dinoController = context.watch<DinoController>();
+    final currentDino = dinoController.dinoPet!;
 
     return SingleChildScrollView(
       child: Center(
@@ -50,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.topCenter,
               children: [
                 GaugeWidget(
-                  value: controller.currentSteps,
-                  maxValue: controller.goalSteps,
+                  value: homeController.currentSteps,
+                  maxValue: homeController.goalSteps,
                 ),
                 Positioned(
                   top: 280 - 150,
@@ -110,26 +104,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
-                    onPressed: () => setState(() => currentDino.addSteps(1000)),
+                    onPressed: () => homeController.addSteps(1000),
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('+1000'),
                   ),
                   ElevatedButton.icon(
-                    onPressed: () => setState(() => currentDino.addSteps(5000)),
+                    onPressed: () => homeController.addSteps(5000),
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('+5000'),
                   ),
                   ElevatedButton.icon(
-                    onPressed: () =>
-                        setState(() => currentDino.addSteps(20000)),
+                    onPressed: () => homeController.addSteps(20000),
                     icon: const Icon(Icons.add, size: 16),
                     label: const Text('+20 000'),
                   ),
                   ElevatedButton.icon(
-                    onPressed: () => setState(() {
+                    onPressed: () {
                       currentDino.level = 1;
-                      currentDino.currentSteps = 0;
-                    }),
+                      currentDino.xpSteps = 0;
+                      dinoController.notifyListeners();
+                    },
                     icon: const Icon(Icons.refresh, size: 16),
                     label: const Text('Reset'),
                   ),

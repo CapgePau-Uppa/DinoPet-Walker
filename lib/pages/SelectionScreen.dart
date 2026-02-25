@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/SelectionController.dart';
 import 'package:dinopet_walker/data/dinoData.dart';
 import 'package:dinopet_walker/models/LifeStage.dart';
@@ -5,7 +6,6 @@ import 'package:dinopet_walker/pages/MainScreen.dart';
 import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/DinoPet.dart';
 import '../widgets/dino/DinoSelectorItem.dart';
 
 class SelectionScreen extends StatelessWidget {
@@ -99,11 +99,12 @@ class _SelectionBody extends StatelessWidget {
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () {
-                        final dinoPet = controller.createSelectedDinoPet();
+                        final newDino = controller.createSelectedDinoPet();
+                        context.read<DinoController>().initializeDinoPet(newDino);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MainScreen(dinoPet: dinoPet),
+                            builder: (context) => MainScreen(),
                           ),
                         );
                       },
