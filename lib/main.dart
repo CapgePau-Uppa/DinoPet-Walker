@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/HomeController.dart';
+import 'package:dinopet_walker/controllers/StatisticsController.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,10 @@ void main() {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => HomeController())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeController()),
+        ChangeNotifierProvider(create: (_) => StatisticsController())
+      ],
       child: const MyApp(),
     ),
   );
