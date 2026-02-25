@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
+import 'package:dinopet_walker/controllers/StatisticsController.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,8 @@ void main() {
             return previous;
           }
         ),
+        ChangeNotifierProvider(create: (_) => StatisticsController())
+
       ],
       child: const MyApp(),
     ),

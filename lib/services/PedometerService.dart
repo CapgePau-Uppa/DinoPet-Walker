@@ -47,6 +47,7 @@ class PedometerService {
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: false,
+        playSound: false,
       ),
       foregroundTaskOptions: ForegroundTaskOptions(
         eventAction: ForegroundTaskEventAction.repeat(5000),
