@@ -73,6 +73,10 @@ flutter:
     - assets/images/dinos/blue_dinos/child/
     - assets/images/dinos/blue_dinos/ado/
     - assets/images/dinos/blue_dinos/adult/
+    - assets/images/dinos/orange_dinos/baby/
+    - assets/images/dinos/orange_dinos/child/
+    - assets/images/dinos/orange_dinos/teenager/
+    - assets/images/dinos/orange_dinos/adult/
     - assets/icons/
   #   - images/a_dot_ham.jpeg
   fonts:
