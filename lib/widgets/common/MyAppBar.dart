@@ -14,6 +14,7 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
         toolbarHeight: 75,
         backgroundColor: Colors.white,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         leading: showBackButton
             ? Center(
