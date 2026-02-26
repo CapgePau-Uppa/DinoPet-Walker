@@ -35,11 +35,26 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
     final statController = context.watch<StatisticsController>();
 
     final int liveSteps = homeController.currentSteps;
+    final DateTime now = DateTime.now();
+
+    final bool isSelectedToday = statController.selectedDate.year == now.year &&
+        statController.selectedDate.month == now.month &&
+        statController.selectedDate.day == now.day;
+
+    final int displaySteps = isSelectedToday ? liveSteps : statController.selectedSteps;
+
+    List<int?> dynamicWeekData = List.from(statController.weekStepsData);
+    for (int i = 0; i < 7; i++) {
+      DateTime day = statController.currentWeekStart.add(Duration(days: i));
+      if (day.year == now.year && day.month == now.month && day.day == now.day) {
+        dynamicWeekData[i] = liveSteps;
+      }
+    }
 
     final DateTime sDate = statController.selectedDate;
     final String formattedDate = "${sDate.day.toString().padLeft(2, '0')}/${sDate.month.toString().padLeft(2, '0')}/${sDate.year}";
 
-    final double distanceInKm = (statController.selectedSteps * 0.75) / 1000;
+    final double distanceInKm = (displaySteps * 0.75) / 1000;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
@@ -55,7 +70,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
               const SizedBox(height: 30),
 
               DailyStatsWidget(
-                steps: statController.selectedSteps,
+                steps: displaySteps,
                 distance: "${distanceInKm.toStringAsFixed(2)} Km",
                 percentage: statController.percentageComparedToYesterday,
                 isUp: statController.isUpComparedToYesterday,
@@ -97,7 +112,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                 },
                 child: InteractiveChartWidget(
                   key: ValueKey<String>(statController.currentWeekStart.toString()),
-                  weekData: statController.weekStepsData,
+                  weekData: dynamicWeekData,
                   weekStartDate: statController.currentWeekStart,
                   selectedDate: statController.selectedDate,
                   onDaySelected: (cliquedDate) {

@@ -67,9 +67,9 @@ class StatisticsController extends ChangeNotifier {
       percentageComparedToYesterday = "+ 100%";
       isUpComparedToYesterday = true;
     } else {
-      double diff = (selectedSteps - yesterdaySteps) / yesterdaySteps * 100;
+      int diff = ((selectedSteps - yesterdaySteps) / yesterdaySteps * 100).clamp(-100, 100).round();
       isUpComparedToYesterday = diff >= 0;
-      percentageComparedToYesterday = "${isUpComparedToYesterday ? '+' : ''} ${diff.toStringAsFixed(1)}%";
+      percentageComparedToYesterday = "${isUpComparedToYesterday ? '+' : ''} ${diff.toString()}%";
     }
 
     notifyListeners();
@@ -101,9 +101,9 @@ class StatisticsController extends ChangeNotifier {
       weeklyPercentage = "+ 100%";
       isWeeklyUp = true;
     } else {
-      double diff = (currentWeekAvg - previousWeekAvg) / previousWeekAvg * 100;
+      int diff = ((currentWeekAvg - previousWeekAvg) / previousWeekAvg * 100).clamp(-100, 100).round();
       isWeeklyUp = diff >= 0;
-      weeklyPercentage = "${isWeeklyUp ? '+' : ''} ${diff.toStringAsFixed(1)}%";
+      weeklyPercentage = "${isWeeklyUp ? '+' : ''} ${diff.toString()}%";
     }
 
     // Moyenne mensuelle (Basée sur les 30 jours précédant le dimanche de la semaine affichée)
@@ -126,9 +126,9 @@ class StatisticsController extends ChangeNotifier {
       monthlyPercentage = "+ 100%";
       isMonthlyUp = true;
     } else {
-      double diff = (currentMonthAvg - previousMonthAvg) / previousMonthAvg * 100;
+      int diff = ((currentMonthAvg - previousMonthAvg) / previousMonthAvg * 100).clamp(-100, 100).round();
       isMonthlyUp = diff >= 0;
-      monthlyPercentage = "${isMonthlyUp ? '+' : ''} ${diff.toStringAsFixed(1)}%";
+      monthlyPercentage = "${isMonthlyUp ? '+' : ''} ${diff.toString()}%";
     }
   }
 
