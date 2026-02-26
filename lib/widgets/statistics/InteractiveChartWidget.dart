@@ -50,8 +50,8 @@ class InteractiveChartWidget extends StatelessWidget {
   }
 
   Widget _buildChartBar(int? steps, bool isSelected) {
-    const double barWidth = 24.0;
-    const double totalHeight = 120.0;
+    const double barWidth = 28.0;
+    const double totalHeight = 160.0;
 
     if (steps == null || steps == 0) {
       return Container(

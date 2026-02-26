@@ -75,7 +75,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                 percentage: statController.percentageComparedToYesterday,
                 isUp: statController.isUpComparedToYesterday,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -90,7 +90,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                         isUp: statController.isWeeklyUp,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: AverageCardWidget(
                         title: "Moyenne\nMensuelle",
@@ -103,7 +103,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
 
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

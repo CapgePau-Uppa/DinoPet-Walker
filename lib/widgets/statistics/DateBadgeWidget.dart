@@ -11,7 +11,7 @@ class DateBadgeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
       decoration: BoxDecoration(
         color: kLightGreenBadge,
