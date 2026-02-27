@@ -100,7 +100,8 @@ class _SelectionBody extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         final newDino = controller.createSelectedDinoPet();
-                        context.read<DinoController>().initializeDinoPet(newDino);
+                        final dinoController = context.read<DinoController>();
+                        dinoController.initializeDinoPet(newDino);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

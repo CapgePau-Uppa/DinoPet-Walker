@@ -78,6 +78,7 @@ flutter:
     - assets/images/dinos/orange_dinos/teenager/
     - assets/images/dinos/orange_dinos/adult/
     - assets/icons/
+    - assets/logos/
   #   - images/a_dot_ham.jpeg
   fonts:
     - family: Inter
