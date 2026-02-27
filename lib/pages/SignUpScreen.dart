@@ -1,13 +1,12 @@
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
-import 'package:dinopet_walker/pages/SignUpScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
 import 'package:dinopet_walker/widgets/login/PasswordField.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,40 +43,37 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const EmailField(),
-                          const SizedBox(height: 14),
-                          const PasswordField(),
-                          const SizedBox(height: 5),
-                          
-                          Center(
-                            child: TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                "Mot de passe oublié ?",
-                                style: TextStyle(
-                                  color: Color(0xFF004D40),
-                                  fontSize: 13,
-                                  decoration: TextDecoration.underline,
-                                ),
+                          const SizedBox(height: 10),
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: "Nom d'utilisateur",
+                              filled: true,
+                              fillColor: Colors.white70,
+                              prefixIcon: const Icon(Icons.person_outline),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 18,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25),
+                                borderSide: BorderSide.none,
                               ),
                             ),
                           ),
-
-                          const SizedBox(height: 15),
-
+                          const SizedBox(height: 14),
+                          const EmailField(),
+                          const SizedBox(height: 14),
+                          const PasswordField(),
+                          const SizedBox(height: 14),
+                          const PasswordField(),
+                          const SizedBox(height: 30),
                           PrimaryButton(
-                            label: 'Se connecter',
+                            label: "Créer un compte",
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const SelectionScreen(),
-                                ),
-                              );
+                              
                             },
                           ),
-
-                          const SizedBox(height: 20),
+                          
+                          const SizedBox(height: 20,),                          
 
                           Center(
                             child: RichText(
@@ -87,31 +83,23 @@ class LoginScreen extends StatelessWidget {
                                   fontSize: 13,
                                 ),
                                 children: [
-                                  const TextSpan(
-                                    text: "Pas encore de compte ? ",
-                                  ),
+                                  const TextSpan(text: "Déjà un compte ? "),
                                   TextSpan(
-                                    text: "S'inscrire",
+                                    text: "Se connecter",
                                     style: const TextStyle(
                                       decoration: TextDecoration.underline,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                const SignUpScreen(),
-                                          ),
-                                        );
+                                        Navigator.pop(context);
                                       },
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 15),
                           Row(
                             children: [
@@ -170,7 +158,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 12),
                                   const Text(
-                                    "Continuer avec Google",
+                                    "S'inscrire avec Google",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -181,7 +169,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                       
+                          const SizedBox(height: 30),
                           
                         ],
                       ),
