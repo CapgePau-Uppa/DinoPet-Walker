@@ -1,7 +1,9 @@
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
+import 'package:dinopet_walker/pages/SignUpScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
 import 'package:dinopet_walker/widgets/login/PasswordField.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -45,19 +47,8 @@ class LoginScreen extends StatelessWidget {
                           const EmailField(),
                           const SizedBox(height: 14),
                           const PasswordField(),
-                          const SizedBox(height: 25),
-                          PrimaryButton(
-                            label: 'Se connecter',
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const SelectionScreen(),
-                                ),
-                              );
-                            },
-                          ),
                           const SizedBox(height: 5),
+                          
                           Center(
                             child: TextButton(
                               onPressed: () {},
@@ -71,6 +62,56 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+
+                          const SizedBox(height: 15),
+
+                          PrimaryButton(
+                            label: 'Se connecter',
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const SelectionScreen(),
+                                ),
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          Center(
+                            child: RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  color: Color(0xFF004D40),
+                                  fontSize: 13,
+                                ),
+                                children: [
+                                  const TextSpan(
+                                    text: "Pas encore de compte ? ",
+                                  ),
+                                  TextSpan(
+                                    text: "S'inscrire",
+                                    style: const TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const SignUpScreen(),
+                                          ),
+                                        );
+                                      },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          
                           const SizedBox(height: 15),
                           Row(
                             children: [
@@ -140,6 +181,8 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                       
+                          
                         ],
                       ),
                     ),
