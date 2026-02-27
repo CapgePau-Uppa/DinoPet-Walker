@@ -1,6 +1,7 @@
 import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/controllers/StatisticsController.dart';
+import 'package:dinopet_walker/pages/LoginScreen.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'DinoPet',
-      home: SelectionScreen(),
+      home: LoginScreen(),
     );
   }
 }
