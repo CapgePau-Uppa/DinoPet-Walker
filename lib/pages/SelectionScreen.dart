@@ -4,6 +4,7 @@ import 'package:dinopet_walker/data/dinoData.dart';
 import 'package:dinopet_walker/models/LifeStage.dart';
 import 'package:dinopet_walker/pages/MainScreen.dart';
 import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
+import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/dino/DinoSelectorItem.dart';
@@ -94,33 +95,15 @@ class _SelectionBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        final newDino = controller.createSelectedDinoPet();
-                        final dinoController = context.read<DinoController>();
-                        dinoController.initializeDinoPet(newDino);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainScreen(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004D40),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text(
-                        "Valider",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
+                  PrimaryButton(label: "Valider",onPressed: (){
+                    final newDino = controller.createSelectedDinoPet();
+                      final dinoController = context.read<DinoController>();
+                      dinoController.initializeDinoPet(newDino);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainScreen()),
+                      );
+                  },)
                 ],
               ),
             ),
