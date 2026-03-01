@@ -5,8 +5,19 @@ import 'package:dinopet_walker/widgets/login/PasswordField.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +56,7 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           const SizedBox(height: 10),
                           TextField(
+                            controller: usernameController,
                             decoration: InputDecoration(
                               hintText: "Nom d'utilisateur",
                               filled: true,
@@ -60,11 +72,11 @@ class SignUpScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 14),
-                          const EmailField(),
+                          EmailField(controller: emailController,),
                           const SizedBox(height: 14),
-                          const PasswordField(),
+                          PasswordField(controller: passwordController,),
                           const SizedBox(height: 14),
-                          const PasswordField(),
+                          PasswordField(controller: confirmPasswordController,),
                           const SizedBox(height: 30),
                           PrimaryButton(
                             label: "Créer un compte",
