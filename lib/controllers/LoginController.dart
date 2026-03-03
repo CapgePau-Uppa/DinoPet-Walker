@@ -16,6 +16,10 @@ class LoginController {
   }
 
   Future <String?> login({required String email,required String password}) async {
+    
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+
     final emailError = isValidEmail(email);
     if (emailError != null) return emailError;
 

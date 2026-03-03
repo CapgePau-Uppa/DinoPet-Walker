@@ -35,6 +35,9 @@ class SignUpController {
     required String password,
     required String confirmPassword,
   }) async {
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+    
     final usernameError=_isValidUsername(username);
     if(usernameError !=null) return usernameError;
 

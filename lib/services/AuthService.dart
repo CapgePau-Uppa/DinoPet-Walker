@@ -1,7 +1,23 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseInstance = FirebaseAuth.instance;
+
+  Future<String?> checkConnectivity() async {
+    try {
+      // connexion Wifi ou cellulaire
+      final List<ConnectivityResult> connectivityResult = await Connectivity().checkConnectivity();
+      bool hasInternet = connectivityResult.contains(ConnectivityResult.wifi) ||
+      connectivityResult.contains(ConnectivityResult.mobile) ;
+      if (!hasInternet) {
+        return "Connexion internet requise";
+      }
+      return null;
+    } catch (e) {
+      return "Impossible de vérifier la connexion";
+    }
+  }
 
   Future<UserCredential> login({
     required String email,
