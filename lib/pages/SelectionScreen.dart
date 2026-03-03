@@ -28,60 +28,59 @@ class _SelectionBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.watch<SelectionController>();
     final selectedDinoType = controller.selectedDinoType;
-    
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: Myappbar(title: "Choose your dino", showBackButton: false),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Center(
-              child: Image.asset(
-                selectedDinoType.getAsset(LifeStage.baby, 1),
-                width: 250,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Center(
+                child: Image.asset(
+                  selectedDinoType.getAsset(LifeStage.baby, 1),
+                  height: screenHeight * 0.25,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-          ),
-
-          Expanded(
-            flex: 4,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: double.infinity,
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: selectedDinoType.outColor,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    selectedDinoType.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF004D40),
+            Expanded(
+              flex: 5,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: double.infinity,
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: selectedDinoType.outColor,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      selectedDinoType.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF004D40),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    selectedDinoType.description,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF004D40),
-                      height: 1.4,
+                    const SizedBox(height: 12),
+                    Text(
+                      selectedDinoType.description,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF004D40),
+                        height: 1.4,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-
-                  SizedBox(
-                    height: 140,
-                    child: Center(
+                    const Spacer(),
+                    SizedBox(
+                      height: screenHeight * 0.18,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
                         itemCount: availableDinos.length,
                         itemBuilder: (context, index) {
                           return DinoSelectorItem(
@@ -92,23 +91,30 @@ class _SelectionBody extends StatelessWidget {
                         },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  PrimaryButton(label: "Valider",onPressed: (){
-                    final newDino = controller.createSelectedDinoPet();
-                      final dinoController = context.read<DinoController>();
-                      dinoController.initializeDinoPet(newDino);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                      );
-                  },)
-                ],
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: PrimaryButton(
+                        label: "Valider",
+                        onPressed: () {
+                          final newDino = controller.createSelectedDinoPet();
+                          final dinoController = context.read<DinoController>();
+                          dinoController.initializeDinoPet(newDino);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

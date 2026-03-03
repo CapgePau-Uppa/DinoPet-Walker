@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/pages/SelectionScreen.dart';
+import 'package:dinopet_walker/controllers/LoginController.dart';
 import 'package:dinopet_walker/pages/SignUpScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
@@ -6,8 +6,30 @@ import 'package:dinopet_walker/widgets/login/PasswordField.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final LoginController _controller = LoginController();
+  
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void login() async {
+    final error = await _controller.login(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+    if (error != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +66,11 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const EmailField(),
+                          EmailField(controller: emailController),
                           const SizedBox(height: 14),
-                          const PasswordField(),
+                          PasswordField(controller: passwordController),
                           const SizedBox(height: 5),
-                          
+
                           Center(
                             child: TextButton(
                               onPressed: () {},
@@ -67,14 +89,7 @@ class LoginScreen extends StatelessWidget {
 
                           PrimaryButton(
                             label: 'Se connecter',
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const SelectionScreen(),
-                                ),
-                              );
-                            },
+                            onPressed: () => login(),
                           ),
 
                           const SizedBox(height: 20),
@@ -111,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 15),
                           Row(
                             children: [
@@ -181,8 +196,6 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                       
-                          
                         ],
                       ),
                     ),
