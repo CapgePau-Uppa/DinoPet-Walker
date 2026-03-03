@@ -1,13 +1,14 @@
 import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/controllers/StatisticsController.dart';
-import 'package:dinopet_walker/pages/LoginScreen.dart';
-import 'package:dinopet_walker/pages/SelectionScreen.dart';
+import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   runApp(
     MultiProvider(
@@ -41,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'DinoPet',
-      home: LoginScreen(),
+      home: AuthWrapper(),
     );
   }
 }
