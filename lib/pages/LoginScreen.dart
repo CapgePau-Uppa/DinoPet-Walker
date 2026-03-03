@@ -1,5 +1,5 @@
 import 'package:dinopet_walker/controllers/LoginController.dart';
-import 'package:dinopet_walker/pages/ForgotPassword.dart';
+import 'package:dinopet_walker/pages/ForgotPasswordScreen.dart';
 import 'package:dinopet_walker/pages/SignUpScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => ForgotPassword(),
+                                    builder: (_) => ForgotPasswordScreen(),
                                   ),
                                 );
                               },
