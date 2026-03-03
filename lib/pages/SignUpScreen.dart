@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/SignUpController.dart';
 import 'package:dinopet_walker/pages/SelectionScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
@@ -13,11 +14,33 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final SignUpController _controller=SignUpController();
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  void _signUp() async {
+    final error = await _controller.signUp(
+      username: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      confirmPassword: confirmPasswordController.text.trim(),
+    );
+    if (error != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error)));
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => SelectionScreen()),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(height: 30),
                           PrimaryButton(
                             label: "Créer un compte",
-                            onPressed: () {},
+                            onPressed: ()=> _signUp(),
                           ),
 
                           const SizedBox(height: 20),
@@ -104,6 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ..onTap = () {
                                         Navigator.pop(context);
                                       },
+                                    
                                   ),
                                 ],
                               ),

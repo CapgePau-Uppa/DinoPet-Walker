@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/LoginController.dart';
+import 'package:dinopet_walker/pages/ForgotPassword.dart';
 import 'package:dinopet_walker/pages/SignUpScreen.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/EmailField.dart';
@@ -73,7 +74,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           Center(
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ForgotPassword(),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 "Mot de passe oublié ?",
                                 style: TextStyle(
