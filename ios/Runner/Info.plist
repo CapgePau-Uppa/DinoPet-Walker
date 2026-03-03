@@ -52,5 +52,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSHealthShareUsageDescription</key>
+    <string>Nous avons besoin de lire vos pas pour faire évoluer votre DinoPet.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>Nous avons besoin d'accéder à Apple Santé pour synchroniser vos pas avec DinoPet.</string>
 </dict>
 </plist>
