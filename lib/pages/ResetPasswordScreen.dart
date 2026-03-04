@@ -23,10 +23,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void confirmReset() async {
     FocusScope.of(context).unfocus();
-
-    setState(() {
-      _loading = true;
-    });
+    setState(() => _loading = true);
 
     final error = await _controller.confirmReset(
       oobCode: widget.oobCode,
@@ -34,11 +31,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       confirm: _confirmController.text.trim(),
     );
 
-    if (mounted) {
-      setState(() {
-        _loading = false;
-      });
-    }
+    if (mounted) setState(() => _loading = false);
 
     if (error != null) {
       ScaffoldMessenger.of(
@@ -64,61 +57,73 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset:true,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFB2DFDB), Color(0xFF81C784)],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight:
-                    MediaQuery.of(context).size.height -
-                    MediaQuery.of(
-                      context,
-                    ).padding.top,
-              ),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/logos/login_screen_logo.png',
-                      height: 180,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: const Color.fromARGB(255, 217, 255, 222),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+
+                  Image.asset("assets/logos/logo.png", height: 130),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "Nouveau mot\nde passe",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF1B3A2D),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1,
+                      height: 1.15,
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Nouveau mot de passe',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF004D40),
-                      ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    "Choisis un mot de passe sécurisé",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                     ),
-                    const SizedBox(height: 24),
-                    PasswordField(
-                      controller: _passwordController,
-                      label: 'Nouveau mot de passe',
-                    ),
-                    const SizedBox(height: 15),
-                    PasswordField(
-                      controller: _confirmController,
-                      label: 'Confirmer votre mot de passe',
-                    ),
-                    const SizedBox(height: 32),
-                    PrimaryButton(
-                      label: 'Réinitialiser',
-                      onPressed: _loading ? () {} : confirmReset,
-                      isLoading: _loading,
-                    ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 36),
+
+                  PasswordField(
+                    controller: _passwordController,
+                    label: 'Nouveau mot de passe',
+                  ),
+                  const SizedBox(height: 14),
+                  PasswordField(
+                    controller: _confirmController,
+                    label: 'Confirmer votre mot de passe',
+                  ),
+
+                  const SizedBox(height: 28),
+
+                  PrimaryButton(
+                    label: 'Réinitialiser',
+                    onPressed: _loading ? () {} : confirmReset,
+                    isLoading: _loading,
+                  ),
+
+                  const SizedBox(height: 36),
+                ],
               ),
             ),
           ),

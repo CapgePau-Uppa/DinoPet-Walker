@@ -1,7 +1,7 @@
 import 'package:dinopet_walker/controllers/ForgotPasswordController.dart';
+import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
+import 'package:dinopet_walker/widgets/login/EmailField.dart';
 import 'package:flutter/material.dart';
-import 'package:dinopet_walker/widgets/login/EmailField.dart'; // Réutilisez le même composant
-import 'package:dinopet_walker/widgets/common/PrimaryButton.dart'; // Même bouton
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -10,15 +10,18 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPasswordScreen> {
   final ForgotPasswordController _controller = ForgotPasswordController();
-
-  final TextEditingController emailController =
-      TextEditingController(); 
+  final TextEditingController emailController = TextEditingController();
+  bool _loading = false;
 
   Future<void> _sendResetEmail() async {
+    FocusScope.of(context).unfocus();
+    setState(() => _loading = true);
 
     final error = await _controller.sendResetPasswordEmail(
       email: emailController.text.trim(),
     );
+
+    if (mounted) setState(() => _loading = false);
 
     if (error != null) {
       ScaffoldMessenger.of(
@@ -26,10 +29,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
       ).showSnackBar(SnackBar(content: Text(error)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Email de réinitialisation envoyé'),
-          backgroundColor: Colors.green,
-        ),
+        const SnackBar(content: Text('Email de réinitialisation envoyé')),
       );
     }
   }
@@ -37,87 +37,79 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, 
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFB2DFDB),
-              Color(0xFF81C784),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 10), 
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight:
-                    MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).padding.top,
-              ),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/logos/login_screen_logo.png",
-                      height: 200,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: const Color.fromARGB(255, 217, 255, 222),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+
+                  Image.asset("assets/logos/logo.png", height: 130),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "Mot de passe\noublié ?",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xFF1B3A2D),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1,
+                      height: 1.15,
                     ),
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          EmailField(controller: emailController),
-                          const SizedBox(height: 32),
-                          Text(
-                            'Mot de passe oublié ?',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF004D40),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Saisissez votre email pour recevoir un lien.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: const Color(0xFF004D40).withOpacity(0.7),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 32),
-                
-                          PrimaryButton(
-                            label:'Envoyer le lien',
-                            onPressed: ()=> _sendResetEmail()
-                          ),
-                          const SizedBox(height: 20),
-                
-                          Center(
-                            child: TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text(
-                                "Retour à la connexion",
-                                style: TextStyle(
-                                  color: const Color(0xFF004D40),
-                                  fontSize: 13,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    "Saisis ton email pour recevoir\nun lien de réinitialisation",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+
+                  const SizedBox(height: 36),
+
+                  EmailField(controller: emailController),
+
+                  const SizedBox(height: 24),
+
+                  PrimaryButton(
+                    label: 'Envoyer le lien',
+                    onPressed: _loading ? () {} : _sendResetEmail,
+                    isLoading: _loading,
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Text(
+                      "Retour à la connexion",
+                      style: TextStyle(
+                        color: const Color(0xFF1B3A2D),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  const SizedBox(height: 36),
+                ],
               ),
             ),
           ),
@@ -125,5 +117,4 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
       ),
     );
   }
-
 }
