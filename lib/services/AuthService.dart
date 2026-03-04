@@ -43,9 +43,23 @@ class AuthService {
   }
 
   Future<String?> sendPasswordResetEmail({required String email}) async {
-    await _firebaseInstance.sendPasswordResetEmail(email: email);
-    return null; 
-    
+    try {
+      final actionCodeSettings = ActionCodeSettings(
+        url: 'https://dinopetwalker.web.app', // le lien envoyé par email pointe sur ce domaine
+        handleCodeInApp: true, // le lien doit etre traité dans l'app
+        androidPackageName: 'com.example.dinopet_walker', 
+        androidInstallApp: true, // propose d'installer l'app si elle n'est pas installé (plus tard)
+        androidMinimumVersion: '21',
+      );
+
+      await _firebaseInstance.sendPasswordResetEmail(
+        email: email,
+        actionCodeSettings: actionCodeSettings,
+      );
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
 }

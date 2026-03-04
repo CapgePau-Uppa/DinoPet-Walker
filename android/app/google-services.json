@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "194181842045",
-    "project_id": "dinopet-walker-c4b8c",
-    "storage_bucket": "dinopet-walker-c4b8c.firebasestorage.app"
+    "project_number": "778196641235",
+    "project_id": "dinopetwalker",
+    "storage_bucket": "dinopetwalker.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:194181842045:android:3e9e58161c3e43f1829d14",
+        "mobilesdk_app_id": "1:778196641235:android:0bd5a8b4ed33006384bb26",
         "android_client_info": {
           "package_name": "com.example.dinopet_walker"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyARCCKIAGSDRraFtm3wmB3AA5X5zjnnB_Y"
+          "current_key": "AIzaSyBo88IE4mIlEwI_BUo1d9HLQnwqKmXwRzs"
         }
       ],
       "services": {
