@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
+import 'package:dinopet_walker/widgets/login/PasswordField.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
@@ -15,29 +16,36 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
-  bool _isLoading = false;
 
   Future<void> _confirmReset() async {
     final password = _passwordController.text.trim();
     final confirm = _confirmController.text.trim();
 
     if (password.isEmpty || password.length < 6) {
-      _showSnack('Le mot de passe doit contenir au moins 6 caractères');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Le mot de passe doit contenir au moins 6 caractères')));
       return;
     }
     if (password != confirm) {
-      _showSnack('Les mots de passe ne correspondent pas');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mot de passe mis à jour'),
+        ),
+      );
       return;
     }
-
-    setState(() => _isLoading = true);
 
     try {
       await FirebaseAuth.instance.confirmPasswordReset(
         code: widget.oobCode,
         newPassword: password,
       );
-      _showSnack('Mot de passe mis à jour', success: true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mot de passe mis à jour'),
+        ),
+      );
       Future.delayed(const Duration(seconds: 2), () {
         Future.delayed(const Duration(seconds: 2), () {
           Navigator.of(context).pushAndRemoveUntil(
@@ -47,9 +55,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         });
       });
     } on FirebaseAuthException catch (e) {
-      _showSnack(e.message ?? 'Erreur lors de la réinitialisation');
-    } finally {
-      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? 'Erreur lors de la réinitialisation')));
     }
   }
 
@@ -89,34 +95,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Nouveau mot de passe',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _confirmController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirmer le mot de passe',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
+                PasswordField(controller: _passwordController),
+                const SizedBox(height: 15),
+                PasswordField(controller: _confirmController),
                 const SizedBox(height: 32),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : PrimaryButton(
-                        label: 'Réinitialiser',
-                        onPressed: _confirmReset,
-                      ),
+                PrimaryButton(
+                  label: 'Réinitialiser',
+                    onPressed: _confirmReset,
+                ),
               ],
             ),
           ),
