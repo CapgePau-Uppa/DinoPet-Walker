@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           EmailField(controller: emailController),
                           const SizedBox(height: 14),
-                          PasswordField(controller: passwordController),
+                          PasswordField(controller: passwordController, label: 'Mot de passe',),
                           const SizedBox(height: 5),
 
                           Center(

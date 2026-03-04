@@ -95,9 +95,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                PasswordField(controller: _passwordController),
+                PasswordField(controller: _passwordController, label: 'Nouveau mot de passe',),
                 const SizedBox(height: 15),
-                PasswordField(controller: _confirmController),
+                PasswordField(controller: _confirmController, label: 'Confirmer votre mot de passe',),
                 const SizedBox(height: 32),
                 PrimaryButton(
                   label: 'Réinitialiser',

@@ -97,9 +97,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(height: 14),
                           EmailField(controller: emailController),
                           const SizedBox(height: 14),
-                          PasswordField(controller: passwordController),
+                          PasswordField(controller: passwordController, label: 'Mot de passe',),
                           const SizedBox(height: 14),
-                          PasswordField(controller: confirmPasswordController),
+                          PasswordField(controller: confirmPasswordController, label: 'Confirmer le mot de passe',),
                           const SizedBox(height: 30),
                           PrimaryButton(
                             label: "Créer un compte",
