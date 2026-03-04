@@ -1,8 +1,8 @@
+import 'package:dinopet_walker/controllers/ResetPasswordController.dart';
+import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
 import 'package:dinopet_walker/widgets/login/PasswordField.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String oobCode;
@@ -14,62 +14,57 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final ResetPasswordController _controller = ResetPasswordController();
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
 
-  Future<void> _confirmReset() async {
-    final password = _passwordController.text.trim();
-    final confirm = _confirmController.text.trim();
+  bool _loading = false;
 
-    if (password.isEmpty || password.length < 6) {
+  void confirmReset() async {
+    FocusScope.of(context).unfocus();
+
+    setState(() {
+      _loading = true;
+    });
+
+    final error = await _controller.confirmReset(
+      oobCode: widget.oobCode,
+      password: _passwordController.text.trim(),
+      confirm: _confirmController.text.trim(),
+    );
+
+    if (mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
+
+    if (error != null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Le mot de passe doit contenir au moins 6 caractères')));
-      return;
-    }
-    if (password != confirm) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Mot de passe mis à jour'),
-        ),
-      );
+      ).showSnackBar(SnackBar(content: Text(error)));
       return;
     }
 
-    try {
-      await FirebaseAuth.instance.confirmPasswordReset(
-        code: widget.oobCode,
-        newPassword: password,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Mot de passe mis à jour'),
-        ),
-      );
-      Future.delayed(const Duration(seconds: 2), () {
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const AuthWrapper()),
-            (route) => false,
-          );
-        });
-      });
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message ?? 'Erreur lors de la réinitialisation')));
-    }
-  }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Mot de passe mis à jour')));
 
-  void _showSnack(String msg, {bool success = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-      ),
-    );
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const AuthWrapper()),
+          (route) => false,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset:true,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -79,31 +74,52 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ),
         ),
         child: SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/logos/login_screen_logo.png', height: 180),
-                const SizedBox(height: 24),
-                const Text(
-                  'Nouveau mot de passe',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF004D40),
-                  ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight:
+                    MediaQuery.of(context).size.height -
+                    MediaQuery.of(
+                      context,
+                    ).padding.top,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/logos/login_screen_logo.png',
+                      height: 180,
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Nouveau mot de passe',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF004D40),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    PasswordField(
+                      controller: _passwordController,
+                      label: 'Nouveau mot de passe',
+                    ),
+                    const SizedBox(height: 15),
+                    PasswordField(
+                      controller: _confirmController,
+                      label: 'Confirmer votre mot de passe',
+                    ),
+                    const SizedBox(height: 32),
+                    PrimaryButton(
+                      label: 'Réinitialiser',
+                      onPressed: _loading ? () {} : confirmReset,
+                      isLoading: _loading,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 24),
-                PasswordField(controller: _passwordController, label: 'Nouveau mot de passe',),
-                const SizedBox(height: 15),
-                PasswordField(controller: _confirmController, label: 'Confirmer votre mot de passe',),
-                const SizedBox(height: 32),
-                PrimaryButton(
-                  label: 'Réinitialiser',
-                    onPressed: _confirmReset,
-                ),
-              ],
+              ),
             ),
           ),
         ),

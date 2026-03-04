@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _firebaseInstance = FirebaseAuth.instance;
 
+  // verifier la connexion
   Future<String?> checkConnectivity() async {
     try {
       // connexion Wifi ou cellulaire
@@ -19,6 +20,7 @@ class AuthService {
     }
   }
 
+  // se connecter
   Future<UserCredential> login({
     required String email,
     required String password,
@@ -29,6 +31,7 @@ class AuthService {
     );
   }
 
+  // s'inscrire
   Future<UserCredential> signUp({
     required String email,
     required String password,
@@ -42,6 +45,7 @@ class AuthService {
     return userCred;
   }
 
+  // envoyer l'email de rénitialisation
   Future<String?> sendPasswordResetEmail({required String email}) async {
     try {
       final actionCodeSettings = ActionCodeSettings(
@@ -62,8 +66,20 @@ class AuthService {
     }
   }
 
+  // se déconnecter
   Future<void> signOut() async {
     await _firebaseInstance.signOut();
+  }
+
+  // confirmer le reset
+  Future<void> confirmPasswordReset({
+    required String oobCode,
+    required String newPassword,
+  }) async {
+    await _firebaseInstance.confirmPasswordReset(
+      code: oobCode,
+      newPassword: newPassword,
+    );
   }
 
 }
