@@ -5,6 +5,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final double? width;
   final double? height;
+  final bool isLoading;
 
   const PrimaryButton({
     super.key,
@@ -12,6 +13,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.width = double.infinity,
     this.height = 55,
+    this.isLoading = false, 
   });
 
   @override
@@ -20,17 +22,29 @@ class PrimaryButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading
+            ? null
+            : onPressed, 
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF004D40),
+          disabledBackgroundColor: const Color(0xFF004D40).withOpacity(0.7),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
         ),
-        child: Text(
-          label,
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                label,
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
       ),
     );
   }

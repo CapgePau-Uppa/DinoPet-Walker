@@ -22,13 +22,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+   bool _loading = false; 
+
   void _signUp() async {
+
+    FocusScope.of(context).unfocus();
+
+    setState(() {
+      _loading = true; 
+    });
+
     final error = await _controller.signUp(
       username: usernameController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
       confirmPassword: confirmPasswordController.text.trim(),
     );
+
+    if (mounted) {
+      setState(() {
+        _loading = false; 
+      });
+    }
+
     if (error != null) {
       ScaffoldMessenger.of(
         context,
@@ -104,6 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           PrimaryButton(
                             label: "Créer un compte",
                             onPressed: ()=> _signUp(),
+                            isLoading: _loading,
                           ),
 
                           const SizedBox(height: 20),
