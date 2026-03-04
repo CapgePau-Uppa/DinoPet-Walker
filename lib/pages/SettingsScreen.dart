@@ -1,7 +1,6 @@
 import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:dinopet_walker/controllers/SettingsController.dart'; 
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,13 +10,23 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  void Signout() async {
-    print("deconnceté");
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => AuthWrapper()),
-      (route) => false,
-    );
+  
+  final SettingsController _controller = SettingsController();
+
+  void _signOut() async {
+    final String? error = await _controller.signOut();
+    if (!mounted) return;
+
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error), backgroundColor: Colors.red),
+      );
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AuthWrapper()),
+        (route) => false,
+      );
+    }
   }
 
   @override
@@ -28,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 200,
           height: 50,
           child: ElevatedButton(
-            onPressed: () => Signout(),
+            onPressed: _signOut, 
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               shape: RoundedRectangleBorder(

@@ -20,11 +20,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool _loading = false;
+
   void login() async {
+    // fermer le clavier immédiatement  
+    FocusScope.of(context).unfocus();
+
+    setState(() {
+      _loading = true;
+    });
+
     final error = await _controller.login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
+
+    if (mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
+
     if (error != null) {
       ScaffoldMessenger.of(
         context,
@@ -97,9 +113,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           PrimaryButton(
                             label: 'Se connecter',
-                            onPressed: () => login(),
+                            onPressed: _loading ? () {} : () => login(),
+                            isLoading: _loading, 
                           ),
-
                           const SizedBox(height: 20),
 
                           Center(
