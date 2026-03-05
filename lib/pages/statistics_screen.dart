@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../controllers/HomeController.dart';
-import '../controllers/StatisticsController.dart';
+import '../controllers/home_controller.dart';
+import '../controllers/statistics_controller.dart';
 
-import '../widgets/statistics/DateBadgeWidget.dart';
-import '../widgets/statistics/DailyStatsWidget.dart';
-import '../widgets/statistics/AverageCardWidget.dart';
-import '../widgets/statistics/InteractiveChartWidget.dart';
-import '../widgets/statistics/ChartNavigationWidget.dart';
+import '../widgets/statistics/date_badge_widget.dart';
+import '../widgets/statistics/daily_stats_widget.dart';
+import '../widgets/statistics/average_card_widget.dart';
+import '../widgets/statistics/interactive_chart_widget.dart';
+import '../widgets/statistics/chart_navigation_widget.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});

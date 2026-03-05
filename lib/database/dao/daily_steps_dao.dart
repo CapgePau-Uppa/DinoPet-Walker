@@ -1,5 +1,5 @@
-import 'package:dinopet_walker/database/DatabaseHelper.dart';
-import 'package:dinopet_walker/models/DailySteps.dart';
+import 'package:dinopet_walker/database/database_helper.dart';
+import 'package:dinopet_walker/models/daily_steps.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DailyStepsDao {

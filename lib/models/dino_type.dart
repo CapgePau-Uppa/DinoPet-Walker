@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/LifeStage.dart';
+import 'package:dinopet_walker/models/life_stage.dart';
 import 'package:flutter/material.dart';
 
 class DinoType {

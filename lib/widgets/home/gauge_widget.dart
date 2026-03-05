@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/widgets/home/GaugePainter.dart';
+import 'package:dinopet_walker/widgets/home/gauge_painter.dart';
 import 'package:flutter/material.dart';
 
 class GaugeWidget extends StatelessWidget {

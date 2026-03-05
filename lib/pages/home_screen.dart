@@ -1,10 +1,10 @@
-import 'package:dinopet_walker/controllers/DinoController.dart';
-import 'package:dinopet_walker/controllers/HomeController.dart';
-import 'package:dinopet_walker/widgets/dino/AnimatedDinoWidget.dart';
+import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/home_controller.dart';
+import 'package:dinopet_walker/widgets/dino/animated_dino_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/home/UserHeader.dart';
-import '../widgets/home/GaugeWidget.dart';
+import '../widgets/home/user_header.dart';
+import '../widgets/home/gauge_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

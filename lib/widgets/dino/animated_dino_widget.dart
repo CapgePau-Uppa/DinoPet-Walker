@@ -1,10 +1,9 @@
 import 'dart:math';
-
-import 'package:dinopet_walker/controllers/DinoAnimationController.dart';
-import 'package:dinopet_walker/models/DinoPet.dart';
-import 'package:dinopet_walker/models/LifeStage.dart';
-import 'package:dinopet_walker/models/StarParticle.dart';
-import 'package:dinopet_walker/widgets/dino/CircularArcWidget.dart';
+import 'package:dinopet_walker/controllers/dino_animation_controller.dart';
+import 'package:dinopet_walker/models/dinoPet.dart';
+import 'package:dinopet_walker/models/life_stage.dart';
+import 'package:dinopet_walker/models/star_particle.dart';
+import 'package:dinopet_walker/widgets/dino/circular_arc_widget.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedDinoWidget extends StatefulWidget {
@@ -142,16 +141,10 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
       builder: (_, __) {
         final totalOffsetY = _controller.floatY + _controller.idleJumpOffsetY;
 
-        final evolveOutDone =
-            _controller.evolveOut.status == AnimationStatus.completed;
-
         final oldOpacity = _isEvolving
             ? (1.0 - _controller.evolveOut.value).clamp(0.0, 1.0)
             : 0.0;
 
-        final newOpacity = (!_isEvolving || evolveOutDone) ? 1.0 : 0.0;
-
-        final isPopping = _controller.evolveIn.value > 0;
 
         final finalScale = _isEvolving
             ? _controller.popScale

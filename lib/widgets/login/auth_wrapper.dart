@@ -1,5 +1,5 @@
-import 'package:dinopet_walker/pages/LoginScreen.dart';
-import 'package:dinopet_walker/pages/SelectionScreen.dart';
+import 'package:dinopet_walker/pages/login_screen.dart';
+import 'package:dinopet_walker/pages/selection_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

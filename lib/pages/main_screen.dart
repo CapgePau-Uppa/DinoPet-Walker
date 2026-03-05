@@ -1,9 +1,9 @@
-import 'package:dinopet_walker/pages/HomeScreen.dart';
-import 'package:dinopet_walker/pages/MapScreen.dart';
-import 'package:dinopet_walker/pages/SettingsScreen.dart';
-import 'package:dinopet_walker/pages/StatisticsScreen.dart';
-import 'package:dinopet_walker/widgets/common/BottomNavBar.dart';
-import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
+import 'package:dinopet_walker/pages/home_screen.dart';
+import 'package:dinopet_walker/pages/map_screen.dart';
+import 'package:dinopet_walker/pages/settings_screen.dart';
+import 'package:dinopet_walker/pages/statistics_screen.dart';
+import 'package:dinopet_walker/widgets/common/bottom_navbar.dart';
+import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {

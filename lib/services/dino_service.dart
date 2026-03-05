@@ -1,6 +1,6 @@
-import 'package:dinopet_walker/models/DinoType.dart';
+import 'package:dinopet_walker/models/dino_type.dart';
 
-import '../models/DinoPet.dart';
+import '../models/dinoPet.dart';
 
 class DinoService {
   static DinoPet createNewDinoPet(

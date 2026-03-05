@@ -1,34 +1,24 @@
-import 'package:dinopet_walker/controllers/ResetPasswordController.dart';
-import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
-import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
-import 'package:dinopet_walker/widgets/login/PasswordField.dart';
+import 'package:dinopet_walker/controllers/forgot_password_controller.dart';
+import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:flutter/material.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
-  final String oobCode;
-
-  const ResetPasswordScreen({required this.oobCode, super.key});
-
+class ForgotPasswordScreen extends StatefulWidget {
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final ResetPasswordController _controller = ResetPasswordController();
-
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
-
+class _ForgotPasswordState extends State<ForgotPasswordScreen> {
+  final ForgotPasswordController _controller = ForgotPasswordController();
+  final TextEditingController emailController = TextEditingController();
   bool _loading = false;
 
-  void confirmReset() async {
+  Future<void> _sendResetEmail() async {
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
 
-    final error = await _controller.confirmReset(
-      oobCode: widget.oobCode,
-      password: _passwordController.text.trim(),
-      confirm: _confirmController.text.trim(),
+    final error = await _controller.sendResetPasswordEmail(
+      email: emailController.text.trim(),
     );
 
     if (mounted) setState(() => _loading = false);
@@ -37,21 +27,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(error)));
-      return;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email de réinitialisation envoyé')),
+      );
     }
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Mot de passe mis à jour')));
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AuthWrapper()),
-          (route) => false,
-        );
-      }
-    });
   }
 
   @override
@@ -79,7 +59,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 16),
 
                   const Text(
-                    "Nouveau mot\nde passe",
+                    "Mot de passe\noublié ?",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xFF1B3A2D),
@@ -93,7 +73,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 8),
 
                   Text(
-                    "Choisis un mot de passe sécurisé",
+                    "Saisis ton email pour recevoir\nun lien de réinitialisation",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: const Color(0xFF1B3A2D).withOpacity(0.45),
@@ -104,22 +84,28 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                   const SizedBox(height: 36),
 
-                  PasswordField(
-                    controller: _passwordController,
-                    label: 'Nouveau mot de passe',
-                  ),
-                  const SizedBox(height: 14),
-                  PasswordField(
-                    controller: _confirmController,
-                    label: 'Confirmer votre mot de passe',
-                  ),
+                  EmailField(controller: emailController),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
 
                   PrimaryButton(
-                    label: 'Réinitialiser',
-                    onPressed: _loading ? () {} : confirmReset,
+                    label: 'Envoyer le lien',
+                    onPressed: _loading ? () {} : _sendResetEmail,
                     isLoading: _loading,
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Text(
+                      "Retour à la connexion",
+                      style: TextStyle(
+                        color: const Color(0xFF1B3A2D),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 36),

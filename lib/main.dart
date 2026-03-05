@@ -1,9 +1,9 @@
 import 'package:app_links/app_links.dart';
-import 'package:dinopet_walker/controllers/DinoController.dart';
-import 'package:dinopet_walker/controllers/HomeController.dart';
-import 'package:dinopet_walker/controllers/StatisticsController.dart';
-import 'package:dinopet_walker/pages/ResetPasswordScreen.dart';
-import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
+import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/home_controller.dart';
+import 'package:dinopet_walker/controllers/statistics_controller.dart';
+import 'package:dinopet_walker/pages/reset_password_screen.dart';
+import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,8 +1,8 @@
-import 'package:dinopet_walker/controllers/SignUpController.dart';
-import 'package:dinopet_walker/pages/SelectionScreen.dart';
-import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
-import 'package:dinopet_walker/widgets/login/EmailField.dart';
-import 'package:dinopet_walker/widgets/login/PasswordField.dart';
+import 'package:dinopet_walker/controllers/signup_controller.dart';
+import 'package:dinopet_walker/pages/selection_screen.dart';
+import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/login/email_field.dart';
+import 'package:dinopet_walker/widgets/login/password_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 

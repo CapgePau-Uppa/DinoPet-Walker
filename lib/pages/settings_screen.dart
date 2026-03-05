@@ -1,6 +1,6 @@
-import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
+import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:dinopet_walker/controllers/SettingsController.dart'; 
+import 'package:dinopet_walker/controllers/settings_controller.dart'; 
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

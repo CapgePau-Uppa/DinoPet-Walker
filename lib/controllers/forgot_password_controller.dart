@@ -1,5 +1,5 @@
-import 'package:dinopet_walker/services/AuthService.dart';
-import 'package:dinopet_walker/utils/Validator.dart';
+import 'package:dinopet_walker/services/auth_service.dart';
+import 'package:dinopet_walker/utils/validator.dart';
 
 class ForgotPasswordController {
   final AuthService _authService = AuthService();

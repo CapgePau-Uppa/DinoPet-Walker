@@ -1,5 +1,5 @@
-import 'package:dinopet_walker/controllers/DinoController.dart';
-import 'package:dinopet_walker/services/HealthService.dart';
+import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/services/health_service.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 

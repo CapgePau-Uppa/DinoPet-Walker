@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:dinopet_walker/models/DinoType.dart';
-import 'package:dinopet_walker/models/LifeStage.dart';
+import 'package:dinopet_walker/models/dino_type.dart';
+import 'package:dinopet_walker/models/life_stage.dart';
 
 class DinoPet {
   final String id;

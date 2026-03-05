@@ -1,13 +1,13 @@
-import 'package:dinopet_walker/controllers/DinoController.dart';
-import 'package:dinopet_walker/controllers/SelectionController.dart';
-import 'package:dinopet_walker/data/dinoData.dart';
-import 'package:dinopet_walker/models/LifeStage.dart';
-import 'package:dinopet_walker/pages/MainScreen.dart';
-import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
-import 'package:dinopet_walker/widgets/common/PrimaryButton.dart';
+import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/selection_controller.dart';
+import 'package:dinopet_walker/data/dino_data.dart';
+import 'package:dinopet_walker/models/life_stage.dart';
+import 'package:dinopet_walker/pages/main_screen.dart';
+import 'package:dinopet_walker/widgets/common/my_appbar.dart';
+import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/dino/DinoSelectorItem.dart';
+import '../widgets/dino/dino_selector_item.dart';
 
 class SelectionScreen extends StatelessWidget {
   const SelectionScreen({super.key});

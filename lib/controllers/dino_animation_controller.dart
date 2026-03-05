@@ -1,10 +1,10 @@
-import 'package:dinopet_walker/animations/BreathAnimation.dart';
-import 'package:dinopet_walker/animations/EvolutionAnimation.dart';
-import 'package:dinopet_walker/animations/FloatAnimation.dart';
-import 'package:dinopet_walker/animations/JumpAnimation.dart';
-import 'package:dinopet_walker/animations/OrbitAnimation.dart';
-import 'package:dinopet_walker/animations/PulseAnimation.dart';
-import 'package:dinopet_walker/animations/StarParticleAnimation.dart';
+import 'package:dinopet_walker/animations/breath_animation.dart';
+import 'package:dinopet_walker/animations/evolution_animation.dart';
+import 'package:dinopet_walker/animations/float_animation.dart';
+import 'package:dinopet_walker/animations/jump_animation.dart';
+import 'package:dinopet_walker/animations/orbit_animation.dart';
+import 'package:dinopet_walker/animations/pulse_animation.dart';
+import 'package:dinopet_walker/animations/star_particle_animation.dart';
 import 'package:flutter/material.dart';
 
 class DinoAnimationController {

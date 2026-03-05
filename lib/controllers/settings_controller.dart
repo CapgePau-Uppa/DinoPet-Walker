@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/services/AuthService.dart';
+import 'package:dinopet_walker/services/auth_service.dart';
 
 class SettingsController {
   final AuthService _authService = AuthService();

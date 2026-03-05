@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'package:dinopet_walker/database/dao/daily_steps_dao.dart';
+import 'package:dinopet_walker/models/daily_steps.dart';
+import 'package:dinopet_walker/utils/date_formatter.dart';
 import 'package:health/health.dart';
-import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
-import 'package:dinopet_walker/models/DailySteps.dart';
-import 'package:dinopet_walker/utils/DateFormatter.dart';
 
 class HealthService {
   final _health = Health();

@@ -1,7 +1,6 @@
-import 'package:dinopet_walker/models/DinoType.dart';
-import 'package:dinopet_walker/models/LifeStage.dart';
+import 'package:dinopet_walker/models/dino_type.dart';
+import 'package:dinopet_walker/models/life_stage.dart';
 import 'package:flutter/material.dart';
-import '../../models/DinoPet.dart';
 
 class DinoSelectorItem extends StatelessWidget {
   final DinoType dinoType;

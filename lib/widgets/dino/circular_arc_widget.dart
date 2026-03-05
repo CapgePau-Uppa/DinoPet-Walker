@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/widgets/dino/CircularArcPainter.dart';
+import 'package:dinopet_walker/widgets/dino/circular_arc_painter.dart';
 import 'package:flutter/material.dart';
 
 class CircularArcWidget extends StatelessWidget {

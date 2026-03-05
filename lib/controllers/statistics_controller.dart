@@ -1,6 +1,6 @@
+import 'package:dinopet_walker/database/dao/daily_steps_dao.dart';
+import 'package:dinopet_walker/models/daily_steps.dart';
 import 'package:flutter/material.dart';
-import 'package:dinopet_walker/database/dao/DailyStepsDao.dart';
-import 'package:dinopet_walker/models/DailySteps.dart';
 
 class StatisticsController extends ChangeNotifier {
   final DailyStepsDao _dailyStepsDao = DailyStepsDao();
