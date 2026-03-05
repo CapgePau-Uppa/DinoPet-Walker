@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         "Connecte toi pour continuer l'aventure",
                         style: TextStyle(
-                          color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                          color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            color: const Color(0xFF1B3A2D).withOpacity(0.5),
+                            color: const Color(0xFF1B3A2D).withValues(alpha:0.5),
                             fontSize: 14,
                           ),
                           children: [
@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withOpacity(0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha:0.12),
                               thickness: 1,
                             ),
                           ),
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               "ou",
                               style: TextStyle(
-                                color: const Color(0xFF1B3A2D).withOpacity(0.3),
+                                color: const Color(0xFF1B3A2D).withValues(alpha:0.3),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withOpacity(0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha:0.12),
                               thickness: 1,
                             ),
                           ),

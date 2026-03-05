@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/dinoPet.dart';
+import 'package:dinopet_walker/models/dinopet.dart';
 import 'package:flutter/material.dart';
 
 class DinoController extends ChangeNotifier {
@@ -13,6 +13,15 @@ class DinoController extends ChangeNotifier {
   void addSteps(int steps) {
     if (_dinoPet == null) return;
     _dinoPet!.addSteps(steps);
+    notifyListeners();
+  }
+
+  void resetDino() {
+    if (_dinoPet == null) return;
+
+    _dinoPet!.level = 1;
+    _dinoPet!.xpSteps = 0;
+
     notifyListeners();
   }
 }

@@ -120,9 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      currentDino.level = 1;
-                      currentDino.xpSteps = 0;
-                      dinoController.notifyListeners();
+                      dinoController.resetDino();
                     },
                     icon: const Icon(Icons.refresh, size: 16),
                     label: const Text('Reset'),

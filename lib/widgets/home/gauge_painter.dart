@@ -19,7 +19,7 @@ class GaugePainter extends CustomPainter {
     final sweep = math.pi;
 
     final orangeBackgroundPaint = Paint()
-      ..color = Color(0xFFFF6B35).withOpacity(0.25)
+      ..color = Color(0xFFFF6B35).withValues(alpha:0.25)
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.butt;
@@ -33,7 +33,7 @@ class GaugePainter extends CustomPainter {
     );
 
     final yellowBackgroundPaint = Paint()
-      ..color = Color(0xFFFFD93D).withOpacity(0.25)
+      ..color = Color(0xFFFFD93D).withValues(alpha:0.25)
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.butt;
@@ -47,7 +47,7 @@ class GaugePainter extends CustomPainter {
     );
 
     final greenBackgroundPaint = Paint()
-      ..color = Color(0xFF4CAF50).withOpacity(0.25)
+      ..color = Color(0xFF4CAF50).withValues(alpha:0.25)
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.butt;

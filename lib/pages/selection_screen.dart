@@ -22,7 +22,7 @@ class SelectionScreen extends StatelessWidget {
 }
 
 class _SelectionBody extends StatelessWidget {
-  const _SelectionBody({super.key});
+  const _SelectionBody();
 
   @override
   Widget build(BuildContext context) {

@@ -20,7 +20,7 @@ class CircularArcPainter extends CustomPainter {
       ..shader = SweepGradient(
         colors: [
           Colors.transparent,
-          color.withOpacity(0.6 * opacity),
+          color.withValues(alpha:0.6 * opacity),
           Colors.transparent,
         ],
         startAngle: angle - pi * 0.65,

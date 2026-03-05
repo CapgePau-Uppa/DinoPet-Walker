@@ -34,7 +34,7 @@ class DinoSelectorItem extends StatelessWidget {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: dinoType.innerColor.withOpacity(0.5),
+                      color: dinoType.innerColor.withValues(alpha:0.5),
                       blurRadius: 15,
                       spreadRadius: 2,
                       offset: const Offset(0, 6),

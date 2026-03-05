@@ -96,7 +96,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     "Choisis un mot de passe sécurisé",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                      color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),

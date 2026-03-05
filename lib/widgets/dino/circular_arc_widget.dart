@@ -8,12 +8,12 @@ class CircularArcWidget extends StatelessWidget {
   final double opacity;
 
   const CircularArcWidget({
-    Key? key,
+    super.key,
     required this.angle,
     required this.radius,
     required this.color,
     this.opacity = 1.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

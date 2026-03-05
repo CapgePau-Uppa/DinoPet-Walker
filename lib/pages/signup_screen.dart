@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         "Rejoins notre Team Dinopet !",
                         style: TextStyle(
-                          color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                          color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                           fontSize: 14,
                         ),
                       ),
@@ -163,7 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            color: const Color(0xFF1B3A2D).withOpacity(0.5),
+                            color: const Color(0xFF1B3A2D).withValues(alpha:0.5),
                             fontSize: 14,
                           ),
                           children: [
@@ -189,7 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withOpacity(0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha: 0.12),
                               thickness: 1,
                             ),
                           ),
@@ -198,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Text(
                               "ou",
                               style: TextStyle(
-                                color: const Color(0xFF1B3A2D).withOpacity(0.3),
+                                color: const Color(0xFF1B3A2D).withValues(alpha:0.3),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -206,7 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withOpacity(0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha:0.12),
                               thickness: 1,
                             ),
                           ),
@@ -239,7 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 'assets/logos/google_logo.png',
                                 height: 22,
                                 width: 22,
-                                errorBuilder: (_, __, ___) => const Icon(
+                                errorBuilder: (_, _, _) => const Icon(
                                   Icons.g_mobiledata_rounded,
                                   size: 26,
                                   color: Color(0xFF1B3A2D),

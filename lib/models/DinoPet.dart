@@ -18,9 +18,9 @@ class DinoPet {
   }) : adoptedDate = adoptedDate ?? DateTime.now();
 
   static int getStepsRequiredForLevel(int level) {
-    const int _baseSteps = 5000;
-    const double _coefficientOfDifficulty = 1.08;
-    return (_baseSteps * pow(_coefficientOfDifficulty, level)).round();
+    const int baseSteps = 5000;
+    const double coefficientOfDifficulty = 1.08;
+    return (baseSteps * pow(coefficientOfDifficulty, level)).round();
   }
 
   int get stepsRequiredForNextLevel =>

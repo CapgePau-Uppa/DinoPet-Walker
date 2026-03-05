@@ -24,7 +24,7 @@ class HealthService {
       permissions: [HealthDataAccess.READ],
     );
     if (!agree) {
-      print('permissionsrefusées');
+      //print('permissionsrefusées');
       return;
     }
     // charger les données sauvegardées en bdd

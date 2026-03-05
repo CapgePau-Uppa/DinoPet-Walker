@@ -16,7 +16,7 @@ class DatabaseHelper {
   Future<Database> _initDB(String filepath) async {
     final dbpath = await getDatabasesPath();
     final path = join(dbpath, filepath);
-    print("BDD path: $path");
+    //print("BDD path: $path");
     return openDatabase(path, version: 1, onCreate: _createDB);
   }
 
@@ -40,7 +40,7 @@ class DatabaseHelper {
       _database = null;
     }
     await deleteDatabase(path);
-    print("BDD supprimée");
+    //print("BDD supprimée");
   }
 
   Future<void> close() async {

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:dinopet_walker/controllers/dino_animation_controller.dart';
-import 'package:dinopet_walker/models/dinoPet.dart';
+import 'package:dinopet_walker/models/dinopet.dart';
 import 'package:dinopet_walker/models/life_stage.dart';
 import 'package:dinopet_walker/models/star_particle.dart';
 import 'package:dinopet_walker/widgets/dino/circular_arc_widget.dart';
@@ -138,7 +138,7 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
         _controller.evolveIn,
         _controller.evolveInCurved,
       ]),
-      builder: (_, __) {
+      builder: (_, _) {
         final totalOffsetY = _controller.floatY + _controller.idleJumpOffsetY;
 
         final oldOpacity = _isEvolving
@@ -210,7 +210,7 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: innerColor.withOpacity(0.9),
+            color: innerColor.withValues(alpha:0.9),
             blurRadius: 25 + _controller.pulseGlow * 50,
             offset: const Offset(0, 7),
           ),
@@ -251,11 +251,11 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
             width: star.size,
             height: star.size,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.9),
+              color: color.withValues(alpha:0.9),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.6),
+                  color: color.withValues(alpha:0.6),
                   blurRadius: star.size * 1.5,
                 ),
               ],

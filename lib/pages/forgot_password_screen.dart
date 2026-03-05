@@ -4,6 +4,8 @@ import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
@@ -76,7 +78,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                     "Saisis ton email pour recevoir\nun lien de réinitialisation",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: const Color(0xFF1B3A2D).withOpacity(0.45),
+                      color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),

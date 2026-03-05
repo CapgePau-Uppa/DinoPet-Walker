@@ -18,7 +18,7 @@ class DateBadgeWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: kGreenText.withOpacity(0.3),
+            color: kGreenText.withValues(alpha:0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           )

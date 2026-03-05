@@ -37,7 +37,7 @@ class UserHeader extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha:0.05)),
           ),
           child: Container(
             padding: const EdgeInsets.all(2),
@@ -50,7 +50,7 @@ class UserHeader extends StatelessWidget {
                     138,
                     248,
                     164,
-                  ).withOpacity(0.8),
+                  ).withValues(alpha:0.8),
                   blurRadius: 5,
                   offset: Offset(0, 1),
                 ),
@@ -91,12 +91,12 @@ class UserHeader extends StatelessWidget {
                   138,
                   248,
                   164,
-                ).withOpacity(0.8),
+                ).withValues(alpha:0.8),
                 blurRadius: 3,
                 offset: Offset(0, 2),
               ),
             ],
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha:0.05)),
           ),
           child: Text(
             'Niveau $userLevel',
@@ -121,12 +121,12 @@ class UserHeader extends StatelessWidget {
                   138,
                   248,
                   164,
-                ).withOpacity(0.8),
+                ).withValues(alpha:0.8),
                 blurRadius: 3,
                 offset: Offset(0, 2),
               ),
             ],
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha:0.05)),
           ),
           child: Row(
             children: [
