@@ -24,4 +24,31 @@ class LoginController {
       return "Email ou mot de passe incorrect";
     }
   }
+
+  Future<String?> loginWithGoogle() async {
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+
+    try {
+      final result = await _authService.signInWithGoogle();
+      return result == null ? "Connexion Google annulée" : null;
+    } catch (e) {
+      return "Erreur Google: ${e.toString()}";
+    }
+  }
+
+  Future<String?> loginWithApple() async {
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+
+    try {
+      final result = await _authService.signInWithApple();
+      if (result == null) {
+        return "Apple Sign-In n'est disponible que sur iOS";
+      }
+      return null;
+    } catch (e) {
+      return "Erreur Apple: ${e.toString()}";
+    }
+  }
 }

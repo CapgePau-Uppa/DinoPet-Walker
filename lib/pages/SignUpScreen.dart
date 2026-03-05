@@ -43,6 +43,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  void _signUpGoogle() async {
+    setState(() => _loading = true);
+    final error = await _controller.signUpWithGoogle();
+    if (mounted) setState(() => _loading = false);
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => SelectionScreen()),
+      );
+    }
+  }
+
+  void _signUpApple() async {
+    setState(() => _loading = true);
+    final error = await _controller.signUpWithApple();
+    if (mounted) setState(() => _loading = false);
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => SelectionScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,7 +247,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 58,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: _loading ? () {} : _signUpGoogle,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF1B3A2D),
@@ -248,6 +276,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               const SizedBox(width: 12),
                               const Text(
                                 "S'inscrire avec Google",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 58,
+                        child: ElevatedButton(
+                          onPressed: _loading ? () {} : _signUpApple,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFF1B3A2D),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              side: const BorderSide(
+                                color: Color(0xFFE8E0D5),
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.apple,
+                                size: 26,
+                                color: Color(0xFF1B3A2D),
+                              ),
+                              const SizedBox(width: 12),
+                              const Text(
+                                "S'inscrire avec Apple",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,

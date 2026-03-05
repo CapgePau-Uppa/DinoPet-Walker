@@ -22,8 +22,11 @@ class _AuthWrapperState extends State<AuthWrapper> {
               body: Center(child: CircularProgressIndicator()),
             );
           }
+          if (snapshot.hasError) {
+            return const SelectionScreen();
+          }
           if (snapshot.hasData) {
-            return SelectionScreen();
+            return const SelectionScreen();
           }
           return LoginScreen();
         },

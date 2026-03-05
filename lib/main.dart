@@ -2,15 +2,24 @@ import 'package:app_links/app_links.dart';
 import 'package:dinopet_walker/controllers/DinoController.dart';
 import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/controllers/StatisticsController.dart';
+import 'package:dinopet_walker/firebase_options.dart';
 import 'package:dinopet_walker/pages/ResetPasswordScreen.dart';
 import 'package:dinopet_walker/widgets/login/AuthWrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print('Firebase initialization failed: $e');
+  }
 
   runApp(
     MultiProvider(

@@ -1,5 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'dart:io';
 
 class AuthService {
   final FirebaseAuth _firebaseInstance = FirebaseAuth.instance;
@@ -49,9 +52,9 @@ class AuthService {
   Future<String?> sendPasswordResetEmail({required String email}) async {
     try {
       final actionCodeSettings = ActionCodeSettings(
-        url: 'https://dinopetwalker.web.app', // le lien envoyé par email pointe sur ce domaine
-        handleCodeInApp: true, // le lien doit etre traité dans l'app
-        androidPackageName: 'com.example.dinopet_walker', 
+        url: 'https://dinopetwalker.web.app',
+        handleCodeInApp: true,
+        androidPackageName: 'com.capgemini.dinopet', 
         androidInstallApp: true, // propose d'installer l'app si elle n'est pas installé (plus tard)
         androidMinimumVersion: '21',
       );
@@ -80,6 +83,48 @@ class AuthService {
       code: oobCode,
       newPassword: newPassword,
     );
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return null;
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      return await _firebaseInstance.signInWithCredential(credential);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<UserCredential?> signInWithApple() async {
+    try {
+      // Apple Sign-In only available on iOS
+      if (!Platform.isIOS) {
+        return null;
+      }
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode,
+      );
+
+      return await _firebaseInstance.signInWithCredential(oauthCredential);
+    } catch (e) {
+      return null;
+    }
   }
 
 }

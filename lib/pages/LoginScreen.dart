@@ -35,6 +35,24 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _loginGoogle() async {
+    setState(() => _loading = true);
+    final error = await _controller.loginWithGoogle();
+    if (mounted) setState(() => _loading = false);
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+    }
+  }
+
+  void _loginApple() async {
+    setState(() => _loading = true);
+    final error = await _controller.loginWithApple();
+    if (mounted) setState(() => _loading = false);
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: double.infinity,
                         height: 58,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: _loading ? () {} : _loginGoogle,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: const Color(0xFF1B3A2D),
@@ -216,6 +234,44 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(width: 12),
                               const Text(
                                 "Continuer avec Google",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 58,
+                        child: ElevatedButton(
+                          onPressed: _loading ? () {} : _loginApple,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: const Color(0xFF1B3A2D),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                              side: const BorderSide(
+                                color: Color(0xFFE8E0D5),
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.apple,
+                                size: 26,
+                                color: Color(0xFF1B3A2D),
+                              ),
+                              const SizedBox(width: 12),
+                              const Text(
+                                "Continuer avec Apple",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,

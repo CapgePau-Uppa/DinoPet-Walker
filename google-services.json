@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "152575631290",
+    "project_id": "dinopetwalker-a8648",
+    "storage_bucket": "dinopetwalker-a8648.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152575631290:android:43aa06eac9626f79c4c783",
+        "android_client_info": {
+          "package_name": "com.capgemini.dinopet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACgOLWISI9VQJspUv02C91p-K0GhZS3Zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

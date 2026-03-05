@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/HomeController.dart';
 import 'package:dinopet_walker/pages/HomeScreen.dart';
 import 'package:dinopet_walker/pages/MapScreen.dart';
 import 'package:dinopet_walker/pages/SettingsScreen.dart';
@@ -5,6 +6,7 @@ import 'package:dinopet_walker/pages/StatisticsScreen.dart';
 import 'package:dinopet_walker/widgets/common/BottomNavBar.dart';
 import 'package:dinopet_walker/widgets/common/MyAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -35,6 +37,10 @@ class _MainScreenState extends State<MainScreen> {
       MapScreen(),
       SettingsScreen(),
     ];
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeController>().init();
+    });
   }
 
   void onTap(int index) {

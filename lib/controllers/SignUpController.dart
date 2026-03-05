@@ -36,4 +36,31 @@ class SignUpController {
       return "Erreur lors de l'inscription. L'email est peut-être déjà utilisé.";
     }
   }
+
+  Future<String?> signUpWithGoogle() async {
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+
+    try {
+      final result = await _authService.signInWithGoogle();
+      return result == null ? "Inscription Google annulée" : null;
+    } catch (e) {
+      return "Erreur Google: ${e.toString()}";
+    }
+  }
+
+  Future<String?> signUpWithApple() async {
+    final connectivityError = await _authService.checkConnectivity();
+    if (connectivityError != null) return connectivityError;
+
+    try {
+      final result = await _authService.signInWithApple();
+      if (result == null) {
+        return "Apple Sign-In n'est disponible que sur iOS";
+      }
+      return null;
+    } catch (e) {
+      return "Erreur Apple: ${e.toString()}";
+    }
+  }
 }
