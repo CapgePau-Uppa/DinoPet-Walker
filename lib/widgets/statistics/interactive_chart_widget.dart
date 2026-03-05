@@ -65,12 +65,16 @@ class InteractiveChartWidget extends StatelessWidget {
 
     double fillPercentage = (steps / 10000).clamp(0.0, 1.0);
     double barHeight = totalHeight * fillPercentage;
-    if (barHeight < 10) barHeight = 10;
+    if (barHeight < 10) {
+      barHeight = 10;
+    }
 
     Color barColor = const Color(0xFF4CAF50);
     if (steps < 4000) {
       barColor = const Color(0xFFFF6B35);
-    } else if (steps < 8000) barColor = const Color(0xFFFFD93D);
+    } else if (steps < 8000) {
+      barColor = const Color(0xFFFFD93D);
+    }
 
     return Opacity(
       opacity: isSelected ? 1.0 : 0.25,

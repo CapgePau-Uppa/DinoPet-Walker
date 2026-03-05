@@ -27,7 +27,9 @@ class _LoginScreenState extends State<LoginScreen> {
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
-    if (mounted) setState(() => _loading = false);
+    if (!mounted) return;
+
+    setState(() => _loading = false);
     if (error != null) {
       ScaffoldMessenger.of(
         context,
@@ -207,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'assets/logos/google_logo.png',
                                 height: 22,
                                 width: 22,
-                                errorBuilder: (_, __, ___) => const Icon(
+                                errorBuilder: (_, _, _) => const Icon(
                                   Icons.g_mobiledata_rounded,
                                   size: 26,
                                   color: Color(0xFF1B3A2D),

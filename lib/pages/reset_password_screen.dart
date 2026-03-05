@@ -31,7 +31,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       confirm: _confirmController.text.trim(),
     );
 
-    if (mounted) setState(() => _loading = false);
+    if (!mounted) return;
+
+    setState(() => _loading = false);
 
     if (error != null) {
       ScaffoldMessenger.of(

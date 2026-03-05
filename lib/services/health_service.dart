@@ -53,7 +53,7 @@ class HealthService {
         }
       }
     } catch (e) {
-      print('erreur health: $e');
+      //print('erreur health: $e');
     }
   }
 

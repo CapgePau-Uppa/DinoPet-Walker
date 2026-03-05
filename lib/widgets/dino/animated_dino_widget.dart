@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:dinopet_walker/controllers/dino_animation_controller.dart';
-import 'package:dinopet_walker/models/dinopet.dart';
+import 'package:dinopet_walker/models/dino_pet.dart';
 import 'package:dinopet_walker/models/life_stage.dart';
 import 'package:dinopet_walker/models/star_particle.dart';
 import 'package:dinopet_walker/widgets/dino/circular_arc_widget.dart';

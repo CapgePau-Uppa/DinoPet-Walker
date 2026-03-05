@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/dinopet.dart';
+import 'package:dinopet_walker/models/dino_pet.dart';
 import 'package:flutter/material.dart';
 
 class DinoController extends ChangeNotifier {

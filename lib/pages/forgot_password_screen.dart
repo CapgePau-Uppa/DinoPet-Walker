@@ -7,7 +7,7 @@ class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  _ForgotPasswordState createState() => _ForgotPasswordState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPasswordScreen> {
@@ -23,17 +23,13 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
       email: emailController.text.trim(),
     );
 
-    if (mounted) setState(() => _loading = false);
+    if (!mounted) return;
 
-    if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Email de réinitialisation envoyé')),
-      );
-    }
+    setState(() => _loading = false);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(error ?? 'Email de réinitialisation envoyé')),
+    );
   }
 
   @override
@@ -103,7 +99,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                     child: const Text(
                       "Retour à la connexion",
                       style: TextStyle(
-                        color: const Color(0xFF1B3A2D),
+                        color: Color(0xFF1B3A2D),
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),

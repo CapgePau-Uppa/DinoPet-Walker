@@ -1,7 +1,7 @@
 import 'package:dinopet_walker/data/dino_data.dart';
 import 'package:dinopet_walker/models/dino_type.dart';
 import 'package:flutter/material.dart';
-import '../models/dinopet.dart';
+import '../models/dino_pet.dart';
 import '../services/dino_service.dart';
 
 class SelectionController extends ChangeNotifier {
