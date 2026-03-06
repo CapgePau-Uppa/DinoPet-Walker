@@ -12,7 +12,7 @@ class Validator {
   }
 
   static String? passwordsMatch(String password, String confirm) {
-    if (password != confirm) return "Les mots de passe ne correspondent pas";
+    if (password != confirm) return "Les mots de passe ne\ncorrespondent pas";
     return null;
   }
 

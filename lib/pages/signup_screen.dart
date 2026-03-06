@@ -1,6 +1,7 @@
 import 'package:dinopet_walker/controllers/signup_controller.dart';
-import 'package:dinopet_walker/pages/selection_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/common/toast.dart';
+import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:dinopet_walker/widgets/login/password_field.dart';
 import 'package:flutter/gestures.dart';
@@ -14,11 +15,13 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final SignUpController _controller = SignUpController();
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
   bool _loading = false;
 
   void _signUp() async {
@@ -36,13 +39,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() => _loading = false);
 
     if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      Toast.show(
+        context: context,
+        message: error,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
+      );
     } else {
+      // a déplacer d'ici
+      // await FirebaseAuth.instance.signOut();
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => SelectionScreen()),
+        MaterialPageRoute(builder: (_) => AuthWrapper(signupToast: true,)),
       );
     }
   }

@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/controllers/settings_controller.dart'; 
@@ -18,12 +19,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
 
     if (error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error), backgroundColor: Colors.red),
+      Toast.show(
+        context: context,
+        message: error,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
       );
     } else {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const AuthWrapper()),
+        MaterialPageRoute(
+          builder: (_) => const AuthWrapper(logoutToast: true,),
+        ),
         (route) => false,
       );
     }
