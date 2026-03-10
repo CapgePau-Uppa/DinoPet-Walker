@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/login_controller.dart';
+import 'package:dinopet_walker/controllers/authentification/login_controller.dart';
 import 'package:dinopet_walker/pages/forgot_password_screen.dart';
 import 'package:dinopet_walker/pages/signup_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';

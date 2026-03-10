@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
+import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/widgets/dino/animated_dino_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +20,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeController>().init();
+      context.read<UserController>().getCurrentUser();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final homeController = context.watch<HomeController>();
     final dinoController = context.watch<DinoController>();
+    final userController = context.watch<UserController>();
+
+    final username = userController.username;
+
     final currentDino = dinoController.dinoPet!;
 
     return SingleChildScrollView(
@@ -34,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             UserHeader(
-              username: "Michel",
+              username: username,
               userLevel: currentDino.level,
               streak: 1,
             ),

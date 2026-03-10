@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EmailIsVerifiedScreen extends StatelessWidget {
@@ -8,6 +9,7 @@ class EmailIsVerifiedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
+    final isUserLoggedIn = FirebaseAuth.instance.currentUser != null;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 217, 255, 222),
@@ -22,7 +24,7 @@ class EmailIsVerifiedScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               const Text(
-                "Email vérifié !",
+                "Email vérifié",
                 style: TextStyle(
                   color: Color(0xFF1B3A2D),
                   fontSize: 30,
@@ -47,7 +49,7 @@ class EmailIsVerifiedScreen extends StatelessWidget {
 
               Center(
                 child: PrimaryButton(
-                  label: 'Continuer',
+                  label: isUserLoggedIn ? 'Continuer' : 'Se connecter',
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,

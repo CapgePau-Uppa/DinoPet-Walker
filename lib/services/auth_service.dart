@@ -42,6 +42,8 @@ class AuthService {
       password: password,
     );
 
+    await userCred.user?.updateDisplayName(username);
+
     return userCred;
   }
 
@@ -97,6 +99,12 @@ class AuthService {
       code: oobCode,
       newPassword: newPassword,
     );
+  }
+
+  
+  Future<void> verifyEmail(String oobCode) async {
+    await _firebaseInstance.applyActionCode(oobCode);
+    await _firebaseInstance.currentUser?.reload();
   }
 
 }

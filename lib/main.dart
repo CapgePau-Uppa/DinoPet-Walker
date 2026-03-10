@@ -1,5 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/statistics_controller.dart';
 import 'package:dinopet_walker/pages/email_is_verified_screen.dart';
@@ -25,7 +26,8 @@ void main() async{
             return previous;
           }
         ),
-        ChangeNotifierProvider(create: (_) => StatisticsController())
+        ChangeNotifierProvider(create: (_) => StatisticsController()),
+        ChangeNotifierProvider(create: (_) => UserController()),
 
       ],
       child: const MyApp(),

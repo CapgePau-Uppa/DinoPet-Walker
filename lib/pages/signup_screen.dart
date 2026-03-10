@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/signup_controller.dart';
+import 'package:dinopet_walker/controllers/authentification/signup_controller.dart';
 import 'package:dinopet_walker/pages/email_verification_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
