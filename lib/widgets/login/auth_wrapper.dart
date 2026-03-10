@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/pages/email_verification_screen.dart';
 import 'package:dinopet_walker/pages/login_screen.dart';
 import 'package:dinopet_walker/pages/selection_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
@@ -58,6 +59,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
             );
           }
           if (snapshot.hasData) {
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null && !user.emailVerified) {
+              return const EmailVerificationScreen();
+            }
             return SelectionScreen();
           }
           return LoginScreen();

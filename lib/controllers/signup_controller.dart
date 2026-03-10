@@ -32,9 +32,10 @@ class SignUpController {
         username: username,
       );
 
-      await _authService.signOut();
-      
+      //await _authService.sendEmailVerification();
+
       return null;
+      
     } catch (e) {
       return "Erreur lors de l'inscription.\nL'email est peut-être déjà utilisé.";
     }

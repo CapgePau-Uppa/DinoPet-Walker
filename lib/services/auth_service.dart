@@ -45,6 +45,23 @@ class AuthService {
     return userCred;
   }
 
+  // Envoi email de confirmation 
+  Future<void> sendEmailVerification() async {
+    final user = _firebaseInstance.currentUser;
+
+    if (user != null && !user.emailVerified) {
+      final actionCodeSettings = ActionCodeSettings(
+        url: 'https://dinopetwalker.web.app',
+        handleCodeInApp: true,
+        androidPackageName: 'com.example.dinopet_walker',
+        androidInstallApp: true,
+        androidMinimumVersion: '21',
+      );
+
+      await user.sendEmailVerification(actionCodeSettings);
+    }
+  }
+
   // envoyer l'email de rénitialisation
   Future<String?> sendPasswordResetEmail({required String email}) async {
     try {

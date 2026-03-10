@@ -20,10 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   bool _loading = false;
 
-  void login() async {
+  void _login() async {
+
     FocusScope.of(context).unfocus();
 
     setState(() => _loading = true);
+    
     final error = await _controller.login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
@@ -119,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       PrimaryButton(
                         label: 'Se connecter',
-                        onPressed: _loading ? () {} : login,
+                        onPressed: _loading ? () {} : _login,
                         isLoading: _loading,
                       ),
 

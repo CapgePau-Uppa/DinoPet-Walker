@@ -2,8 +2,10 @@ import 'package:app_links/app_links.dart';
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/statistics_controller.dart';
+import 'package:dinopet_walker/pages/email_is_verified_screen.dart';
 import 'package:dinopet_walker/pages/reset_password_screen.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,10 +59,12 @@ class _MyAppState extends State<MyApp> {
     _appLinks.uriLinkStream.listen(_handleLink);
   }
 
-  void _handleLink(Uri uri) {
+  // Gérer les liens 
+  Future<void> _handleLink(Uri uri) async {
     final oobCode = uri.queryParameters['oobCode'];
-    final mode = uri.queryParameters['mode']; // mode resetPassword
+    final mode = uri.queryParameters['mode']; 
 
+    // mode resetPassword
     if (mode == 'resetPassword' && oobCode != null) {
       _navigatorKey.currentState?.push(
         MaterialPageRoute(
@@ -68,12 +72,26 @@ class _MyAppState extends State<MyApp> {
         ),
       );
     }
+
+    // mode verifyEmail
+    if (mode == 'verifyEmail' && oobCode != null) {
+      try {
+        await FirebaseAuth.instance.applyActionCode(oobCode);
+        await FirebaseAuth.instance.currentUser?.reload();
+
+        _navigatorKey.currentState?.push(
+          MaterialPageRoute(builder: (_) => const EmailIsVerifiedScreen()),
+        );
+      } catch (e) {
+        //
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: _navigatorKey, // ← Important
+      navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'DinoPet',
       home: AuthWrapper(),
