@@ -42,7 +42,26 @@ class AuthService {
       password: password,
     );
 
+    await userCred.user?.updateDisplayName(username);
+
     return userCred;
+  }
+
+  // Envoi email de confirmation 
+  Future<void> sendEmailVerification() async {
+    final user = _firebaseInstance.currentUser;
+
+    if (user != null && !user.emailVerified) {
+      final actionCodeSettings = ActionCodeSettings(
+        url: 'https://dinopetwalker.web.app',
+        handleCodeInApp: true,
+        androidPackageName: 'com.example.dinopet_walker',
+        androidInstallApp: true,
+        androidMinimumVersion: '21',
+      );
+
+      await user.sendEmailVerification(actionCodeSettings);
+    }
   }
 
   // envoyer l'email de rénitialisation
@@ -80,6 +99,12 @@ class AuthService {
       code: oobCode,
       newPassword: newPassword,
     );
+  }
+
+  
+  Future<void> verifyEmail(String oobCode) async {
+    await _firebaseInstance.applyActionCode(oobCode);
+    await _firebaseInstance.currentUser?.reload();
   }
 
 }
