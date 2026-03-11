@@ -8,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/activity_controller.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -23,7 +25,8 @@ void main() async{
             return previous;
           }
         ),
-        ChangeNotifierProvider(create: (_) => StatisticsController())
+        ChangeNotifierProvider(create: (_) => StatisticsController()),
+        ChangeNotifierProvider(create: (_) => ActivityController())
 
       ],
       child: const MyApp(),
