@@ -56,6 +56,10 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
 
     final double distanceInKm = (displaySteps * 0.75) / 1000;
 
+    final DateTime todayDate = DateTime(now.year, now.month, now.day);
+    final DateTime weekStart = todayDate.subtract(Duration(days: todayDate.weekday - 1));
+    final bool canGoNext = statController.currentWeekStart.isBefore(weekStart);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
@@ -116,6 +120,11 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                   weekStartDate: statController.currentWeekStart,
                   selectedDate: statController.selectedDate,
                   onDaySelected: (cliquedDate) {
+                    final today = DateTime(now.year, now.month, now.day);
+                    final clicked = DateTime(cliquedDate.year, cliquedDate.month, cliquedDate.day);
+
+                    if (clicked.isAfter(today)) return;
+
                     statController.selectDate(cliquedDate, liveSteps);
                   },
                 ),
@@ -134,14 +143,20 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () => statController.changeWeek(1, liveSteps),
-                      child: const ChartNavigationWidget(text: "Suivant"),
+                  if (canGoNext)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => statController.changeWeek(1, liveSteps),
+                        child: const ChartNavigationWidget(text: "Suivant"),
+                      ),
+                    )
+                  else
+                    const Opacity(
+                      opacity: 0.0,
+                      child: ChartNavigationWidget(text: "Suivant"),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(height: 40),

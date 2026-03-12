@@ -1,5 +1,6 @@
-import 'package:dinopet_walker/controllers/reset_password_controller.dart';
+import 'package:dinopet_walker/controllers/authentification/reset_password_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/login/password_field.dart';
 import 'package:flutter/material.dart';
@@ -36,28 +37,36 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     setState(() => _loading = false);
 
     if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      Toast.show(
+        context: context,
+        message: error,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
+      );
+      
       return;
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Mot de passe mis à jour')));
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AuthWrapper()),
-          (route) => false,
-        );
-      }
-    });
+    Toast.show(
+      context: context,
+      message: "Mot de passe rénitialisé",
+      icon: Icons.check_circle,
+      color: const Color(0xFF4CAF50),
+    );
+    
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AuthWrapper()),
+        (route) => false,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    
+    final double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color.fromARGB(255, 217, 255, 222),
@@ -67,7 +76,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight:
-                  MediaQuery.of(context).size.height -
+                  height -
                   MediaQuery.of(context).padding.top,
             ),
             child: IntrinsicHeight(
@@ -81,7 +90,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 16),
 
                   const Text(
-                    "Nouveau mot\nde passe",
+                    "Nouveau \n mot de passe",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xFF1B3A2D),
@@ -124,7 +133,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     isLoading: _loading,
                   ),
 
-                  const SizedBox(height: 36),
+                  const SizedBox(height: 10),
+
+                  PrimaryButton(
+                    label: 'Annuler',
+                    onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => const AuthWrapper(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                  ),
                 ],
               ),
             ),
