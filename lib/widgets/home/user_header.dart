@@ -43,18 +43,7 @@ class UserHeader extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(
-                    255,
-                    138,
-                    248,
-                    164,
-                  ).withValues(alpha:0.8),
-                  blurRadius: 5,
-                  offset: Offset(0, 1),
-                ),
-              ],
+              
             ),
             child: CircleAvatar(
               radius: 18,
