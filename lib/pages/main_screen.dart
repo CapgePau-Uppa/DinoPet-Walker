@@ -5,6 +5,7 @@ import 'package:dinopet_walker/pages/statistics_screen.dart';
 import 'package:dinopet_walker/widgets/common/bottom_navbar.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:flutter/material.dart';
+import 'activity_screen.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -20,6 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<String> titles = [
     'Accueil',
     'Statistiques',
+    'Activités',
     'Carte',
     'Paramètres',
   ];
@@ -32,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
     screens = [
       HomeScreen(), 
       StatisticsScreen(),
+      ActivityScreen(),
       MapScreen(),
       SettingsScreen(),
     ];

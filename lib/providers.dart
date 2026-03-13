@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
@@ -15,4 +16,5 @@ List<SingleChildWidget> get providers => [
 
   ChangeNotifierProvider(create: (_) => StatisticsController()),
   ChangeNotifierProvider(create: (_) => UserController()),
+  ChangeNotifierProvider(create: (_) => ActivityController()),
 ];
