@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const AuthWrapper(logoutToast: true)),
-        (route) => false,
+            (route) => false,
       );
     }
   }
@@ -107,56 +107,66 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: ElevatedButton.icon(
                 onPressed: _isLoadingStrava ? null : _toggleStravaConnection,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _isStravaLinked ? Colors.grey[700] : const Color(0xFFFC4C02),
+                  backgroundColor: _isStravaLinked
+                      ? Colors.grey[700]
+                      : const Color(0xFFFC4C02),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 icon: _isLoadingStrava
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                    : Icon(_isStravaLinked ? Icons.link_off : Icons.link, color: Colors.white),
+                    ? const SizedBox(width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                        color: Colors.white, strokeWidth: 2))
+                    : Icon(_isStravaLinked ? Icons.link_off : Icons.link,
+                    color: Colors.white),
                 label: Text(
-                  _isStravaLinked ? "Déconnecter Strava" : "Lier mon compte Strava",
-                  style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                  _isStravaLinked
+                      ? "Déconnecter Strava"
+                      : "Lier mon compte Strava",
+                  style: const TextStyle(fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
 
             const SizedBox(height: 40),
 
-        SizedBox(
-          width: 200,
-          height: 50,
-          child: ElevatedButton(
-            onPressed: _loading ? null : _signOut,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            SizedBox(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _loading ? null : _signOut,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: _loading
+                    ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+                    : const Text(
+                  "Se déconnecter",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-            child: _loading
-                ? const SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            )
-                : const Text(
-              "Se déconnecter",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
           ],
-      ),
+        ),
       ),
     );
-
   }
+}
