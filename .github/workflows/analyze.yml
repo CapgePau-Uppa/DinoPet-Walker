@@ -27,7 +27,15 @@ jobs:
           flutter-version: '3.x'
           channel: 'stable'
 
-      # Télécharge toutes les dépendances nécessaires
+      # Génère le fichier .env en utilisant les secrets déclarés sur github 
+      - name: Créer le fichier .env
+        run: |
+          mkdir -p assets
+          echo "STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }}" >> assets/.env
+          echo "STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }}" >> assets/.env
+          echo "STRAVA_REDIRECT_URI=${{ secrets.STRAVA_REDIRECT_URI }}" >> assets/.env
+
+      # Télécharger toutes les dépendances nécessaires
       - name: Installation des dépendances
         run: flutter pub get
 
