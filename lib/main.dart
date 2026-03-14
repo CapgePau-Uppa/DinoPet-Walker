@@ -9,7 +9,7 @@ import 'package:dinopet_walker/providers.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // Charger les variables dans .env
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp();
 
   runApp(
