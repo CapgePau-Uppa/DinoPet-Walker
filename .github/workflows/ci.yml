@@ -1,0 +1,55 @@
+name: Flutter ci
+
+on:
+  push:
+    branches:
+      - develop  
+      - main    
+  pull_request:
+    branches:
+      - develop  
+      - main    
+
+jobs:
+  analysis_and_build:
+    name: Analyse statique & Build APK Android
+    runs-on: ubuntu-latest
+
+    steps:
+      # Récupère le code source du repo sur la machine virtuelle
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # Installe Flutter sur la machine virtuelle
+      - name: Installation de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      # Génère le fichier .env en utilisant les secrets déclarés sur github 
+      - name: Créer le fichier .env
+        run: |
+          mkdir -p assets
+          echo "STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }}" >> assets/.env
+          echo "STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }}" >> assets/.env
+          echo "STRAVA_REDIRECT_URI=${{ secrets.STRAVA_REDIRECT_URI }}" >> assets/.env
+
+      # Télécharger toutes les dépendances nécessaires
+      - name: Installation des dépendances
+        run: flutter pub get
+
+      # Analyser le code 
+      - name: Analyse statique du code
+        run: flutter analyze
+
+      # Compile l'application
+      - name: Build APK
+        run: flutter build apk --release
+
+      # Sauvegarder l'apk généré 
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
