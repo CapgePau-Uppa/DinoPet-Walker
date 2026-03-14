@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,15 +7,21 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/sport_activity.dart';
 
 class StravaService {
-  final String clientId = '207948';
-  final String clientSecret = 'd5cdff7f7fec1a123e4dc95153b15712a11b59ea';
-
-  final String redirectUri = 'dinopet://dinopet.app';
+  final String clientId = dotenv.env['STRAVA_CLIENT_ID']!;
+  final String clientSecret = dotenv.env['STRAVA_CLIENT_SECRET']!;
+  final String redirectUri = dotenv.env['STRAVA_REDIRECT_URI']!;
 
   final _storage = const FlutterSecureStorage();
 
   Future<bool> loginToStrava() async {
-    final url = 'https://www.strava.com/oauth/mobile/authorize?client_id=$clientId&redirect_uri=$redirectUri&response_type=code&approval_prompt=auto&scope=activity:read_all';
+    try {
+      await _storage.deleteAll();
+    } catch (e) {
+      //
+    }
+
+    final url =
+        'https://www.strava.com/oauth/mobile/authorize?client_id=$clientId&redirect_uri=$redirectUri&response_type=code&approval_prompt=auto&scope=activity:read_all';
 
     try {
       final result = await FlutterWebAuth2.authenticate(
@@ -28,7 +35,6 @@ class StravaService {
       }
       return false;
     } catch (e) {
-      print('Erreur de connexion Strava: $e');
       return false;
     }
   }
@@ -47,9 +53,18 @@ class StravaService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      await _storage.write(key: 'strava_access_token', value: data['access_token']);
-      await _storage.write(key: 'strava_refresh_token', value: data['refresh_token']);
-      await _storage.write(key: 'strava_expires_at', value: data['expires_at'].toString());
+      await _storage.write(
+        key: 'strava_access_token',
+        value: data['access_token'],
+      );
+      await _storage.write(
+        key: 'strava_refresh_token',
+        value: data['refresh_token'],
+      );
+      await _storage.write(
+        key: 'strava_expires_at',
+        value: data['expires_at'].toString(),
+      );
 
       return true;
     } else {
@@ -85,7 +100,7 @@ class StravaService {
         'AlpineSki',
         'Snowboard',
         'BackcountrySki',
-        'NordicSki'
+        'NordicSki',
       ];
 
       final filteredActivities = rawActivities.where((json) {

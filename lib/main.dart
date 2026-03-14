@@ -2,11 +2,14 @@ import 'package:dinopet_walker/services/app_links_service.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/providers.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  // Charger les variables dans .env
+  await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp();
 
   runApp(
