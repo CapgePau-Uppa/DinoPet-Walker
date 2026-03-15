@@ -1,7 +1,8 @@
-import 'package:dinopet_walker/controllers/login_controller.dart';
+import 'package:dinopet_walker/controllers/authentification/login_controller.dart';
 import 'package:dinopet_walker/pages/forgot_password_screen.dart';
 import 'package:dinopet_walker/pages/signup_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:dinopet_walker/widgets/login/password_field.dart';
 import 'package:flutter/gestures.dart';
@@ -19,10 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   bool _loading = false;
 
-  void login() async {
+  void _login() async {
+
     FocusScope.of(context).unfocus();
 
     setState(() => _loading = true);
+    
     final error = await _controller.login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
@@ -30,10 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     setState(() => _loading = false);
+
     if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+      Toast.show(context: context, message: error, icon: Icons.highlight_off, color: const Color(0xFFC94A4A));
     }
   }
 
@@ -119,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       PrimaryButton(
                         label: 'Se connecter',
-                        onPressed: _loading ? () {} : login,
+                        onPressed: _loading ? () {} : _login,
                         isLoading: _loading,
                       ),
 

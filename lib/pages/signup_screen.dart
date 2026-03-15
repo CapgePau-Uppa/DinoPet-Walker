@@ -1,6 +1,7 @@
-import 'package:dinopet_walker/controllers/signup_controller.dart';
-import 'package:dinopet_walker/pages/selection_screen.dart';
+import 'package:dinopet_walker/controllers/authentification/signup_controller.dart';
+import 'package:dinopet_walker/pages/email_verification_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:dinopet_walker/widgets/login/password_field.dart';
 import 'package:flutter/gestures.dart';
@@ -14,35 +15,41 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final SignUpController _controller = SignUpController();
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
   bool _loading = false;
 
   void _signUp() async {
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
-    final error = await _controller.signUp(
+
+    final erreur = await _controller.signUp(
       username: usernameController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
       confirmPassword: confirmPasswordController.text.trim(),
     );
-    
-    if (!mounted) return;
 
+    if (!mounted) return;
     setState(() => _loading = false);
 
-    if (error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
+    if (erreur != null) {
+      Toast.show(
+        context: context,
+        message: erreur,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
+      );
     } else {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => SelectionScreen()),
+        MaterialPageRoute(builder: (_) => const EmailVerificationScreen()),
       );
     }
   }

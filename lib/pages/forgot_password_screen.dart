@@ -1,5 +1,6 @@
-import 'package:dinopet_walker/controllers/forgot_password_controller.dart';
+import 'package:dinopet_walker/controllers/authentification/forgot_password_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/email_field.dart';
 import 'package:flutter/material.dart';
 
@@ -27,9 +28,21 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
 
     setState(() => _loading = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(error ?? 'Email de réinitialisation envoyé')),
-    );
+    if(error!=null){
+      Toast.show(
+        context: context,
+        message: error,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
+      );
+    }else{
+      Toast.show(
+        context: context,
+        message: "Email de réinitialisation envoyé",
+        icon: Icons.check_circle,
+        color: const Color(0xFF4CAF50),
+      );
+    }
   }
 
   @override

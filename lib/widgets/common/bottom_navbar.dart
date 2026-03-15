@@ -50,13 +50,21 @@ class BottomNavBar extends StatelessWidget {
               BottomNavBarItem(
                 index: 2,
                 currentIndex: currentIndex,
+                icon: Icons.sports,
+                activeIcon: Icons.sports,
+                label: 'Activités',
+                onTap: onTap,
+              ),
+              BottomNavBarItem(
+                index: 3,
+                currentIndex: currentIndex,
                 icon: Icons.map_outlined,
                 activeIcon: Icons.map,
                 label: 'Map',
                 onTap: onTap,
               ),
               BottomNavBarItem(
-                index: 3,
+                index: 4,
                 currentIndex: currentIndex,
                 icon: Icons.settings_outlined,
                 activeIcon: Icons.settings,

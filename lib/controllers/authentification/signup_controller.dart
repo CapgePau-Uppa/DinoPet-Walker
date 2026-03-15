@@ -31,9 +31,12 @@ class SignUpController {
         password: password,
         username: username,
       );
+
       return null;
+      
     } catch (e) {
-      return "Erreur lors de l'inscription. L'email est peut-être déjà utilisé.";
+      return "Erreur lors de l'inscription.\nL'email est peut-être déja utilisé";
     }
   }
+
 }
