@@ -15,7 +15,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ActivityController>().loadActivities();
     });
@@ -27,7 +26,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-
       appBar: AppBar(
         title: const Text(
           "Mes Activités",
@@ -37,7 +35,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
       ),
-
       body: Builder(
         builder: (context) {
           if (controller.isLoading) {
@@ -45,15 +42,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
               child: CircularProgressIndicator(color: Color(0xFFFC4C02)),
             );
           }
+
           if (!controller.isStravaLinked) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.link_off, size: 80, color: Colors.grey[400]),
-
                   const SizedBox(height: 16),
-
                   const Text(
                     "Strava n'est pas connecté.\nAllez dans les paramètres pour lier votre compte.",
                     textAlign: TextAlign.center,
@@ -76,12 +72,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
           return RefreshIndicator(
             color: const Color(0xFFFC4C02),
             onRefresh: () => controller.loadActivities(),
-
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-
-              itemCount: controller.activities.length + 1,
-
+              itemCount: controller.todayActivities.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return Column(
@@ -95,9 +88,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               icon: Icons.timer_outlined,
                             ),
                           ),
-
                           const SizedBox(width: 12),
-
                           Expanded(
                             child: ActivityGaugeWidget(
                               title: "Distance totale\nSemaine",
@@ -108,14 +99,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 20),
                     ],
                   );
                 }
 
-                final activity = controller.activities[index - 1];
-
+                final activity = controller.todayActivities[index - 1];
                 return ActivityCard(activity: activity);
               },
             ),
