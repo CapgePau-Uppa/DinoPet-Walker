@@ -14,6 +14,7 @@ class ActivityController extends ChangeNotifier {
   int get totalDuration => _totalDuration;
 
   List<SportActivity> activities = [];
+  List<SportActivity> todayActivities = [];
   bool isLoading = true;
   bool isStravaLinked = false;
 
@@ -25,13 +26,16 @@ class ActivityController extends ChangeNotifier {
     isStravaLinked = token != null;
 
     if (isStravaLinked) {
-      activities = (await _stravaService.fetchActivities()).where((a) => a.type != 'Walk').toList();
-
       final now = DateTime.now();
       final weekStart = now.subtract(Duration(days: now.weekday - 1));
 
       _totalDistance = 0.0;
       _totalDuration = 0;
+
+      activities = (await _stravaService.fetchActivities()).where((a) => a.type != 'Walk').toList();
+
+      todayActivities = activities.where((a) =>a.date.year == now.year && a.date.month == now.month && a.date.day == now.day,)
+      .toList();
 
       for (final acvt in activities) {
         final activityDay = DateTime(acvt.date.year, acvt.date.month, acvt.date.day);
