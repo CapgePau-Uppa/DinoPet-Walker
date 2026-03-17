@@ -35,82 +35,123 @@ class _ActivityScreenState extends State<ActivityScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
       ),
-      body: Builder(
-        builder: (context) {
-          if (controller.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFC4C02)),
-            );
-          }
+      body: () {
+        if (controller.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(color: Color(0xFFFC4C02)),
+          );
+        }
 
-          if (!controller.isStravaLinked) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        if (!controller.isStravaLinked) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.link_off, size: 80, color: Colors.grey[400]),
+                const SizedBox(height: 16),
+                const Text(
+                  "Vous n'êtes pas connecté a Strava.\nAllez dans les paramètres pour relier votre compte.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          color: const Color(0xFFFC4C02),
+          onRefresh: () => controller.loadActivities(),
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Row(
                 children: [
-                  Icon(Icons.link_off, size: 80, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Strava n'est pas connecté.\nAllez dans les paramètres pour lier votre compte.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  Expanded(
+                    child: ActivityGaugeWidget(
+                      title: "Temps d'activité\nHebdomadaire",
+                      value: "${controller.totalDuration} min",
+                      icon: Icons.timer_outlined,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ActivityGaugeWidget(
+                      title: "Distance totale\nHebdomadaire",
+                      value:
+                          "${controller.totalDistance.toStringAsFixed(2)} km",
+                      icon: Icons.directions_walk,
+                    ),
                   ),
                 ],
               ),
-            );
-          }
+              const SizedBox(height: 30),
 
-          if (controller.activities.isEmpty) {
-            return const Center(
-              child: Text(
-                "Aucune activité trouvée sur votre compte Strava.",
-                style: TextStyle(color: Colors.grey),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (controller.todayActivities.isNotEmpty) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFC4C02).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFC4C02).withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.calendar_today,
+                                size: 14,
+                                color: Color(0xFFFC4C02),
+                              ),
+                              const SizedBox(width: 6),
+                              const Text(
+                                "Aujourd'hui",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFFC4C02),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                ],
               ),
-            );
-          }
+              const SizedBox(height: 12),
 
-          return RefreshIndicator(
-            color: const Color(0xFFFC4C02),
-            onRefresh: () => controller.loadActivities(),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: controller.todayActivities.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ActivityGaugeWidget(
-                              title: "Temps d'activité\nSemaine",
-                              value: "${controller.totalDuration} min",
-                              icon: Icons.timer_outlined,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ActivityGaugeWidget(
-                              title: "Distance totale\nSemaine",
-                              value:
-                                  "${controller.totalDistance.toStringAsFixed(2)} km",
-                              icon: Icons.directions_walk,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  );
-                }
-
-                final activity = controller.todayActivities[index - 1];
-                return ActivityCard(activity: activity);
-              },
-            ),
-          );
-        },
-      ),
+              if (controller.todayActivities.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.only(top: 40),
+                  child: Center(
+                    child: Text(
+                      "Aucune activité aujourd'hui",
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ),
+                )
+              else
+                ...controller.todayActivities.map(
+                  (activity) => ActivityCard(activity: activity),
+                ),
+            ],
+          ),
+        );
+      }(),
     );
   }
 }

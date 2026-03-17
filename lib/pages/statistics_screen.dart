@@ -1,3 +1,5 @@
+import 'package:dinopet_walker/controllers/activity_controller.dart';
+import 'package:dinopet_walker/widgets/activity_gauge_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +24,13 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
   void initState() {
     super.initState();
 
-    // Au lancement de la page, on charge les données de la semaine en cours
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Au lancement de la page, on charge les données de la semaine en cours
       final liveSteps = context.read<HomeController>().currentSteps;
       context.read<StatisticsController>().loadStats(liveSteps);
+
+      final weekStart = context.read<StatisticsController>().currentWeekStart;
+      context.read<ActivityController>().loadActivities(weekStart: weekStart);
     });
   }
 
@@ -33,11 +38,13 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     final homeController = context.watch<HomeController>();
     final statController = context.watch<StatisticsController>();
+    final activityController = context.watch<ActivityController>();
 
     final int liveSteps = homeController.currentSteps;
     final DateTime now = DateTime.now();
 
-    final bool isSelectedToday = statController.selectedDate.year == now.year &&
+    final bool isSelectedToday =
+        statController.selectedDate.year == now.year &&
         statController.selectedDate.month == now.month &&
         statController.selectedDate.day == now.day;
 
@@ -57,79 +64,121 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
     final double distanceInKm = (displaySteps * 0.75) / 1000;
 
     final DateTime todayDate = DateTime(now.year, now.month, now.day);
-    final DateTime weekStart = todayDate.subtract(Duration(days: todayDate.weekday - 1));
+    final DateTime weekStart = todayDate.subtract(
+      Duration(days: todayDate.weekday - 1),
+    );
     final bool canGoNext = statController.currentWeekStart.isBefore(weekStart);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
         child: statController.isLoading
-            ? const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)))
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
+              )
             : SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-
-              DateBadgeWidget(date: formattedDate),
-              const SizedBox(height: 30),
-
-              DailyStatsWidget(
-                steps: displaySteps,
-                distance: "${distanceInKm.toStringAsFixed(2)} Km",
-                percentage: statController.percentageComparedToYesterday,
-                isUp: statController.isUpComparedToYesterday,
-              ),
-              const SizedBox(height: 20),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: AverageCardWidget(
-                        title: "Moyenne\nHebdomadaire",
-                        steps: statController.weeklyAverage,
-                        percentage: statController.weeklyPercentage,
-                        subtitle: "par rapport à la\ndernière semaine",
-                        isUp: statController.isWeeklyUp,
+                    const SizedBox(height: 20),
+
+                    DateBadgeWidget(date: formattedDate),
+                    const SizedBox(height: 30),
+
+                    DailyStatsWidget(
+                      steps: displaySteps,
+                      distance: "${distanceInKm.toStringAsFixed(2)} Km",
+                      percentage: statController.percentageComparedToYesterday,
+                      isUp: statController.isUpComparedToYesterday,
+                    ),
+                    const SizedBox(height: 20),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: AverageCardWidget(
+                              title: "Moyenne\nHebdomadaire",
+                              steps: statController.weeklyAverage,
+                              percentage: statController.weeklyPercentage,
+                              subtitle: "par rapport à la\ndernière semaine",
+                              isUp: statController.isWeeklyUp,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: AverageCardWidget(
+                              title: "Moyenne\nMensuelle",
+                              steps: statController.monthlyAverage,
+                              percentage: statController.monthlyPercentage,
+                              subtitle: "par rapport au\ndernier mois",
+                              isUp: statController.isMonthlyUp,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: AverageCardWidget(
-                        title: "Moyenne\nMensuelle",
-                        steps: statController.monthlyAverage,
-                        percentage: statController.monthlyPercentage,
-                        subtitle: "par rapport au\ndernier mois",
-                        isUp: statController.isMonthlyUp,
+                    const SizedBox(height: 20),
+
+                    if (activityController.isStravaLinked) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ActivityGaugeWidget(
+                                title: "Temps d'activité\nHebdomadaire",
+                                value:
+                                    "${activityController.totalDuration} min",
+                                icon: Icons.timer_outlined,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ActivityGaugeWidget(
+                                title: "Distance totale\nHebdomadaire",
+                                value:
+                                    "${activityController.totalDistance.toStringAsFixed(2)} km",
+                                icon: Icons.directions_walk,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                      child: InteractiveChartWidget(
+                        key: ValueKey<String>(
+                          statController.currentWeekStart.toString(),
+                        ),
+                        weekData: dynamicWeekData,
+                        weekStartDate: statController.currentWeekStart,
+                        selectedDate: statController.selectedDate,
+                        onDaySelected: (cliquedDate) {
+                          final today = DateTime(now.year, now.month, now.day);
+                          final clicked = DateTime(
+                            cliquedDate.year,
+                            cliquedDate.month,
+                            cliquedDate.day,
+                          );
+
+                          if (clicked.isAfter(today)) return;
+
+                          statController.selectDate(cliquedDate, liveSteps);
+                        },
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                child: InteractiveChartWidget(
-                  key: ValueKey<String>(statController.currentWeekStart.toString()),
-                  weekData: dynamicWeekData,
-                  weekStartDate: statController.currentWeekStart,
-                  selectedDate: statController.selectedDate,
-                  onDaySelected: (cliquedDate) {
-                    final today = DateTime(now.year, now.month, now.day);
-                    final clicked = DateTime(cliquedDate.year, cliquedDate.month, cliquedDate.day);
-
-                    if (clicked.isAfter(today)) return;
-
-                    statController.selectDate(cliquedDate, liveSteps);
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
