@@ -154,7 +154,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                     )
                   else
                     const Opacity(
-                      opacity: 0.0,
+                      opacity: 0.5,
                       child: ChartNavigationWidget(text: "Suivant"),
                     ),
                 ],
