@@ -105,10 +105,10 @@ class _GoalScreenState extends State<GoalScreen> {
                             color: tier.color,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: isSelected
-                                ? [BoxShadow(color: tier.color.withOpacity(0.6), blurRadius: 15, spreadRadius: 2)]
+                                ? [BoxShadow(color: tier.color.withValues(alpha: 0.6), blurRadius: 15, spreadRadius: 2)]
                                 : [],
                             border: isSelected
-                                ? Border.all(color: Colors.white.withOpacity(0.5), width: 2)
+                                ? Border.all(color: Colors.white.withValues(alpha: 0.5), width: 2)
                                 : null,
                           ),
                           child: Row(
@@ -116,7 +116,7 @@ class _GoalScreenState extends State<GoalScreen> {
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(tier.icon, color: Colors.white, size: 30),
@@ -131,7 +131,7 @@ class _GoalScreenState extends State<GoalScreen> {
                                   ),
                                   Text(
                                     "${tier.steps} pas / jour",
-                                    style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
                                   ),
                                 ],
                               ),
