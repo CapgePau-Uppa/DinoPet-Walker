@@ -46,4 +46,13 @@ class UserService {
 
     return UserModel.fromFirestore(uid, user.data()!);
   }
+
+  Future<void> updateGoalSteps(int newGoal) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'goalSteps': newGoal,
+    });
+  }
 }
