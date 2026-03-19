@@ -226,6 +226,62 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+                child: InteractiveChartWidget(
+                  key: ValueKey<String>(statController.currentWeekStart.toString()),
+                  weekData: dynamicWeekData,
+                  weekStartDate: statController.currentWeekStart,
+                  selectedDate: statController.selectedDate,
+                  onDaySelected: (cliquedDate) {
+                    final today = DateTime(now.year, now.month, now.day);
+                    final clicked = DateTime(cliquedDate.year, cliquedDate.month, cliquedDate.day);
+
+                    if (clicked.isAfter(today)) return;
+
+                    statController.selectDate(cliquedDate, liveSteps);
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () => statController.changeWeek(-1, liveSteps),
+                      child: const ChartNavigationWidget(text: "Précédent"),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  if (canGoNext)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => statController.changeWeek(1, liveSteps),
+                        child: const ChartNavigationWidget(text: "Suivant"),
+                      ),
+                    )
+                  else
+                    const Opacity(
+                      opacity: 0.5,
+                      child: ChartNavigationWidget(text: "Suivant"),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
       ),
     );
   }
