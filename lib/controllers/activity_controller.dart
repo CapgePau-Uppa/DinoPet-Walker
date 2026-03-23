@@ -31,9 +31,7 @@ class ActivityController extends ChangeNotifier {
 
     String? token = await _storage.read(key: 'strava_access_token');
 
-    if(token != null){
-      _isStravaLinked = true;
-    }
+    _isStravaLinked = token != null;
 
     if (isStravaLinked) {
 
