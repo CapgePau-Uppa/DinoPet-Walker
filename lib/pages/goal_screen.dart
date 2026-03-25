@@ -3,6 +3,8 @@ import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/common/my_appbar.dart';
+
 class GoalTier {
   final String title;
   final int steps;
@@ -60,15 +62,7 @@ class _GoalScreenState extends State<GoalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          "Mon objectif",
-          style: TextStyle(color: Color(0xFF1B4965), fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      appBar: Myappbar(title: "Mon objectif", showBackButton: false),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
