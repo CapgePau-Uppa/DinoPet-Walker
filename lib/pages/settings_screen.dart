@@ -41,9 +41,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (_isStravaLinked) {
       await _controller.unlinkStrava();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Compte Strava déconnecté"),
-              backgroundColor: Colors.orange),
+        Toast.show(
+          context: context,
+          message: "Compte Strava déconnecté",
+          icon: Icons.check_circle,
+          color: const Color(0xFF4CAF50),
         );
         context.read<ActivityController>().loadActivities();
       }
@@ -51,16 +53,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final success = await _controller.linkStrava();
       if (mounted) {
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Compte Strava lié avec succès !"),
-                backgroundColor: Colors.green),
+          Toast.show(
+            context: context,
+            message: "Compte Strava lié avec succès !",
+            icon: Icons.check_circle,
+            color: const Color(0xFF4CAF50),
           );
           context.read<ActivityController>().loadActivities();
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text("Erreur lors de la connexion à Strava"),
-                backgroundColor: Colors.red),
+          Toast.show(
+            context: context,
+            message: "Erreur lors de la connexion à Strava",
+            icon: Icons.highlight_off,
+            color: const Color(0xFFC94A4A),
           );
         }
       }
