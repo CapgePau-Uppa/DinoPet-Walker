@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/widgets/settings/settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/controllers/settings_controller.dart';
 import 'package:provider/provider.dart';
@@ -101,76 +102,101 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 250,
-              height: 50,
-              child: ElevatedButton.icon(
-                onPressed: _isLoadingStrava ? null : _toggleStravaConnection,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isStravaLinked
-                      ? Colors.grey[700]
-                      : const Color(0xFFFC4C02),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                icon: _isLoadingStrava
-                    ? const SizedBox(width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                        color: Colors.white, strokeWidth: 2))
-                    : Icon(_isStravaLinked ? Icons.link_off : Icons.link,
-                    color: Colors.white),
-                label: Text(
-                  _isStravaLinked
-                      ? "Déconnecter Strava"
-                      : "Lier mon compte Strava",
-                  style: const TextStyle(fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+    final height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(horizontal: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SettingsItem(
+            title: "Modifier mon objectif",
+            icon: Icons.track_changes,
+            onTap: () {},
+          ),
+
+          const SizedBox(height: 15),
+
+          SettingsItem(
+            title: "Modifier le profil",
+            icon: Icons.person_outline,
+            onTap: () {},
+          ),
+
+          const SizedBox(height: 15),
+          
+          SettingsItem(
+            title: "Modifier le mot de passe",
+            icon: Icons.lock_outline,
+            onTap: () {},
+          ),
+
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            height: height * 0.06,
+            child: ElevatedButton.icon(
+              onPressed: _isLoadingStrava ? null : _toggleStravaConnection,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _isStravaLinked
+                    ? Colors.grey[700]
+                    : const Color(0xFFFC4C02),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-            ),
-
-            const SizedBox(height: 40),
-
-            SizedBox(
-              width: 200,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _loading ? null : _signOut,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: _loading
-                    ? const SizedBox(
-                  width: 22,
-                  height: 22,
+              icon: _isLoadingStrava
+                  ? const SizedBox(width: 20,
+                  height: 20,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-                    : const Text(
-                  "Se déconnecter",
-                  style: TextStyle(
-                    fontSize: 16,
+                      color: Colors.white, strokeWidth: 2))
+                  : Icon(_isStravaLinked ? Icons.link_off : Icons.link,
+                  color: Colors.white),
+              label: Text(
+                _isStravaLinked
+                    ? "Déconnecter Strava"
+                    : "Lier mon compte Strava",
+                style: const TextStyle(fontSize: 16,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+      
+          const SizedBox(height: 40),
+      
+                    SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton.icon(
+              onPressed: _loading ? null : _signOut,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: _loading
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Icon(Icons.logout, color: Colors.white),
+              label: const Text(
+                "Se déconnecter",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
