@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/pages/change_password_screen.dart';
 import 'package:dinopet_walker/pages/edit_profile_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
@@ -133,7 +134,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SettingsItem(
             title: "Modifier le mot de passe",
             icon: Icons.lock_outline,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+              );
+            },
           ),
 
           const SizedBox(height: 24),

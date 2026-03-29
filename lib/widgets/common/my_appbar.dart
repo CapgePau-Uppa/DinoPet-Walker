@@ -14,7 +14,7 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      leadingWidth: 100,
+      leadingWidth: 80,
       leading: showBackButton
           ? Center(
               child: Container(
