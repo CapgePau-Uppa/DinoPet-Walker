@@ -55,4 +55,13 @@ class UserService {
       'goalSteps': newGoal,
     });
   }
+
+  // mettre a jour le nom d'utilisateur 
+  Future<void> updateUsername(String newUsername) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'username': newUsername,
+    });
+  }
 }
