@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/pages/edit_profile_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/settings/settings_item.dart';
@@ -119,7 +120,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SettingsItem(
             title: "Modifier le profil",
             icon: Icons.person_outline,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+              );
+            },
           ),
 
           const SizedBox(height: 15),
