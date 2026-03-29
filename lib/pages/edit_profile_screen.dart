@@ -1,7 +1,9 @@
+import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/widgets/settings/profile/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -14,6 +16,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    initFields();
+  }
+
+  void initFields(){
+    final userController = context.read<UserController>();
+    usernameController.text = userController.username;
+    emailController.text = userController.email;
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {

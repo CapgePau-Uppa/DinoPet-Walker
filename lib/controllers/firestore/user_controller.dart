@@ -19,4 +19,6 @@ class UserController extends ChangeNotifier {
   }
 
   String get username => user?.username ?? '';
+  String get email => user?.email ?? '';
+
 }
