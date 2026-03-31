@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
+  final Color? fillColor;
   const PasswordField({
     super.key,
     required this.controller,
     required this.label,
+    this.fillColor
   });
 
   @override
@@ -21,7 +23,7 @@ class _PasswordFieldState extends State<PasswordField> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: Colors.white70,
+        color: widget.fillColor ?? Colors.white70,
       ),
       child: TextField(
         controller: widget.controller,
