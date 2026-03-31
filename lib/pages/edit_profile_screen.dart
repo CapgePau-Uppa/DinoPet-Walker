@@ -41,25 +41,54 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _save() async {
     final userController = context.read<UserController>();
 
-    final error = await userController.updateUsername(usernameController.text);
-
-    if (!mounted) return;
-
-    if (error != null) {
-      Toast.show(
-        context: context,
-        message: error,
-        icon: Icons.highlight_off,
-        color: const Color(0xFFC94A4A),
+    // Mise a jour de username
+    if (usernameController.text != userController.username) {
+      final error = await userController.updateUsername(
+        usernameController.text,
       );
-    } else {
+      if (!mounted) return;
+      if (error != null) {
+        Toast.show(
+          context: context,
+          message: error,
+          icon: Icons.highlight_off,
+          color: const Color(0xFFC94A4A),
+        );
+        return;
+      }
+    }
+
+    // Mise a jour de l'email
+    if (emailController.text != userController.email) {
+      final error = await userController.updateEmail(
+        emailController.text,
+      );
+      if (!mounted) return;
+      if (error != null) {
+        Toast.show(
+          context: context,
+          message: error,
+          icon: Icons.highlight_off,
+          color: const Color(0xFFC94A4A),
+        );
+        return;
+      }
       Toast.show(
         context: context,
-        message: "Profil mis a jour",
-        icon: Icons.check_circle,
+        message:
+            "Un lien de vérification a été envoyé a ${emailController.text}",
+        icon: Icons.email,
         color: const Color(0xFF4CAF50),
       );
+      return;
     }
+
+    Toast.show(
+      context: context,
+      message: "Profil mis a jour",
+      icon: Icons.check_circle,
+      color: const Color(0xFF4CAF50),
+    );
   }
 
   @override

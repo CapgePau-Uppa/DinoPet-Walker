@@ -4,6 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _firebaseInstance = FirebaseAuth.instance;
 
+  // récupérer l'utilisateur courrant
+  User? getCurrentUser() {
+    return _firebaseInstance.currentUser;
+  }
+
   // verifier la connexion
   Future<String?> checkConnectivity() async {
     try {
@@ -101,10 +106,61 @@ class AuthService {
     );
   }
 
+  // envoyer un email de validation pour mettre a jour l'email de l'utilisateur
+  Future<String?> sendEmailUpdateVerification({
+    required String newEmail,
+  }) async {
+    try {
+      final user = _firebaseInstance.currentUser;
+
+      final actionCodeSettings = ActionCodeSettings(
+        url:
+            'https://dinopetwalker.web.app/?newEmail=${Uri.encodeComponent(newEmail)}',
+        handleCodeInApp: true,
+        androidPackageName: 'com.example.dinopet_walker',
+        androidInstallApp: true,
+        androidMinimumVersion: '21',
+      );
+
+      await user!.verifyBeforeUpdateEmail(newEmail, actionCodeSettings);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        return "Veuillez vous reconnecter avant de changer votre email";
+      }
+      return e.message;
+    }
+  }
   
+  // valider le code OOB reçu par email et rafraichit les données de l'utilisateur
   Future<void> verifyEmail(String oobCode) async {
     await _firebaseInstance.applyActionCode(oobCode);
     await _firebaseInstance.currentUser?.reload();
   }
+
+  // appliquer le changement d'email et retourne le nouvel email extrait de l'url
+  Future<String?> applyEmailChange({
+    required String oobCode,
+    required String? continueUrlRaw,
+  }) async {
+    String? newEmail;
+
+    if (continueUrlRaw != null) {
+      final decodedOnce = Uri.decodeComponent(continueUrlRaw);
+      final parsedContinueUrl = Uri.tryParse(decodedOnce);
+      newEmail = parsedContinueUrl?.queryParameters['newEmail'];
+    }
+
+    await _firebaseInstance.applyActionCode(oobCode);
+
+    return newEmail;
+  }
+
+  // révoquer le code pour annuler le changement d'email
+  Future<void> revokeEmailChange(String oobCode) async {
+    await _firebaseInstance.checkActionCode(oobCode);
+    // on applique pas le code, il expire naturellement
+  }
+  
 
 }

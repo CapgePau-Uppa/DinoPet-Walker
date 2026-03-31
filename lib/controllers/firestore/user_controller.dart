@@ -1,11 +1,12 @@
 import 'package:dinopet_walker/models/user_model.dart';
+import 'package:dinopet_walker/services/auth_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/utils/validator.dart';
 import 'package:flutter/material.dart';
 
 class UserController extends ChangeNotifier {
   final UserService _userService = UserService();
-
+  final AuthService _authService = AuthService();
   UserModel? user;
 
   // Récuperer ou créer l'utilisateur qui a validé son email sur firestore
@@ -19,6 +20,7 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Mettre a jour le username
   Future<String?> updateUsername(String newUsername) async {
     final error = Validator.username(newUsername);
     if (error != null) return error;
@@ -42,7 +44,13 @@ class UserController extends ChangeNotifier {
     return null;
   }
 
+  // Mettre a jour l'email
+  Future<String?> updateEmail(String newEmail) async {
+    return await _authService.sendEmailUpdateVerification(newEmail: newEmail);
+  }
+
   String get username => user?.username ?? '';
   String get email => user?.email ?? '';
+  bool get isLoggedIn => _authService.getCurrentUser() != null;
 
 }
