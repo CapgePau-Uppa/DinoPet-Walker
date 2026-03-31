@@ -1,7 +1,10 @@
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
+import 'package:dinopet_walker/widgets/common/form_label.dart';
+import 'package:dinopet_walker/widgets/fields/phone_field.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:dinopet_walker/widgets/settings/profile/input_field.dart';
+import 'package:dinopet_walker/widgets/fields/email_field.dart';
+import 'package:dinopet_walker/widgets/fields/username_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
@@ -101,7 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: Myappbar(title: "Modifier le profil", showBackButton: true),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -112,25 +115,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 MediaQuery.of(context).padding.top -
                 kToolbarHeight,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 50),
-                InputField(
-                  label: "Nom d'utilisateur",
-                  controller: usernameController,
-                ),
-                const SizedBox(height: 20),
-                InputField(
-                  label: "Email",
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 20),
-                InputField(
-                  label: "Numéro de téléphone",
-                  controller: phoneController,
-                  keyboardType: TextInputType.phone,
-                ),
                 const SizedBox(height: 40),
+
+                FormLabel(text: "Nom d'utilisateur"),
+                UsernameField(
+                  controller: usernameController,
+                  fillColor: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
+                ),
+
+                const SizedBox(height: 20),
+
+                FormLabel(text: "Adresse email"),
+                EmailField(
+                  controller: emailController,
+                  fillColor: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
+                ),
+
+                const SizedBox(height: 20),
+
+                FormLabel(text: "Numéro de téléphone"),
+                PhoneField(
+                  controller: phoneController,
+                  fillColor: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
+                ),
+
+                const SizedBox(height: 36),
+
                 PrimaryButton(label: "Enregistrer", onPressed: _save),
               ],
             ),
