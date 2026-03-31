@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
+import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/settings/profile/input_field.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     // Mise a jour de l'email
     if (emailController.text != userController.email) {
+      final password = await ConfirmPasswordDialog.show(context);
+      if (!mounted) return;
+      if (password == null || password.isEmpty) return;
+
       final error = await userController.updateEmail(
-        emailController.text,
+        newEmail: emailController.text,
+        password: password,
       );
       if (!mounted) return;
       if (error != null) {

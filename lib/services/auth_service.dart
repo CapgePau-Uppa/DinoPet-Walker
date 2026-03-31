@@ -161,6 +161,30 @@ class AuthService {
     await _firebaseInstance.checkActionCode(oobCode);
     // on applique pas le code, il expire naturellement
   }
+
+  // réauthentifier l'utilisateur avec son mot de passe actuel
+  Future<String?> reauthenticate({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final user = _firebaseInstance.currentUser;
+      if (user == null) return "Utilisateur introuvable";
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        return "Mot de passe incorrect";
+      }
+      return e.message;
+    }
+  }
   
 
 }

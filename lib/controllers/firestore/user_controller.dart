@@ -44,8 +44,22 @@ class UserController extends ChangeNotifier {
     return null;
   }
 
-  // Mettre a jour l'email
-  Future<String?> updateEmail(String newEmail) async {
+  Future<String?> updateEmail({
+    required String newEmail,
+    required String password,
+  }) async {
+    // récuperer  l'email courrant depuis Firestore 
+    final currentEmail = await _userService.getCurrentUserEmail();
+    if (currentEmail == null) return "Utilisateur introuvable";
+
+    // réauthentifier avec l'email courrant
+    final reauthError = await _authService.reauthenticate(
+      email: currentEmail,
+      password: password,
+    );
+    if (reauthError != null) return reauthError;
+
+    // si tout est ok on envoie l'email de validation par email
     return await _authService.sendEmailUpdateVerification(newEmail: newEmail);
   }
 

@@ -48,6 +48,14 @@ class UserService {
     return UserModel.fromFirestore(uid, user.data()!);
   }
 
+  Future<String?> getCurrentUserEmail() async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return null;
+
+    final doc = await _firestoreInstance.collection('users').doc(uid).get();
+    return doc.data()?['email'] as String?;
+  }
+
   Future<void> updateGoalSteps(int newGoal) async {
     final uid = getCurrentAthenticatedUser()?.uid;
     if (uid == null) return;
