@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 
-class EmailField extends StatelessWidget {
+class PhoneField extends StatelessWidget {
   final TextEditingController controller;
-  const EmailField({super.key, required this.controller});
+  final Color? fillColor;
+
+  const PhoneField({super.key, required this.controller, this.fillColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: Colors.white70,
+        color: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
       ),
       child: TextField(
         controller: controller,
+        keyboardType: TextInputType.phone,
         decoration: InputDecoration(
-          hintText: "Email",
+          hintText: "Numéro de téléphone",
           filled: true,
           fillColor: Colors.transparent,
           prefixIcon: const Icon(
-            Icons.email_outlined,
+            Icons.phone_outlined,
             color: Color(0xFF1B3A2D),
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 18),

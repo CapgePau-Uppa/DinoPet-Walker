@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/widgets/login/password_field.dart';
+import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmPasswordDialog extends StatefulWidget {
