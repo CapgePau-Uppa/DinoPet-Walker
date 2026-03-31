@@ -1,9 +1,9 @@
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
 import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
 import 'package:dinopet_walker/widgets/common/form_label.dart';
-import 'package:dinopet_walker/widgets/fields/phone_field.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/email_field.dart';
+import 'package:dinopet_walker/widgets/fields/phone_field.dart';
 import 'package:dinopet_walker/widgets/fields/username_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
@@ -32,6 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final userController = context.read<UserController>();
     usernameController.text = userController.username;
     emailController.text = userController.email;
+    phoneController.text = userController.phone;
   }
 
   @override
@@ -90,6 +91,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         color: const Color(0xFF4CAF50),
       );
       return;
+    }
+
+    if (phoneController.text.isNotEmpty) {
+      await userController.updatePhone(phoneController.text);
+      if (!mounted) return;
     }
 
     Toast.show(

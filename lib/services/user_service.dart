@@ -80,4 +80,16 @@ class UserService {
       'email': newEmail,
     });
   }
+
+  // mettre a jour le téléphone après changement
+  Future<void> updatePhone(String? phone) async {
+  final uid = getCurrentAthenticatedUser()?.uid;
+  if (uid == null) return;
+
+  if (phone != null && phone.isNotEmpty) {
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'phone': phone,
+    });
+  }
+}
 }

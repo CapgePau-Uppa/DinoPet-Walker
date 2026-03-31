@@ -44,6 +44,7 @@ class UserController extends ChangeNotifier {
     return null;
   }
 
+  // Mettre a jour l'email
   Future<String?> updateEmail({
     required String newEmail,
     required String password,
@@ -63,8 +64,28 @@ class UserController extends ChangeNotifier {
     return await _authService.sendEmailUpdateVerification(newEmail: newEmail);
   }
 
+  // Mettre a jour le numéro
+  Future<void> updatePhone(String? phone) async {
+    if (phone == null || phone.isEmpty) return;
+
+    await _userService.updatePhone(phone);
+
+    if (user != null) {
+      user = UserModel(
+        uid: user!.uid,
+        username: user!.username,
+        email: user!.email,
+        phone: phone,
+        goalSteps: user!.goalSteps,
+        createdAt: user!.createdAt,
+      );
+      notifyListeners();
+    }
+  }
+
   String get username => user?.username ?? '';
   String get email => user?.email ?? '';
+  String get phone => user?.phone ?? '';
   bool get isLoggedIn => _authService.getCurrentUser() != null;
 
 }
