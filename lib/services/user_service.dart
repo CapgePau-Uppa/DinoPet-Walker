@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinopet_walker/models/user_model.dart';
+import 'package:dinopet_walker/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserService {
   final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;
-  final FirebaseAuth _authInstance = FirebaseAuth.instance;
+  final AuthService _authService = AuthService();
 
   // Récupérer l'utilisateur authentifié a partir du quel on va créer l'utilisateur sur firestore
   User? getCurrentAthenticatedUser() {
-    return _authInstance.currentUser;
+    return _authService.getCurrentUser();
   }
 
   Future<void> getOrCreateUserOnFirestore() async {
@@ -47,6 +48,14 @@ class UserService {
     return UserModel.fromFirestore(uid, user.data()!);
   }
 
+  Future<String?> getCurrentUserEmail() async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return null;
+
+    final doc = await _firestoreInstance.collection('users').doc(uid).get();
+    return doc.data()?['email'] as String?;
+  }
+
   Future<void> updateGoalSteps(int newGoal) async {
     final uid = getCurrentAthenticatedUser()?.uid;
     if (uid == null) return;
@@ -55,4 +64,32 @@ class UserService {
       'goalSteps': newGoal,
     });
   }
+
+  // mettre a jour le nom d'utilisateur 
+  Future<void> updateUsername(String newUsername) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'username': newUsername,
+    });
+  }
+
+  // mettre a jour l'email sur firestore après changement
+  Future<void> updateEmailOnFirestoreByUid(String uid, String newEmail) async {
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'email': newEmail,
+    });
+  }
+
+  // mettre a jour le téléphone après changement
+  Future<void> updatePhone(String? phone) async {
+  final uid = getCurrentAthenticatedUser()?.uid;
+  if (uid == null) return;
+
+  if (phone != null && phone.isNotEmpty) {
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'phone': phone,
+    });
+  }
+}
 }

@@ -1,25 +1,46 @@
 import 'package:flutter/material.dart';
 
-class EmailField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   final TextEditingController controller;
-  const EmailField({super.key, required this.controller});
+  final String label;
+  final Color? fillColor;
+  const PasswordField({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.fillColor
+  });
+
+  @override
+  State<PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool _isHide = true;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: Colors.white70,
+        color: widget.fillColor ?? Colors.white70,
       ),
       child: TextField(
-        controller: controller,
+        controller: widget.controller,
+        obscureText: _isHide,
         decoration: InputDecoration(
-          hintText: "Email",
+          hintText: widget.label,
           filled: true,
           fillColor: Colors.transparent,
-          prefixIcon: const Icon(
-            Icons.email_outlined,
-            color: Color(0xFF1B3A2D),
+          prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF1B3A2D)),
+          suffixIcon: IconButton(
+            onPressed: () => setState(() => _isHide = !_isHide),
+            icon: Icon(
+              _isHide
+                  ? Icons.visibility_off_outlined
+                  : Icons.visibility_outlined,
+              color: const Color(0xFF1B3A2D),
+            ),
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 18),
           border: OutlineInputBorder(

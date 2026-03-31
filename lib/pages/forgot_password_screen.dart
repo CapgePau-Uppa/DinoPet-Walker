@@ -1,7 +1,7 @@
 import 'package:dinopet_walker/controllers/authentification/forgot_password_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:dinopet_walker/widgets/login/email_field.dart';
+import 'package:dinopet_walker/widgets/fields/email_field.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {

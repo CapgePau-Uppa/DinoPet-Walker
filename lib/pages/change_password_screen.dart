@@ -1,6 +1,6 @@
+import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
-import 'package:dinopet_walker/widgets/settings/profile/input_field.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -55,22 +55,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             
                 const SizedBox(height: 36),
 
-                InputField(
+                PasswordField(
                   label: "Ancien mot de passe",
                   controller: oldPasswordController,
-                  obscureText: true,
                 ),
                 const SizedBox(height: 24),
-                InputField(
+
+                PasswordField(
                   label: "Nouveau mot de passe",
                   controller: newPasswordController,
-                  obscureText: true,
                 ),
                 const SizedBox(height: 24),
-                InputField(
+
+                PasswordField(
                   label: "Confirmer le mot de passe",
                   controller: confirmPasswordController,
-                  obscureText: true,
                 ),
                 const SizedBox(height: 60),
 
