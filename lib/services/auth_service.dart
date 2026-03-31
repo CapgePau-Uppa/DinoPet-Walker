@@ -186,5 +186,32 @@ class AuthService {
     }
   }
   
+  // rénitialiser le mot de passe (pas besoin d'envoi d'email de validation)
+  Future<String?> changePassword({
+    required String email,
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final user = getCurrentUser()!;
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: oldPassword,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+
+      await user.updatePassword(newPassword);
+
+      return null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password' || e.code == 'invalid-credential') {
+        return "Mot de passe incorrect";
+      }
+
+      return "Une erreur est survenue";
+    }
+  }
 
 }
