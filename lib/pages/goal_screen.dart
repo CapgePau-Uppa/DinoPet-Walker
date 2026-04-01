@@ -19,8 +19,9 @@ class GoalTier {
 
 class GoalScreen extends StatefulWidget {
   final GoalType goalType;
+  final bool showBackButton;
 
-  const GoalScreen({super.key, required this.goalType});
+  const GoalScreen({super.key, required this.goalType, this.showBackButton = true});
 
   @override
   State<GoalScreen> createState() => _GoalScreenState();
@@ -138,7 +139,7 @@ class _GoalScreenState extends State<GoalScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
-      appBar: Myappbar(title: screenTitle, showBackButton: false),
+      appBar: Myappbar(title: screenTitle, showBackButton: widget.showBackButton),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

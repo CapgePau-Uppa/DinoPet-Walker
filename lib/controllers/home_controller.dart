@@ -39,6 +39,8 @@ class HomeController extends ChangeNotifier {
 
         if (user.goalSteps != null) {
           await prefs.setInt('goalSteps', user.goalSteps!);
+          await prefs.setBool('isGoalSet', true);
+          isGoalSet = true;
         }
 
         if (user.goalTime != null) {
@@ -47,9 +49,6 @@ class HomeController extends ChangeNotifier {
         if (user.goalDistance != null) {
           await prefs.setInt('goalDistance', user.goalDistance!);
         }
-
-        await prefs.setBool('isGoalSet', true);
-        isGoalSet = true;
       }
     }
 
