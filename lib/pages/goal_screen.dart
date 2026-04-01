@@ -4,65 +4,141 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/common/my_appbar.dart';
+import '../widgets/common/toast.dart';
+
+enum GoalType { steps, time, distance }
 
 class GoalTier {
   final String title;
-  final int steps;
+  final int target;
   final Color color;
   final IconData icon;
 
-  GoalTier(this.title, this.steps, this.color, this.icon);
+  GoalTier(this.title, this.target, this.color, this.icon);
 }
 
 class GoalScreen extends StatefulWidget {
-  const GoalScreen({super.key});
+  final GoalType goalType;
+
+  const GoalScreen({super.key, required this.goalType});
 
   @override
   State<GoalScreen> createState() => _GoalScreenState();
 }
 
 class _GoalScreenState extends State<GoalScreen> {
-  final List<GoalTier> tiers = [
-    GoalTier("Débutant", 4000, const Color(0xFFD38B86), Icons.military_tech),
-    GoalTier("Intermédiaire", 7000, const Color(0xFF8B3A36), Icons.workspace_premium),
-    GoalTier("Actif", 10000, const Color(0xFFE83E8C), Icons.military_tech),
-    GoalTier("Sportif", 12000, const Color(0xFF6f42c1), Icons.emoji_events),
-    GoalTier("Champion", 15000, const Color(0xFFB8A236), Icons.emoji_events),
-  ];
+  late int _selectedTarget;
+  late TextEditingController _customTargetController;
 
-  late int _selectedSteps;
-  late TextEditingController _customStepsController;
+  String get screenTitle {
+    switch (widget.goalType) {
+      case GoalType.steps: return "Objectif de pas";
+      case GoalType.time: return "Temps d'activité";
+      case GoalType.distance: return "Objectif de distance";
+    }
+  }
+
+  String get unit {
+    switch (widget.goalType) {
+      case GoalType.steps: return "pas / jour";
+      case GoalType.time: return "min / jour";
+      case GoalType.distance: return "km / jour";
+    }
+  }
+
+  List<GoalTier> get currentTiers {
+    switch (widget.goalType) {
+      case GoalType.steps:
+        return [
+          GoalTier("Débutant", 4000, const Color(0xFFD38B86), Icons.military_tech),
+          GoalTier("Intermédiaire", 7000, const Color(0xFF8B3A36), Icons.workspace_premium),
+          GoalTier("Actif", 10000, const Color(0xFFE83E8C), Icons.military_tech),
+          GoalTier("Sportif", 12000, const Color(0xFF6f42c1), Icons.emoji_events),
+          GoalTier("Champion", 15000, const Color(0xFFB8A236), Icons.emoji_events),
+        ];
+      case GoalType.time:
+        return [
+          GoalTier("Débutant", 15, const Color(0xFFD38B86), Icons.timer),
+          GoalTier("Intermédiaire", 30, const Color(0xFF8B3A36), Icons.timer),
+          GoalTier("Actif", 45, const Color(0xFFE83E8C), Icons.timer),
+          GoalTier("Sportif", 60, const Color(0xFF6f42c1), Icons.timer),
+          GoalTier("Champion", 90, const Color(0xFFB8A236), Icons.timer),
+        ];
+      case GoalType.distance:
+        return [
+          GoalTier("Débutant", 2, const Color(0xFFD38B86), Icons.directions_run),
+          GoalTier("Intermédiaire", 4, const Color(0xFF8B3A36), Icons.directions_run),
+          GoalTier("Actif", 6, const Color(0xFFE83E8C), Icons.directions_run),
+          GoalTier("Sportif", 10, const Color(0xFF6f42c1), Icons.directions_run),
+          GoalTier("Champion", 15, const Color(0xFFB8A236), Icons.directions_run),
+        ];
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _selectedSteps = context.read<HomeController>().goalSteps;
-    _customStepsController = TextEditingController(text: _selectedSteps.toString());
+    final homeController = context.read<HomeController>();
+
+    switch (widget.goalType) {
+      case GoalType.steps:
+        _selectedTarget = homeController.goalSteps;
+        break;
+      case GoalType.time:
+        _selectedTarget = homeController.goalTime;
+        break;
+      case GoalType.distance:
+        _selectedTarget = homeController.goalDistance;
+        break;
+    }
+
+    _customTargetController = TextEditingController(text: _selectedTarget.toString());
   }
 
   @override
   void dispose() {
-    _customStepsController.dispose();
+    _customTargetController.dispose();
     super.dispose();
   }
 
-  void _selectTier(int steps) {
+  void _selectTier(int target) {
     setState(() {
-      _selectedSteps = steps;
-      _customStepsController.text = steps.toString();
+      _selectedTarget = target;
+      _customTargetController.text = target.toString();
     });
   }
 
   void _saveAndContinue() {
-    final int finalGoal = int.tryParse(_customStepsController.text) ?? 10000;
-    context.read<HomeController>().updateGoalSteps(finalGoal);
+    final int finalGoal = int.tryParse(_customTargetController.text) ?? 0;
+    final homeController = context.read<HomeController>();
+
+    switch (widget.goalType) {
+      case GoalType.steps:
+        homeController.updateGoalSteps(finalGoal);
+        break;
+      case GoalType.time:
+        homeController.updateGoalTime(finalGoal);
+        break;
+      case GoalType.distance:
+        homeController.updateGoalDistance(finalGoal);
+        break;
+    }
+
+    Toast.show(
+      context: context,
+      message: "Objectif défini avec succès !",
+      icon: Icons.check_circle_outline,
+      color: const Color(0xFF4CAF50),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final tiers = currentTiers;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
-      appBar: Myappbar(title: "Mon objectif", showBackButton: false),
+      appBar: Myappbar(title: screenTitle, showBackButton: false),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -87,10 +163,10 @@ class _GoalScreenState extends State<GoalScreen> {
                     itemCount: tiers.length,
                     itemBuilder: (context, index) {
                       final tier = tiers[index];
-                      final isSelected = _selectedSteps == tier.steps;
+                      final isSelected = _selectedTarget == tier.target;
 
                       return GestureDetector(
-                        onTap: () => _selectTier(tier.steps),
+                        onTap: () => _selectTier(tier.target),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           margin: const EdgeInsets.only(bottom: 16),
@@ -124,7 +200,7 @@ class _GoalScreenState extends State<GoalScreen> {
                                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                                   ),
                                   Text(
-                                    "${tier.steps} pas / jour",
+                                    "${tier.target} $unit",
                                     style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 14),
                                   ),
                                 ],
@@ -151,7 +227,7 @@ class _GoalScreenState extends State<GoalScreen> {
                           children: [
                             Expanded(
                               child: TextField(
-                                controller: _customStepsController,
+                                controller: _customTargetController,
                                 keyboardType: TextInputType.number,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -162,7 +238,7 @@ class _GoalScreenState extends State<GoalScreen> {
                                 decoration: const InputDecoration(border: InputBorder.none),
                                 onChanged: (val) {
                                   setState(() {
-                                    _selectedSteps = int.tryParse(val) ?? 10000;
+                                    _selectedTarget = int.tryParse(val) ?? 0;
                                   });
                                 },
                               ),

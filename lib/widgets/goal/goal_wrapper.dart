@@ -35,7 +35,7 @@ class _GoalWrapperState extends State<GoalWrapper> {
     }
 
     if (!homeController.isGoalSet) {
-      return const GoalScreen();
+      return const GoalScreen(goalType: GoalType.steps);
     }
 
     return const SelectionScreen();
