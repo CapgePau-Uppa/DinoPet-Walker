@@ -76,18 +76,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               const SizedBox(height: 40),
 
-              Container(
+              SizedBox(
                 width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Color(0xFF1B3A2D).withValues(alpha: 0.08),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.shield_outlined, 
-                  size: 50,
-                  color: Color(0xFF1B3A2D),
-                ),
+                height: 100,       
+                child: Image.asset("assets/icons/security_icon.png", height: 130),
               ),
 
               const SizedBox(height: 32),
