@@ -6,6 +6,8 @@ class UserModel {
   final String email;
   final String? phone;
   final int? goalSteps;
+  final int? goalTime;
+  final int? goalDistance;
   final DateTime? createdAt;
 
   UserModel({
@@ -14,6 +16,8 @@ class UserModel {
     required this.email,
     this.phone,
     this.goalSteps,
+    this.goalTime,
+    this.goalDistance,
     this.createdAt,
   });
 
@@ -25,6 +29,8 @@ class UserModel {
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
       goalSteps: data['goalSteps'] as int?,
+      goalTime: data['goalTime'] as int?,
+      goalDistance: data['goalDistance'] as int?,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
     );
   }
@@ -36,6 +42,8 @@ class UserModel {
       'email': email,
       'phone': phone,
       'goalSteps': goalSteps,
+      'goalTime': goalTime,
+      'goalDistance': goalDistance,
       'createdAt': FieldValue.serverTimestamp(),
     };
   }

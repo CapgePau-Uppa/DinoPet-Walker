@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/pages/change_password_screen.dart';
 import 'package:dinopet_walker/pages/edit_profile_screen.dart';
+import 'package:dinopet_walker/pages/goal_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/settings/settings_item.dart';
@@ -17,9 +18,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _loading = false;
-
   final SettingsController _controller = SettingsController();
-
   bool _isStravaLinked = false;
   bool _isLoadingStrava = false;
 
@@ -111,12 +110,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SettingsItem(
-            title: "Modifier mon objectif",
+            title: "Modifier mon objectif de pas",
             icon: Icons.track_changes,
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.steps)),
+              );
+            },
           ),
 
           const SizedBox(height: 15),
+
+          if (_isStravaLinked) ...[
+            SettingsItem(
+              title: "Modifier mon objectif de temps",
+              icon: Icons.timer,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.time)),
+                );
+              },
+            ),
+            const SizedBox(height: 15),
+
+            SettingsItem(
+              title: "Modifier mon objectif de distance",
+              icon: Icons.directions_run,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.distance)),
+                );
+              },
+            ),
+            const SizedBox(height: 15),
+          ],
 
           SettingsItem(
             title: "Modifier le profil",

@@ -13,11 +13,16 @@ class HomeController extends ChangeNotifier {
   int _goalSteps = 10000;
   bool _isInitialized = false;
 
+  int _goalTime = 30;
+  int _goalDistance = 5;
+
   bool isGoalSet = false;
   bool isLoadingGoal = true;
 
   int get currentSteps => _currentSteps;
   int get goalSteps => _goalSteps;
+  int get goalTime => _goalTime;
+  int get goalDistance => _goalDistance;
 
   HomeController({required this.dinoController});
 
@@ -30,17 +35,28 @@ class HomeController extends ChangeNotifier {
 
     if (!isGoalSet) {
       final user = await _userService.getCurrentUser();
-      if (user != null && user.goalSteps != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('goalSteps', user.goalSteps!);
-        await prefs.setBool('isGoalSet', true);
+      if (user != null) {
 
+        if (user.goalSteps != null) {
+          await prefs.setInt('goalSteps', user.goalSteps!);
+        }
+
+        if (user.goalTime != null) {
+          await prefs.setInt('goalTime', user.goalTime!);
+        }
+        if (user.goalDistance != null) {
+          await prefs.setInt('goalDistance', user.goalDistance!);
+        }
+
+        await prefs.setBool('isGoalSet', true);
         isGoalSet = true;
       }
     }
 
     if (isGoalSet) {
       _goalSteps = prefs.getInt('goalSteps') ?? 10000;
+      _goalTime = prefs.getInt('goalTime') ?? 30;
+      _goalDistance = prefs.getInt('goalDistance') ?? 5;
     }
 
     isLoadingGoal = false;
@@ -57,6 +73,26 @@ class HomeController extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goalSteps', newGoal);
     await prefs.setBool('isGoalSet', true);
+  }
+
+  Future<void> updateGoalTime(int newTime) async {
+    _goalTime = newTime;
+    notifyListeners();
+
+    _userService.updateGoalTime(newTime);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('goalTime', newTime);
+  }
+
+  Future<void> updateGoalDistance(int newDistance) async {
+    _goalDistance = newDistance;
+    notifyListeners();
+
+    _userService.updateGoalDistance(newDistance);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('goalDistance', newDistance);
   }
 
   Future<void> init() async {
