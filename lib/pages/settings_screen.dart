@@ -106,99 +106,115 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 160),
+    return SingleChildScrollView(
+      physics:const BouncingScrollPhysics(), 
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 200), 
 
-          SettingsItem(
-            title: "Modifier mon objectif de pas",
-            icon: Icons.track_changes,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.steps)),
-              );
-            },
-          ),
-
-          const SizedBox(height: 15),
-
-          if (_isStravaLinked) ...[
             SettingsItem(
-              title: "Modifier mon objectif de temps",
-              icon: Icons.timer,
+              title: "Modifier mon objectif de pas",
+              icon: Icons.track_changes,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.time)),
+                  MaterialPageRoute(
+                    builder: (_) => const GoalScreen(goalType: GoalType.steps),
+                  ),
                 );
               },
             ),
+
             const SizedBox(height: 15),
 
+            if (_isStravaLinked) ...[
+              SettingsItem(
+                title: "Modifier mon objectif de temps",
+                icon: Icons.timer,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const GoalScreen(goalType: GoalType.time),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+
+              SettingsItem(
+                title: "Modifier mon objectif de distance",
+                icon: Icons.directions_run,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const GoalScreen(goalType: GoalType.distance),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+            ],
+
             SettingsItem(
-              title: "Modifier mon objectif de distance",
-              icon: Icons.directions_run,
+              title: "Modifier le profil",
+              icon: Icons.manage_accounts_rounded,
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.distance)),
+                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
                 );
               },
             ),
+
             const SizedBox(height: 15),
-          ],
 
-          SettingsItem(
-            title: "Modifier le profil",
-            icon: Icons.manage_accounts_rounded,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const EditProfileScreen()),
-              );
-            },
-          ),
+            SettingsItem(
+              title: "Modifier le mot de passe",
+              icon: Icons.lock_clock_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChangePasswordScreen(),
+                  ),
+                );
+              },
+            ),
 
-          const SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-          SettingsItem(
-            title: "Modifier le mot de passe",
-            icon: Icons.lock_clock_outlined,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
-              );
-            },
-          ),
+            Divider(
+              color: const Color(0xFF0B6666).withValues(alpha: .15),
+              thickness: 1,
+            ),
 
-          const SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-          Divider(
-            color: const Color(0xFF0B6666).withValues(alpha: .15),
-            thickness: 1,
-          ),
-
-          const SizedBox(height: 15),
-
-          StravaSettingsItem(
-            isLinked: _isStravaLinked,
-            onTap: () => StravaBottomSheet.show(
-              context,
+            StravaSettingsItem(
               isLinked: _isStravaLinked,
-              isLoading: _isLoadingStrava,
-              onToggle: _toggleStravaConnection,
+              onTap: () => StravaBottomSheet.show(
+                context,
+                isLinked: _isStravaLinked,
+                isLoading: _isLoadingStrava,
+                onToggle: _toggleStravaConnection,
+              ),
             ),
-          ),
 
-          const SizedBox(height: 40),
+            const SizedBox(height: 40),
 
-          LogoutButton(isLoading: _loading, onTap: _signOut),
-        ],
+            LogoutButton(isLoading: _loading, onTap: _signOut),
+
+            const SizedBox(
+              height: 40,
+            ), 
+          ],
+        ),
       ),
     );
   }
