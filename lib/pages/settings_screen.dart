@@ -3,7 +3,10 @@ import 'package:dinopet_walker/pages/edit_profile_screen.dart';
 import 'package:dinopet_walker/pages/goal_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/widgets/settings/logout_button.dart';
 import 'package:dinopet_walker/widgets/settings/settings_item.dart';
+import 'package:dinopet_walker/widgets/settings/strava_bottom_sheet.dart';
+import 'package:dinopet_walker/widgets/settings/strava_settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/controllers/settings_controller.dart';
 import 'package:provider/provider.dart';
@@ -96,149 +99,122 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const AuthWrapper(logoutToast: true)),
-            (route) => false,
+        (route) => false,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsetsGeometry.symmetric(horizontal: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SettingsItem(
-            title: "Modifier mon objectif de pas",
-            icon: Icons.track_changes,
-            onTap: () {
-              Navigator.push(
+    return SingleChildScrollView(
+      physics:const BouncingScrollPhysics(), 
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 200), 
+
+            SettingsItem(
+              title: "Modifier mon objectif de pas",
+              icon: Icons.track_changes,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GoalScreen(goalType: GoalType.steps),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 15),
+
+            if (_isStravaLinked) ...[
+              SettingsItem(
+                title: "Modifier mon objectif de temps",
+                icon: Icons.timer,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const GoalScreen(goalType: GoalType.time),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+
+              SettingsItem(
+                title: "Modifier mon objectif de distance",
+                icon: Icons.directions_run,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const GoalScreen(goalType: GoalType.distance),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 15),
+            ],
+
+            SettingsItem(
+              title: "Modifier le profil",
+              icon: Icons.manage_accounts_rounded,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                );
+              },
+            ),
+
+            const SizedBox(height: 15),
+
+            SettingsItem(
+              title: "Modifier le mot de passe",
+              icon: Icons.lock_clock_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChangePasswordScreen(),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 15),
+
+            Divider(
+              color: const Color(0xFF0B6666).withValues(alpha: .15),
+              thickness: 1,
+            ),
+
+            const SizedBox(height: 15),
+
+            StravaSettingsItem(
+              isLinked: _isStravaLinked,
+              onTap: () => StravaBottomSheet.show(
                 context,
-                MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.steps)),
-              );
-            },
-          ),
-
-          const SizedBox(height: 15),
-
-          if (_isStravaLinked) ...[
-            SettingsItem(
-              title: "Modifier mon objectif de temps",
-              icon: Icons.timer,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.time)),
-                );
-              },
+                isLinked: _isStravaLinked,
+                isLoading: _isLoadingStrava,
+                onToggle: _toggleStravaConnection,
+              ),
             ),
-            const SizedBox(height: 15),
 
-            SettingsItem(
-              title: "Modifier mon objectif de distance",
-              icon: Icons.directions_run,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const GoalScreen(goalType: GoalType.distance)),
-                );
-              },
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 40),
+
+            LogoutButton(isLoading: _loading, onTap: _signOut),
+
+            const SizedBox(
+              height: 40,
+            ), 
           ],
-
-          SettingsItem(
-            title: "Modifier le profil",
-            icon: Icons.person_outline,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const EditProfileScreen()),
-              );
-            },
-          ),
-
-          const SizedBox(height: 15),
-          
-          SettingsItem(
-            title: "Modifier le mot de passe",
-            icon: Icons.lock_outline,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
-              );
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          SizedBox(
-            width: double.infinity,
-            height: height * 0.06,
-            child: ElevatedButton.icon(
-              onPressed: _isLoadingStrava ? null : _toggleStravaConnection,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _isStravaLinked
-                    ? Colors.grey[700]
-                    : const Color(0xFFFC4C02),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              icon: _isLoadingStrava
-                  ? const SizedBox(width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                      color: Colors.white, strokeWidth: 2))
-                  : Icon(_isStravaLinked ? Icons.link_off : Icons.link,
-                  color: Colors.white),
-              label: Text(
-                _isStravaLinked
-                    ? "Déconnecter Strava"
-                    : "Lier mon compte Strava",
-                style: const TextStyle(fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-      
-          const SizedBox(height: 40),
-      
-                    SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton.icon(
-              onPressed: _loading ? null : _signOut,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              icon: _loading
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Icon(Icons.logout, color: Colors.white),
-              label: const Text(
-                "Se déconnecter",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
