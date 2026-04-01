@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
+import 'package:dinopet_walker/utils/date_formatter.dart';
 import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
 import 'package:dinopet_walker/widgets/common/form_label.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
@@ -123,7 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
 
                 FormLabel(text: "Nom d'utilisateur"),
                 UsernameField(
@@ -147,9 +148,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fillColor: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
                 ),
 
-                const SizedBox(height: 36),
+                const SizedBox(height: 40),
 
                 PrimaryButton(label: "Enregistrer", onPressed: _save),
+
+                const SizedBox(height: 16),
+
+                Center(
+                  child: Consumer<UserController>(
+                    builder: (context, userController, _) {
+                      final createdAt = userController.createdAt;
+                      if (createdAt == null) return const SizedBox.shrink();
+
+                      return Text(
+                        "Membre depuis le ${DateFormater.formatDate(createdAt)}",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[500],
+                          fontStyle: FontStyle.italic,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 20),
               ],
             ),
           ),
