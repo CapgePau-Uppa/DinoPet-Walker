@@ -4,7 +4,8 @@ import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/settings/logout_button.dart';
 import 'package:dinopet_walker/widgets/settings/settings_item.dart';
-import 'package:dinopet_walker/widgets/settings/strava_button.dart';
+import 'package:dinopet_walker/widgets/settings/strava_bottom_sheet.dart';
+import 'package:dinopet_walker/widgets/settings/strava_settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/controllers/settings_controller.dart';
 import 'package:provider/provider.dart';
@@ -99,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const AuthWrapper(logoutToast: true)),
-            (route) => false,
+        (route) => false,
       );
     }
   }
@@ -111,6 +112,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(height: 160),
+
           SettingsItem(
             title: "Modifier mon objectif",
             icon: Icons.track_changes,
@@ -121,7 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           SettingsItem(
             title: "Modifier le profil",
-            icon: Icons.person_outline,
+            icon: Icons.manage_accounts_rounded,
             onTap: () {
               Navigator.push(
                 context,
@@ -131,10 +134,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
 
           const SizedBox(height: 15),
-          
+
           SettingsItem(
             title: "Modifier le mot de passe",
-            icon: Icons.lock_outline,
+            icon: Icons.lock_clock_outlined,
             onTap: () {
               Navigator.push(
                 context,
@@ -143,12 +146,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 15),
 
-          StravaButton(
+          Divider(
+            color: const Color(0xFF0B6666).withValues(alpha: .15),
+            thickness: 1,
+          ),
+
+          const SizedBox(height: 15),
+
+          StravaSettingsItem(
             isLinked: _isStravaLinked,
-            isLoading: _isLoadingStrava,
-            onTap: _toggleStravaConnection,
+            onTap: () => StravaBottomSheet.show(
+              context,
+              isLinked: _isStravaLinked,
+              isLoading: _isLoadingStrava,
+              onToggle: _toggleStravaConnection,
+            ),
           ),
 
           const SizedBox(height: 40),
