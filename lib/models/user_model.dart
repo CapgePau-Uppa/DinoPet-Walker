@@ -4,12 +4,20 @@ class UserModel {
   final String uid;
   final String username;
   final String email;
+  final String? phone;
+  final int? goalSteps;
+  final int? goalTime;
+  final int? goalDistance;
   final DateTime? createdAt;
 
   UserModel({
     required this.uid,
     required this.username,
     required this.email,
+    this.phone,
+    this.goalSteps,
+    this.goalTime,
+    this.goalDistance,
     this.createdAt,
   });
 
@@ -19,6 +27,10 @@ class UserModel {
       uid: uid,
       username: data['username'] ?? '',
       email: data['email'] ?? '',
+      phone: data['phone'] ?? '',
+      goalSteps: data['goalSteps'] as int?,
+      goalTime: data['goalTime'] as int?,
+      goalDistance: data['goalDistance'] as int?,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
     );
   }
@@ -28,6 +40,10 @@ class UserModel {
     return {
       'username': username,
       'email': email,
+      'phone': phone,
+      'goalSteps': goalSteps,
+      'goalTime': goalTime,
+      'goalDistance': goalDistance,
       'createdAt': FieldValue.serverTimestamp(),
     };
   }

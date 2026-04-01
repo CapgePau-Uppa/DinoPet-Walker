@@ -14,11 +14,12 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
+      leadingWidth: 80,
       leading: showBackButton
           ? Center(
               child: Container(
-                height: 40,
-                width: 40,
+                height: 50,
+                width: 50,
                 decoration: const BoxDecoration(
                   color: Color(0xFFEDFFEA),
                   shape: BoxShape.circle,
@@ -34,19 +35,22 @@ class Myappbar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : null,
-    
+
       title: Text(
         title,
         style: const TextStyle(
           color: Color(0xFF007984),
           fontWeight: FontWeight.w900,
-          fontSize: 28,
+          fontSize: 25,
         ),
       ),
-    
+
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
-        child: Container(color: Colors.grey.withValues(alpha:0.1), height: 4.0),
+        child: Container(
+          color: Colors.grey.withValues(alpha: 0.1),
+          height: 4.0,
+        ),
       ),
     );
   }

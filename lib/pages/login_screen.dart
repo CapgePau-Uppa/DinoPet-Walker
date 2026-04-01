@@ -3,8 +3,8 @@ import 'package:dinopet_walker/pages/forgot_password_screen.dart';
 import 'package:dinopet_walker/pages/signup_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:dinopet_walker/widgets/login/email_field.dart';
-import 'package:dinopet_walker/widgets/login/password_field.dart';
+import 'package:dinopet_walker/widgets/fields/email_field.dart';
+import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 

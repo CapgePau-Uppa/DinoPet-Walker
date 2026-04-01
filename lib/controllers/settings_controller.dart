@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/services/auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/strava_service.dart';
 
 class SettingsController {
@@ -13,6 +14,9 @@ class SettingsController {
 
     try {
       await _authService.signOut();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('goalSteps');
+      await prefs.remove('isGoalSet');
       return null;
     } catch (e) {
       return "Connexion requise";
