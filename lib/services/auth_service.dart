@@ -60,6 +60,7 @@ class AuthService {
       final actionCodeSettings = ActionCodeSettings(
         url: 'https://dinopetwalker.web.app',
         handleCodeInApp: true,
+        iOSBundleId: 'com.example.dinopetWalker',
         androidPackageName: 'com.example.dinopet_walker',
         androidInstallApp: true,
         androidMinimumVersion: '21',
@@ -75,6 +76,7 @@ class AuthService {
       final actionCodeSettings = ActionCodeSettings(
         url: 'https://dinopetwalker.web.app', // le lien envoyé par email pointe sur ce domaine
         handleCodeInApp: true, // le lien doit etre traité dans l'app
+        iOSBundleId: 'com.example.dinopetWalker',
         androidPackageName: 'com.example.dinopet_walker', 
         androidInstallApp: true, // propose d'installer l'app si elle n'est pas installé (plus tard)
         androidMinimumVersion: '21',
