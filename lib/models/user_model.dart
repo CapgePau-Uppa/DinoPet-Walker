@@ -9,6 +9,7 @@ class UserModel {
   final int? goalTime;
   final int? goalDistance;
   final DateTime? createdAt;
+  final String? dinoPetId; 
 
   UserModel({
     required this.uid,
@@ -19,9 +20,9 @@ class UserModel {
     this.goalTime,
     this.goalDistance,
     this.createdAt,
+    this.dinoPetId,
   });
 
-  // Récupérer un utilisateur de firestore et le convertir en objet dart 
   factory UserModel.fromFirestore(String uid, Map<String, dynamic> data) {
     return UserModel(
       uid: uid,
@@ -32,10 +33,10 @@ class UserModel {
       goalTime: data['goalTime'] as int?,
       goalDistance: data['goalDistance'] as int?,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      dinoPetId: data['dinoPetId'] as String?,
     );
   }
 
-  // Convertir un objet dart utilisateur en un document pour le stocker sur firestore
   Map<String, dynamic> toFirestore() {
     return {
       'username': username,
@@ -45,6 +46,7 @@ class UserModel {
       'goalTime': goalTime,
       'goalDistance': goalDistance,
       'createdAt': FieldValue.serverTimestamp(),
+      if (dinoPetId != null) 'dinoPetId': dinoPetId,
     };
   }
 }
