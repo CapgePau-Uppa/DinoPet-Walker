@@ -86,6 +86,7 @@ class UserController extends ChangeNotifier {
   String get username => user?.username ?? '';
   String get email => user?.email ?? '';
   String get phone => user?.phone ?? '';
+  DateTime? get createdAt => user?.createdAt;
   bool get isLoggedIn => _authService.getCurrentUser() != null;
 
 }

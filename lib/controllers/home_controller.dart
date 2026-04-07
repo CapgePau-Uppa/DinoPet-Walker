@@ -104,20 +104,21 @@ class HomeController extends ChangeNotifier {
     await _healthService.initialize();
 
     _currentSteps = _healthService.todaySteps;
-    dinoController.dinoPet?.addSteps(_currentSteps);
     notifyListeners();
 
-    _healthService.stepsStream.listen((steps) {
-      final difference = steps - _currentSteps;
-      _currentSteps = steps;
-      if (difference > 0) dinoController.dinoPet?.addSteps(difference);
+    _healthService.stepsStream.listen((difference) async {
+      if (difference > 0) {
+        _currentSteps += difference;
+        await dinoController.addSteps(difference);
+      } else {
+        _currentSteps = _healthService.todaySteps;
+      }
       notifyListeners();
-      dinoController.notifyListeners();
     });
   }
 
   Future<void> addSteps(int steps) async {
-    dinoController.addSteps(steps);
+    await dinoController.addSteps(steps);
     notifyListeners();
   }
 
