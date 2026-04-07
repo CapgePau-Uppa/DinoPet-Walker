@@ -9,6 +9,7 @@ class HealthService {
   final _dailyStepsDao = DailyStepsDao();
 
   int todaySteps = 0;
+  int lastSensorValue = 0;
 
   final _stepsController = StreamController<int>.broadcast();
   Stream<int> get stepsStream => _stepsController.stream;
@@ -45,11 +46,20 @@ class HealthService {
       // les pas a partir de 00h00 jusqu'a maintenent
       final steps = await _health.getTotalStepsInInterval(starDay, now);
 
-      if (steps != null && steps != todaySteps) {
+      if (steps == null) return;
+
+      if (steps != todaySteps || steps != lastSensorValue) {
+        var difference = steps - lastSensorValue;
+        if (difference < 0) {
+          difference = steps;
+        }
+
         todaySteps = steps;
+        lastSensorValue = steps;
+
         await _save();
-        if (!_stepsController.isClosed) {
-          _stepsController.add(todaySteps);
+        if (difference > 0 && !_stepsController.isClosed) {
+          _stepsController.add(difference);
         }
       }
     } catch (e) {
@@ -61,6 +71,7 @@ class HealthService {
     final saved = await _dailyStepsDao.getByDate(DateFormater.todayString());
     if (saved != null) {
       todaySteps = saved.steps;
+      lastSensorValue = saved.lastSensorValue;
     }
   }
 
@@ -70,9 +81,23 @@ class HealthService {
         date: DateFormater.todayString(),
         steps: todaySteps,
         timestamp: DateTime.now(),
-        lastSensorValue: todaySteps,
+        lastSensorValue: lastSensorValue,
       ),
     );
+  }
+
+  Future<int> fetchTodaySteps() async {
+    await _health.configure();
+    final agree = await _health.requestAuthorization(
+      [HealthDataType.STEPS],
+      permissions: [HealthDataAccess.READ],
+    );
+    if (!agree) return 0;
+
+    final now = DateTime.now();
+    final startDay = DateTime(now.year, now.month, now.day);
+    final steps = await _health.getTotalStepsInInterval(startDay, now);
+    return steps ?? 0;
   }
 
   void dispose() {
