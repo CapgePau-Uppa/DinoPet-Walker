@@ -9,11 +9,12 @@ class DinoPetService {
   String? get _uid => FirebaseAuth.instance.currentUser?.uid;
 
   // Créer l'objet dino
-  DinoPet createNewDinoPet(DinoType type) {
-    return DinoPet(
-      id: _uid ?? 'dino_${DateTime.now().millisecondsSinceEpoch}',
-      type: type,
-    );
+  DinoPet createNewDinoPet(DinoType type, {int initialSteps = 0}) {
+    final dino = DinoPet(id: _uid!,type: type,);
+    if (initialSteps > 0) {
+      dino.addSteps(initialSteps);
+    }
+    return dino;
   }
 
   // Sauvegarder le dino sur Firestore
