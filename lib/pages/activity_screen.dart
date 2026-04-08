@@ -61,7 +61,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
         return RefreshIndicator(
           color: const Color(0xFFFC4C02),
-          onRefresh: () => controller.loadActivities(),
+          onRefresh: () => controller.loadActivities(forceRefresh: true),
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
