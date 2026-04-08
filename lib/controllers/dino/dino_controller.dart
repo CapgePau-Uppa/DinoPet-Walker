@@ -1,9 +1,9 @@
-import 'package:dinopet_walker/models/dino_pet.dart';
-import 'package:dinopet_walker/models/dino_type.dart';
+import 'package:dinopet_walker/models/dino/dino_pet.dart';
+import 'package:dinopet_walker/models/dino/dino_type.dart';
 import 'package:dinopet_walker/models/daily_steps.dart';
 import 'package:dinopet_walker/services/dino_service.dart';
 import 'package:dinopet_walker/services/health_service.dart';
-import 'package:dinopet_walker/database/dao/daily_steps_dao.dart';
+import 'package:dinopet_walker/sqlite/dao/daily_steps_dao.dart';
 import 'package:dinopet_walker/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 

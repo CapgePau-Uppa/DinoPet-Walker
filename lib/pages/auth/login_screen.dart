@@ -1,5 +1,6 @@
-import 'package:dinopet_walker/controllers/authentification/signup_controller.dart';
-import 'package:dinopet_walker/pages/email_verification_screen.dart';
+import 'package:dinopet_walker/controllers/auth/login_controller.dart';
+import 'package:dinopet_walker/pages/auth/forgot_password_screen.dart';
+import 'package:dinopet_walker/pages/auth/signup_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/email_field.dart';
@@ -7,50 +8,34 @@ import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final SignUpController _controller = SignUpController();
-
-  final TextEditingController usernameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  final LoginController _controller = LoginController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
-
   bool _loading = false;
 
-  void _signUp() async {
-    FocusScope.of(context).unfocus();
-    setState(() => _loading = true);
+  void _login() async {
 
-    final erreur = await _controller.signUp(
-      username: usernameController.text.trim(),
+    FocusScope.of(context).unfocus();
+
+    setState(() => _loading = true);
+    
+    final error = await _controller.login(
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
-      confirmPassword: confirmPasswordController.text.trim(),
     );
-
     if (!mounted) return;
+
     setState(() => _loading = false);
 
-    if (erreur != null) {
-      Toast.show(
-        context: context,
-        message: erreur,
-        icon: Icons.highlight_off,
-        color: const Color(0xFFC94A4A),
-      );
-    } else {
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const EmailVerificationScreen()),
-      );
+    if (error != null) {
+      Toast.show(context: context, message: error, icon: Icons.highlight_off, color: const Color(0xFFC94A4A));
     }
   }
 
@@ -76,15 +61,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     children: [
                       const SizedBox(height: 20),
 
-                      Image.asset(
-                        "assets/logos/logo.png",
-                        height: 110,
-                      ),
+                      Image.asset("assets/logos/logo.png", height: 130),
 
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 16),
 
                       const Text(
-                        "Créer un compte",
+                        "Connexion",
                         style: TextStyle(
                           color: Color(0xFF1B3A2D),
                           fontSize: 30,
@@ -94,78 +76,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 5),
 
                       Text(
-                        "Rejoins notre Team Dinopet !",
+                        "Connecte toi pour continuer l'aventure",
                         style: TextStyle(
                           color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                           fontSize: 14,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
 
-                      const SizedBox(height: 32),
-
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.white70,
-                        ),
-                        child: TextField(
-                          controller: usernameController,
-                          decoration: InputDecoration(
-                            hintText: "Nom d'utilisateur",
-                            filled: true,
-                            fillColor: Colors.transparent,
-                            prefixIcon: const Icon(
-                              Icons.person_outline_rounded,
-                              color: Color(0xFF1B3A2D),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 18,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF1B3A2D),
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 36),
 
                       EmailField(controller: emailController),
-
                       const SizedBox(height: 14),
-
                       PasswordField(
                         controller: passwordController,
                         label: 'Mot de passe',
                       ),
 
-                      const SizedBox(height: 14),
-
-                      PasswordField(
-                        controller: confirmPasswordController,
-                        label: 'Confirmer le mot de passe',
+                      const SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ForgotPasswordScreen(),
+                            ),
+                          ),
+                          child: const Text(
+                            "Mot de passe oublié ?",
+                            style: TextStyle(
+                              color: Color(0xFF1B3A2D),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
 
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 24),
 
                       PrimaryButton(
-                        label: "Créer un compte",
-                        onPressed: _loading ? () {} : _signUp,
+                        label: 'Se connecter',
+                        onPressed: _loading ? () {} : _login,
                         isLoading: _loading,
                       ),
 
@@ -178,9 +134,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             fontSize: 14,
                           ),
                           children: [
-                            const TextSpan(text: "Déjà un compte ? "),
+                            const TextSpan(text: "Pas encore de compte ? "),
                             TextSpan(
-                              text: "Se connecter",
+                              text: "S'inscrire",
                               style: const TextStyle(
                                 color: Color(0xFF1B3A2D),
                                 fontWeight: FontWeight.w800,
@@ -188,7 +144,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 decorationColor: Color(0xFF1B3A2D),
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => Navigator.pop(context),
+                                ..onTap = () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignUpScreen(),
+                                  ),
+                                ),
                             ),
                           ],
                         ),
@@ -200,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withValues(alpha: 0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha:0.12),
                               thickness: 1,
                             ),
                           ),
@@ -258,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               const SizedBox(width: 12),
                               const Text(
-                                "S'inscrire avec Google",
+                                "Continuer avec Google",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,

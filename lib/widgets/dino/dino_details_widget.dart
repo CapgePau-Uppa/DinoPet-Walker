@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/dino_nature.dart';
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:flutter/material.dart';
 
 class DinoDetailsWidget extends StatelessWidget {

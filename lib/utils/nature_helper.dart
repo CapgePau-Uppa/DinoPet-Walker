@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/dino_nature.dart';
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 
 class NatureHelper {
   static Nature getNatureFromSportType(String? sportType) {

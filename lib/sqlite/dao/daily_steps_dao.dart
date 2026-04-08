@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/database/database_helper.dart';
+import 'package:dinopet_walker/sqlite/database_helper.dart';
 import 'package:dinopet_walker/models/daily_steps.dart';
 import 'package:sqflite/sqflite.dart';
 

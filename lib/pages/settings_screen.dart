@@ -1,8 +1,8 @@
-import 'package:dinopet_walker/pages/change_password_screen.dart';
+import 'package:dinopet_walker/pages/auth/change_password_screen.dart';
 import 'package:dinopet_walker/pages/edit_profile_screen.dart';
 import 'package:dinopet_walker/pages/goal_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/pages/auth/auth_wrapper.dart';
 import 'package:dinopet_walker/widgets/settings/logout_button.dart';
 import 'package:dinopet_walker/widgets/settings/settings_item.dart';
 import 'package:dinopet_walker/widgets/settings/strava_bottom_sheet.dart';
@@ -10,7 +10,7 @@ import 'package:dinopet_walker/widgets/settings/strava_settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/controllers/settings_controller.dart';
 import 'package:provider/provider.dart';
-import '../controllers/activity_controller.dart';
+import '../controllers/activity/activity_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../controllers/home_controller.dart';
-import '../../controllers/dino_controller.dart';
+import '../../../controllers/home_controller.dart';
+import '../../controllers/dino/dino_controller.dart';
 
 class DebugMenu extends StatelessWidget {
   const DebugMenu({super.key});

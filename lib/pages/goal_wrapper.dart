@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/pages/goal_screen.dart';
 import 'package:dinopet_walker/pages/main_screen.dart';

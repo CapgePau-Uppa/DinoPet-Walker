@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/change_password_controller.dart';
+import 'package:dinopet_walker/controllers/auth/change_password_controller.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/material.dart';

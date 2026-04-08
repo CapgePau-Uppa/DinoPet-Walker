@@ -1,7 +1,7 @@
-import 'package:dinopet_walker/models/dino_nature.dart';
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:dinopet_walker/utils/nature_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:dinopet_walker/models/sport_activity.dart';
+import 'package:dinopet_walker/models/activity/sport_activity.dart';
 import 'package:dinopet_walker/services/strava_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

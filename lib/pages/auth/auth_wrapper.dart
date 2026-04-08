@@ -1,7 +1,7 @@
-import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
-import 'package:dinopet_walker/pages/email_verification_screen.dart';
-import 'package:dinopet_walker/widgets/goal/goal_wrapper.dart';
-import 'package:dinopet_walker/pages/login_screen.dart';
+import 'package:dinopet_walker/controllers/user/user_controller.dart';
+import 'package:dinopet_walker/pages/auth/email_verification_screen.dart';
+import 'package:dinopet_walker/pages/goal_wrapper.dart';
+import 'package:dinopet_walker/pages/auth/login_screen.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

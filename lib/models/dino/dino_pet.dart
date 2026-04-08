@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinopet_walker/data/dino_data.dart';
-import 'package:dinopet_walker/models/dino_type.dart';
-import 'package:dinopet_walker/models/life_stage.dart';
+import 'package:dinopet_walker/models/dino/dino_type.dart';
+import 'package:dinopet_walker/models/dino/life_stage.dart';
 
 class DinoPet {
   final String id;

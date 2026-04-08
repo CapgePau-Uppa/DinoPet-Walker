@@ -1,5 +1,5 @@
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
-import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/pages/auth/auth_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

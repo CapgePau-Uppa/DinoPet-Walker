@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/models/user_model.dart';
+import 'package:dinopet_walker/models/user/user_model.dart';
 import 'package:dinopet_walker/services/auth_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/utils/validator.dart';

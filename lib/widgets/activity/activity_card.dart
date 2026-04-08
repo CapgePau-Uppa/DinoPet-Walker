@@ -1,4 +1,5 @@
-import 'package:dinopet_walker/models/sport_activity.dart';
+import 'package:dinopet_walker/models/activity/sport_activity.dart';
+import 'package:dinopet_walker/utils/activity_helper.dart';
 import 'package:flutter/material.dart';
 
 class ActivityCard extends StatelessWidget {
@@ -6,37 +7,13 @@ class ActivityCard extends StatelessWidget {
 
   const ActivityCard({super.key, required this.activity});
 
-  IconData _getIconForSport(String sportName) {
-    switch (sportName) {
-      case 'Marche':
-        return Icons.directions_walk;
-      case 'Course à pied':
-        return Icons.directions_run;
-      case 'Vélo':
-      case 'VTT':
-        return Icons.directions_bike;
-      case 'Natation':
-        return Icons.pool;
-      case 'Randonnée':
-        return Icons.hiking;
-      case 'HIIT':
-        return Icons.fitness_center;
-      case 'Pilates':
-      case 'Yoga':
-        return Icons.self_improvement;
-      case 'Ski':
-        return Icons.snowboarding;
-      case 'Snowboard':
-        return Icons.downhill_skiing;
-      default:
-        return Icons.star;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
 
     bool hasDistance=false;
+
+    final String sportName = ActivityHelper.getSportName(activity.type);
+    final IconData sportIcon = ActivityHelper.getIconForSport(sportName);
 
     if(activity.distanceInKm > 0){
       hasDistance = activity.distanceInKm > 0;
@@ -65,7 +42,7 @@ class ActivityCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              _getIconForSport(activity.sportName),
+              sportIcon,
               color: const Color(0xFFFC4C02),
               size: 30,
             ),
@@ -78,7 +55,7 @@ class ActivityCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  activity.sportName,
+                  sportName,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

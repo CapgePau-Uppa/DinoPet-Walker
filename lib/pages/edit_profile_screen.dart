@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
+import 'package:dinopet_walker/controllers/user/user_controller.dart';
 import 'package:dinopet_walker/utils/date_formatter.dart';
 import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
 import 'package:dinopet_walker/widgets/common/form_label.dart';

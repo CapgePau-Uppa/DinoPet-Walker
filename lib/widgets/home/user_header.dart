@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

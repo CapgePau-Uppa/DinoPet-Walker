@@ -1,11 +1,11 @@
 import 'package:app_links/app_links.dart';
-import 'package:dinopet_walker/pages/email_change_requires_login_screen.dart';
-import 'package:dinopet_walker/pages/email_is_changed_screen.dart';
+import 'package:dinopet_walker/pages/auth/email_change_requires_login_screen.dart';
+import 'package:dinopet_walker/pages/auth/email_is_changed_screen.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import '../pages/reset_password_screen.dart';
-import '../pages/email_is_verified_screen.dart';
+import '../pages/auth/reset_password_screen.dart';
+import '../pages/auth/email_is_verified_screen.dart';
 
 class AppLinksService {
   final _appLinks = AppLinks();
