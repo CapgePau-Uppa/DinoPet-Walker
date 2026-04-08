@@ -91,6 +91,7 @@ flutter:
     - assets/images/dinos/orange_dinos/child/
     - assets/images/dinos/orange_dinos/teenager/
     - assets/images/dinos/orange_dinos/adult/
+    - assets/images/dinos/backgrounds/
     - assets/icons/
     - assets/logos/
   #   - images/a_dot_ham.jpeg

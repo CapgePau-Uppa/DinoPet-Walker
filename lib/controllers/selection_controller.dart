@@ -1,14 +1,14 @@
 import 'package:dinopet_walker/data/dino_data.dart';
 import 'package:dinopet_walker/models/dino_type.dart';
+import 'package:dinopet_walker/services/dino_service.dart'; 
 import 'package:flutter/material.dart';
 import '../models/dino_pet.dart';
-import '../services/dino_service.dart';
 
 class SelectionController extends ChangeNotifier {
   int _indexSelectedDino = 0;
+  final DinoPetService _dinoPetService = DinoPetService(); 
 
   int get getSelectedIndex => _indexSelectedDino;
-
   DinoType get selectedDinoType => availableDinos[_indexSelectedDino];
 
   void selectDino(int index) {
@@ -19,6 +19,6 @@ class SelectionController extends ChangeNotifier {
   }
 
   DinoPet createSelectedDinoPet() {
-    return DinoService.createNewDinoPet(selectedDinoType);
+    return _dinoPetService.createNewDinoPet(selectedDinoType); 
   }
 }

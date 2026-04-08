@@ -1,6 +1,7 @@
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/services/health_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
+import 'package:dinopet_walker/services/streak_service.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,9 @@ class HomeController extends ChangeNotifier {
   bool isGoalSet = false;
   bool isLoadingGoal = true;
 
+  int _streak = 0;
+  int get streak => _streak;
+
   int get currentSteps => _currentSteps;
   int get goalSteps => _goalSteps;
   int get goalTime => _goalTime;
@@ -27,6 +31,7 @@ class HomeController extends ChangeNotifier {
   HomeController({required this.dinoController});
 
   final UserService _userService = UserService();
+  final StreakService _streakService = StreakService();
 
   Future<void> loadGoal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -36,7 +41,6 @@ class HomeController extends ChangeNotifier {
     if (!isGoalSet) {
       final user = await _userService.getCurrentUser();
       if (user != null) {
-
         if (user.goalSteps != null) {
           await prefs.setInt('goalSteps', user.goalSteps!);
           await prefs.setBool('isGoalSet', true);
@@ -58,8 +62,18 @@ class HomeController extends ChangeNotifier {
       _goalDistance = prefs.getInt('goalDistance') ?? 5;
     }
 
+    _streak = await _streakService.checkAndIncrementStreak(_currentSteps, _goalSteps);
+
     isLoadingGoal = false;
     notifyListeners();
+  }
+
+  Future<void> _updateStreak() async {
+    final newStreak = await _streakService.checkAndIncrementStreak(_currentSteps, _goalSteps);
+    if (newStreak != _streak) {
+      _streak = newStreak;
+      notifyListeners();
+    }
   }
 
   Future<void> updateGoalSteps(int newGoal) async {
@@ -72,6 +86,8 @@ class HomeController extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goalSteps', newGoal);
     await prefs.setBool('isGoalSet', true);
+
+    _updateStreak();
   }
 
   Future<void> updateGoalTime(int newTime) async {
@@ -101,23 +117,34 @@ class HomeController extends ChangeNotifier {
     await Permission.activityRecognition.request();
 
     _healthService = HealthService();
+    _healthService.stepsStream.listen((difference) async {
+      if (difference > 0) {
+        _currentSteps += difference;
+        await dinoController.addSteps(difference);
+      } else {
+        _currentSteps = _healthService.todaySteps;
+      }
+      _updateStreak();
+      notifyListeners();
+    });
+
     await _healthService.initialize();
 
     _currentSteps = _healthService.todaySteps;
-    dinoController.dinoPet?.addSteps(_currentSteps);
+    _updateStreak();
     notifyListeners();
-
-    _healthService.stepsStream.listen((steps) {
-      final difference = steps - _currentSteps;
-      _currentSteps = steps;
-      if (difference > 0) dinoController.dinoPet?.addSteps(difference);
-      notifyListeners();
-      dinoController.notifyListeners();
-    });
   }
 
   Future<void> addSteps(int steps) async {
-    dinoController.addSteps(steps);
+    await dinoController.addSteps(steps);
+    notifyListeners();
+  }
+
+  Future<void> refreshSteps() async {
+    if (!_isInitialized) return;
+    await _healthService.refreshNow();
+    _currentSteps = _healthService.todaySteps;
+    _updateStreak();
     notifyListeners();
   }
 
