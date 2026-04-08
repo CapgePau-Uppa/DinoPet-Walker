@@ -25,6 +25,61 @@ class ActivityController extends ChangeNotifier {
   List<SportActivity> _todayActivities = [];
   List<SportActivity> get todayActivities => _todayActivities;
 
+  // Trouver le sport dominant de la semaine en cours
+  String? get dominantSport {
+    if (_activities.isEmpty) return null;
+
+    final now = DateTime.now();
+
+    // Début de semaine
+    final weekStartDay = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    ).subtract(Duration(days: now.weekday - 1));
+
+    // Fin (dimanche)
+    final weekEndDay = weekStartDay.add(const Duration(days: 6));
+
+    final Map<String, double> scorePerSport = {};
+
+    for (var act in _activities) {
+      final activityDay = DateTime(
+        act.date.year,
+        act.date.month,
+        act.date.day,
+      );
+
+      // Filtrer les activitées de cette semaine
+      if (!activityDay.isBefore(weekStartDay) && !activityDay.isAfter(weekEndDay)) {
+        // Score (temps + distance)
+        double score = act.durationInMinutes.toDouble();
+
+        // Les km * 10 pour leur donner plus de valeur
+        if (act.distanceInKm > 0) {
+          score += (act.distanceInKm * 10);
+        }
+
+        // Score total par type de sport
+        scorePerSport[act.type] =
+            (scorePerSport[act.type] ?? 0) + score;
+      }
+    }
+
+    String? dominant;
+    double maxScore = -1;
+
+    // Séléectionner le sport avec un score maximum
+    scorePerSport.forEach((type, score) {
+      if (score > maxScore) {
+        maxScore = score;
+        dominant = type;
+      }
+    });
+
+    return dominant;
+  }
+
   Future<void> loadActivities({DateTime? weekStart}) async {
     isLoading = true;
     notifyListeners();
