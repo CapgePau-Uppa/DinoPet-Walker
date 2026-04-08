@@ -4,7 +4,7 @@ import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../models/sport_activity.dart';
+import '../models/activity/sport_activity.dart';
 
 class StravaService {
   final String clientId = dotenv.env['STRAVA_CLIENT_ID']!;

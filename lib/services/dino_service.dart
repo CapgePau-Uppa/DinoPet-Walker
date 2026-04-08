@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinopet_walker/models/dino_type.dart';
+import 'package:dinopet_walker/models/dino/dino_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:dinopet_walker/models/dino_pet.dart';
+import 'package:dinopet_walker/models/dino/dino_pet.dart';
 
 class DinoPetService {
   final FirebaseFirestore _firestoreInstance = FirebaseFirestore.instance;

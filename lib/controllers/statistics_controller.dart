@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/database/dao/daily_steps_dao.dart';
+import 'package:dinopet_walker/sqlite/dao/daily_steps_dao.dart';
 import 'package:dinopet_walker/models/daily_steps.dart';
 import 'package:flutter/material.dart';
 

@@ -1,7 +1,7 @@
-import 'package:dinopet_walker/controllers/authentification/email_verification_controller.dart';
+import 'package:dinopet_walker/controllers/auth/email_verification_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:flutter/material.dart';
-import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/pages/auth/auth_wrapper.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});

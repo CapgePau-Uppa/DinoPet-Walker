@@ -1,6 +1,6 @@
-import 'package:dinopet_walker/controllers/activity_controller.dart';
-import 'package:dinopet_walker/controllers/dino_controller.dart';
-import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
+import 'package:dinopet_walker/controllers/activity/activity_controller.dart';
+import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
+import 'package:dinopet_walker/controllers/user/user_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/statistics_controller.dart';
 import 'package:provider/provider.dart';

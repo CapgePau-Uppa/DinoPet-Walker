@@ -1,8 +1,8 @@
-import 'package:dinopet_walker/controllers/authentification/reset_password_controller.dart';
+import 'package:dinopet_walker/controllers/auth/reset_password_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/password_field.dart';
-import 'package:dinopet_walker/widgets/login/auth_wrapper.dart';
+import 'package:dinopet_walker/pages/auth/auth_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatefulWidget {

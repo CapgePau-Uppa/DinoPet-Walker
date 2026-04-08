@@ -1,4 +1,4 @@
-import 'package:dinopet_walker/controllers/dino_controller.dart';
+import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:dinopet_walker/services/health_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/services/streak_service.dart';

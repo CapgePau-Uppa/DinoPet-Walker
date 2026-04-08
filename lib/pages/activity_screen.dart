@@ -1,8 +1,8 @@
-import 'package:dinopet_walker/widgets/activity_gauge_widget.dart';
-import 'package:dinopet_walker/widgets/activity_card.dart';
+import 'package:dinopet_walker/widgets/activity/activity_gauge_widget.dart';
+import 'package:dinopet_walker/widgets/activity/activity_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:dinopet_walker/controllers/activity_controller.dart';
+import 'package:dinopet_walker/controllers/activity/activity_controller.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});

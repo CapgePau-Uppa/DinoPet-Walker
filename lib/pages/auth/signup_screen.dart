@@ -1,6 +1,5 @@
-import 'package:dinopet_walker/controllers/authentification/login_controller.dart';
-import 'package:dinopet_walker/pages/forgot_password_screen.dart';
-import 'package:dinopet_walker/pages/signup_screen.dart';
+import 'package:dinopet_walker/controllers/auth/signup_controller.dart';
+import 'package:dinopet_walker/pages/auth/email_verification_screen.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/email_field.dart';
@@ -8,34 +7,50 @@ import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _controller = LoginController();
+class _SignUpScreenState extends State<SignUpScreen> {
+  final SignUpController _controller = SignUpController();
+
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   bool _loading = false;
 
-  void _login() async {
-
+  void _signUp() async {
     FocusScope.of(context).unfocus();
-
     setState(() => _loading = true);
-    
-    final error = await _controller.login(
+
+    final erreur = await _controller.signUp(
+      username: usernameController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
+      confirmPassword: confirmPasswordController.text.trim(),
     );
-    if (!mounted) return;
 
+    if (!mounted) return;
     setState(() => _loading = false);
 
-    if (error != null) {
-      Toast.show(context: context, message: error, icon: Icons.highlight_off, color: const Color(0xFFC94A4A));
+    if (erreur != null) {
+      Toast.show(
+        context: context,
+        message: erreur,
+        icon: Icons.highlight_off,
+        color: const Color(0xFFC94A4A),
+      );
+    } else {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const EmailVerificationScreen()),
+      );
     }
   }
 
@@ -61,12 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const SizedBox(height: 20),
 
-                      Image.asset("assets/logos/logo.png", height: 130),
+                      Image.asset(
+                        "assets/logos/logo.png",
+                        height: 110,
+                      ),
 
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 14),
 
                       const Text(
-                        "Connexion",
+                        "Créer un compte",
                         style: TextStyle(
                           color: Color(0xFF1B3A2D),
                           fontSize: 30,
@@ -76,52 +94,78 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 6),
 
                       Text(
-                        "Connecte toi pour continuer l'aventure",
+                        "Rejoins notre Team Dinopet !",
                         style: TextStyle(
                           color: const Color(0xFF1B3A2D).withValues(alpha:0.45),
                           fontSize: 14,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
 
-                      const SizedBox(height: 36),
+                      const SizedBox(height: 32),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.white70,
+                        ),
+                        child: TextField(
+                          controller: usernameController,
+                          decoration: InputDecoration(
+                            hintText: "Nom d'utilisateur",
+                            filled: true,
+                            fillColor: Colors.transparent,
+                            prefixIcon: const Icon(
+                              Icons.person_outline_rounded,
+                              color: Color(0xFF1B3A2D),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 18,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF1B3A2D),
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 14),
 
                       EmailField(controller: emailController),
+
                       const SizedBox(height: 14),
+
                       PasswordField(
                         controller: passwordController,
                         label: 'Mot de passe',
                       ),
 
-                      const SizedBox(height: 15),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ForgotPasswordScreen(),
-                            ),
-                          ),
-                          child: const Text(
-                            "Mot de passe oublié ?",
-                            style: TextStyle(
-                              color: Color(0xFF1B3A2D),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                      const SizedBox(height: 14),
+
+                      PasswordField(
+                        controller: confirmPasswordController,
+                        label: 'Confirmer le mot de passe',
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 28),
 
                       PrimaryButton(
-                        label: 'Se connecter',
-                        onPressed: _loading ? () {} : _login,
+                        label: "Créer un compte",
+                        onPressed: _loading ? () {} : _signUp,
                         isLoading: _loading,
                       ),
 
@@ -134,9 +178,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 14,
                           ),
                           children: [
-                            const TextSpan(text: "Pas encore de compte ? "),
+                            const TextSpan(text: "Déjà un compte ? "),
                             TextSpan(
-                              text: "S'inscrire",
+                              text: "Se connecter",
                               style: const TextStyle(
                                 color: Color(0xFF1B3A2D),
                                 fontWeight: FontWeight.w800,
@@ -144,12 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decorationColor: Color(0xFF1B3A2D),
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignUpScreen(),
-                                  ),
-                                ),
+                                ..onTap = () => Navigator.pop(context),
                             ),
                           ],
                         ),
@@ -161,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Expanded(
                             child: Divider(
-                              color: const Color(0xFF1B3A2D).withValues(alpha:0.12),
+                              color: const Color(0xFF1B3A2D).withValues(alpha: 0.12),
                               thickness: 1,
                             ),
                           ),
@@ -219,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               const SizedBox(width: 12),
                               const Text(
-                                "Continuer avec Google",
+                                "S'inscrire avec Google",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,

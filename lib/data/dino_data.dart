@@ -1,5 +1,5 @@
-import 'package:dinopet_walker/models/dino_type.dart';
-import 'package:dinopet_walker/models/life_stage.dart';
+import 'package:dinopet_walker/models/dino/dino_type.dart';
+import 'package:dinopet_walker/models/dino/life_stage.dart';
 import 'package:flutter/material.dart';
 
 //ce fichier contient la liste de tous les DinoPet disponibles 
