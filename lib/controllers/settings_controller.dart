@@ -17,6 +17,8 @@ class SettingsController {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('goalSteps');
       await prefs.remove('isGoalSet');
+      await prefs.remove('streak');
+      await prefs.remove('lastStreakUpdate');
       return null;
     } catch (e) {
       return "Connexion requise";
