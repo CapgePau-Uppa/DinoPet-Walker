@@ -1,6 +1,4 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinopet_walker/data/dino_data.dart';
 import 'package:dinopet_walker/models/dino_type.dart';
 import 'package:dinopet_walker/models/life_stage.dart';
 
@@ -19,30 +17,6 @@ class DinoPet {
     DateTime? adoptedDate,
   }) : adoptedDate = adoptedDate ?? DateTime.now();
 
-  factory DinoPet.fromFirestore(String id, Map<String, dynamic> data) {
-    final dinoType = availableDinos.firstWhere(
-      (d) => d.id == data['typeId'],
-      orElse: () => availableDinos.first,
-    );
-    return DinoPet(
-      id: id,
-      type: dinoType,
-      level: data['level'] as int? ?? 1,
-      xpSteps: data['xpSteps'] as int? ?? 0,
-      adoptedDate:
-          (data['adoptedDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
-    );
-  }
-
-  Map<String, dynamic> toFirestore() {
-    return {
-      'typeId': type.id,
-      'level': level,
-      'xpSteps': xpSteps,
-      'adoptedDate': Timestamp.fromDate(adoptedDate),
-    };
-  }
-
   static int getStepsRequiredForLevel(int level) {
     const int baseSteps = 5000;
     const double coefficientOfDifficulty = 1.08;
@@ -51,6 +25,7 @@ class DinoPet {
 
   int get stepsRequiredForNextLevel =>
       level >= 50 ? 0 : getStepsRequiredForLevel(level + 1);
+
 
   double get progressToNextLevel {
     if (level >= 50) return 100.0;
@@ -83,4 +58,6 @@ class DinoPet {
   }
 
   String getCurrentAsset() => type.getAsset(currentStage, level);
+
+  
 }

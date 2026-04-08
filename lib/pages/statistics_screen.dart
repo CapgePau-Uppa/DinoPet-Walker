@@ -161,13 +161,7 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                         key: ValueKey<String>(
                           statController.currentWeekStart.toString(),
                         ),
-                        isStravaLinked: activityController.isStravaLinked,
-                        weekStepsData: dynamicWeekData,
-                        weekTimeData: activityController.weekTimeData,
-                        weekDistanceData: activityController.weekDistanceData,
-                        goalSteps: homeController.goalSteps,
-                        goalTime: homeController.goalTime,
-                        goalDistance: homeController.goalDistance.toDouble(),
+                        weekData: dynamicWeekData,
                         weekStartDate: statController.currentWeekStart,
                         selectedDate: statController.selectedDate,
                         onDaySelected: (cliquedDate) {
@@ -186,43 +180,34 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              statController.changeWeek(-1, liveSteps);
-                              final newWeek = context.read<StatisticsController>().currentWeekStart;
-                              context.read<ActivityController>().loadActivities(weekStart: newWeek);
-                            },
-                            child: const ChartNavigationWidget(text: "Précédent"),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-
-                        if (canGoNext)
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(20),
-                              onTap: () {
-                                statController.changeWeek(1, liveSteps);
-                                final newWeek = context.read<StatisticsController>().currentWeekStart;
-                                context.read<ActivityController>().loadActivities(weekStart: newWeek);
-                              },
-                              child: const ChartNavigationWidget(text: "Suivant"),
-                            ),
-                          )
-                        else
-                          const Opacity(
-                            opacity: 0.5,
-                            child: ChartNavigationWidget(text: "Suivant"),
-                          ),
-                      ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () => statController.changeWeek(-1, liveSteps),
+                      child: const ChartNavigationWidget(text: "Précédent"),
                     ),
+                  ),
+                  const SizedBox(width: 20),
+                  if (canGoNext)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => statController.changeWeek(1, liveSteps),
+                        child: const ChartNavigationWidget(text: "Suivant"),
+                      ),
+                    )
+                  else
+                    const Opacity(
+                      opacity: 0.5,
+                      child: ChartNavigationWidget(text: "Suivant"),
+                    ),
+                ],
+              ),
               const SizedBox(height: 40),
             ],
           ),

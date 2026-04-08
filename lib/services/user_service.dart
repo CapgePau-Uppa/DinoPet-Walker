@@ -101,23 +101,13 @@ class UserService {
 
   // mettre a jour le téléphone après changement
   Future<void> updatePhone(String? phone) async {
-    final uid = getCurrentAthenticatedUser()?.uid;
-    if (uid == null) return;
+  final uid = getCurrentAthenticatedUser()?.uid;
+  if (uid == null) return;
 
-    if (phone != null && phone.isNotEmpty) {
-      await _firestoreInstance.collection('users').doc(uid).update({
-        'phone': phone,
-      });
-    }
-  }
-
-  Future<void> updateStreak(int newStreak, String date) async {
-    final uid = getCurrentAthenticatedUser()?.uid;
-    if (uid == null) return;
-
+  if (phone != null && phone.isNotEmpty) {
     await _firestoreInstance.collection('users').doc(uid).update({
-      'streak': newStreak,
-      'lastStreakUpdate': date,
+      'phone': phone,
     });
   }
+}
 }
