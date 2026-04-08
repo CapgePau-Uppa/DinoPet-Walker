@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       child: UserHeader(
                         username: username,
                         userLevel: currentDino.level,
-                        streak: 1,
+                        streak: homeController.streak,
                       ),
                     ),
                     const SizedBox(height: 15),
