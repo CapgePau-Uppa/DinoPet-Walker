@@ -11,18 +11,15 @@ class StreakService {
     int currentStreak = 0;
     String lastDate = '';
     if (prefs.containsKey('streak')) {
-      print('premier if');
       currentStreak = prefs.getInt('streak') ?? 0;
       lastDate = prefs.getString('lastStreakUpdate') ?? '';
     }
     else if (user != null && user.streak != null) {
-      print('deuxieme if');
       currentStreak = user.streak!;
       lastDate = user.lastStreakUpdate!;
       prefs.setInt('streak', currentStreak);
       prefs.setString('lastStreakUpdate', lastDate);
     }
-    print("Current streak: $currentStreak, Last date: $lastDate");
 
     final today = DateTime.now();
     final todayStr = "${today.year}-${today.month}-${today.day}";
