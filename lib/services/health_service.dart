@@ -67,6 +67,10 @@ class HealthService {
     }
   }
 
+  Future<void> refreshNow() async {
+    await _fetchSteps();
+  }
+
   Future<void> _loadSavedData() async {
     final saved = await _dailyStepsDao.getByDate(DateFormater.todayString());
     if (saved != null) {

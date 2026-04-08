@@ -36,7 +36,6 @@ class HomeController extends ChangeNotifier {
     if (!isGoalSet) {
       final user = await _userService.getCurrentUser();
       if (user != null) {
-
         if (user.goalSteps != null) {
           await prefs.setInt('goalSteps', user.goalSteps!);
           await prefs.setBool('isGoalSet', true);
@@ -101,11 +100,6 @@ class HomeController extends ChangeNotifier {
     await Permission.activityRecognition.request();
 
     _healthService = HealthService();
-    await _healthService.initialize();
-
-    _currentSteps = _healthService.todaySteps;
-    notifyListeners();
-
     _healthService.stepsStream.listen((difference) async {
       if (difference > 0) {
         _currentSteps += difference;
@@ -115,10 +109,22 @@ class HomeController extends ChangeNotifier {
       }
       notifyListeners();
     });
+
+    await _healthService.initialize();
+
+    _currentSteps = _healthService.todaySteps;
+    notifyListeners();
   }
 
   Future<void> addSteps(int steps) async {
     await dinoController.addSteps(steps);
+    notifyListeners();
+  }
+
+  Future<void> refreshSteps() async {
+    if (!_isInitialized) return;
+    await _healthService.refreshNow();
+    _currentSteps = _healthService.todaySteps;
     notifyListeners();
   }
 
