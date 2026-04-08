@@ -2,6 +2,7 @@ import 'package:dinopet_walker/controllers/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
+import 'package:dinopet_walker/models/dino_nature.dart';
 import 'package:dinopet_walker/utils/theme_helper.dart';
 import 'package:dinopet_walker/widgets/clippers/bowl_clipper.dart';
 import 'package:dinopet_walker/widgets/clippers/header_clipper.dart';
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final username = userController.username;
     final currentDino = dinoController.dinoPet!;
     final dominantSport = activityController.dominantSport;
+    final dinoNature = activityController.dinoNature;
 
     final size = MediaQuery.of(context).size;
 
@@ -143,30 +145,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
+                          const SizedBox(height: 12),
+                          Text(
+                            dinoNature.label,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           Text(
                             currentDino.type.name,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: currentDino.type.innerColor,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           Text(
                             currentDino.currentStage.getName,
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black54,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           Text(
-                            '${currentDino.getTotalStepsCollected()}',
+                            '${currentDino.getTotalStepsCollected()} pas collectés',
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              fontSize: 13,
+                              color: Colors.black45,
                             ),
                           ),
                         ],
