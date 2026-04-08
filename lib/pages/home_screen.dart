@@ -2,11 +2,11 @@ import 'package:dinopet_walker/controllers/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/firestore/user_controller.dart';
-import 'package:dinopet_walker/models/dino_nature.dart';
 import 'package:dinopet_walker/utils/theme_helper.dart';
 import 'package:dinopet_walker/widgets/clippers/bowl_clipper.dart';
 import 'package:dinopet_walker/widgets/clippers/header_clipper.dart';
 import 'package:dinopet_walker/widgets/debug_menu.dart';
+import 'package:dinopet_walker/widgets/dino/dino_details_widget.dart';
 import 'package:dinopet_walker/widgets/dino/animated_dino_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -141,44 +141,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ],
                     ),
                     const SizedBox(height: 220),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 12),
-                          Text(
-                            dinoNature.label,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            currentDino.type.name,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            currentDino.currentStage.getName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${currentDino.getTotalStepsCollected()} pas collectés',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black45,
-                            ),
-                          ),
-                        ],
-                      ),
+                    DinoDetailsWidget(
+                      nature: dinoNature,
+                      typeName: currentDino.type.name,
+                      currentStage: currentDino.currentStage.getName,
+                      totalSteps: currentDino.getTotalStepsCollected(),
                     ),
                   ],
                 ),
