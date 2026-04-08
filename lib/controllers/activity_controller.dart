@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ActivityController extends ChangeNotifier {
   final StravaService _stravaService = StravaService();
-
   final _storage = const FlutterSecureStorage();
 
   bool isLoading = true;
@@ -25,16 +24,20 @@ class ActivityController extends ChangeNotifier {
   List<SportActivity> _todayActivities = [];
   List<SportActivity> get todayActivities => _todayActivities;
 
-  Future<void> loadActivities({DateTime? weekStart}) async {
+  List<int> _weekTimeData = List.filled(7, 0);
+  List<int> get weekTimeData => _weekTimeData;
+
+  List<double> _weekDistanceData = List.filled(7, 0.0);
+  List<double> get weekDistanceData => _weekDistanceData;
+
+  Future<void> loadActivities({DateTime? weekStart, bool forceRefresh = false}) async {
     isLoading = true;
     notifyListeners();
 
     String? token = await _storage.read(key: 'strava_access_token');
-
     _isStravaLinked = token != null;
 
     if (isStravaLinked) {
-
       final now = DateTime.now();
       final wStart = weekStart ?? now.subtract(Duration(days: now.weekday - 1));
       final weekStartDay = DateTime(wStart.year, wStart.month, wStart.day);
@@ -42,18 +45,21 @@ class ActivityController extends ChangeNotifier {
       _totalDistance = 0.0;
       _totalDuration = 0;
 
-      _activities = (await _stravaService.fetchActivities())
-          .where((a) => a.type != 'Walk')
-          .toList();
+      _weekTimeData = List.filled(7, 0);
+      _weekDistanceData = List.filled(7, 0.0);
 
-      _todayActivities = activities
-          .where(
+      if (_activities.isEmpty || forceRefresh) {
+        _activities = (await _stravaService.fetchActivities())
+            .where((a) => a.type != 'Walk')
+            .toList();
+      }
+
+      _todayActivities = activities.where(
             (a) =>
-                a.date.year == now.year &&
-                a.date.month == now.month &&
-                a.date.day == now.day,
-          )
-          .toList();
+              a.date.year == now.year &&
+              a.date.month == now.month &&
+              a.date.day == now.day,
+      ).toList();
 
       for (final acvt in activities) {
         final activityDay = DateTime(
@@ -64,11 +70,17 @@ class ActivityController extends ChangeNotifier {
         final weekEndDay = weekStartDay.add(const Duration(days: 6));
 
         if (!activityDay.isBefore(weekStartDay) && !activityDay.isAfter(weekEndDay)) {
-          if (acvt.distanceInKm > 0){
-            _totalDistance += acvt.distanceInKm;
-          } 
-          if (acvt.durationInMinutes > 0) {
-            _totalDuration += acvt.durationInMinutes;
+          int dayIndex = activityDay.difference(weekStartDay).inDays;
+
+          if (dayIndex >= 0 && dayIndex < 7) {
+            if (acvt.distanceInKm > 0) {
+              _totalDistance += acvt.distanceInKm;
+              _weekDistanceData[dayIndex] += acvt.distanceInKm;
+            }
+            if (acvt.durationInMinutes > 0) {
+              _totalDuration += acvt.durationInMinutes;
+              _weekTimeData[dayIndex] += acvt.durationInMinutes;
+            }
           }
         }
       }

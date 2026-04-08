@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 
 class InteractiveChartWidget extends StatelessWidget {
-  final List<int?> weekData;
+  final bool isStravaLinked;
+
+  final List<int?> weekStepsData;
+  final List<int?> weekTimeData;
+  final List<double?> weekDistanceData;
+
+  final int goalSteps;
+  final int goalTime;
+  final double goalDistance;
+
   final DateTime weekStartDate;
   final DateTime selectedDate;
   final Function(DateTime) onDaySelected;
 
   const InteractiveChartWidget({
     super.key,
-    required this.weekData,
+    required this.isStravaLinked,
+    required this.weekStepsData,
+    required this.weekTimeData,
+    required this.weekDistanceData,
+    required this.goalSteps,
+    required this.goalTime,
+    required this.goalDistance,
     required this.weekStartDate,
     required this.selectedDate,
     required this.onDaySelected,
@@ -17,7 +32,7 @@ class InteractiveChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         children: [
           Row(
@@ -26,34 +41,63 @@ class InteractiveChartWidget extends StatelessWidget {
             children: List.generate(7, (index) {
               DateTime currentBarDate = weekStartDate.add(Duration(days: index));
               bool isSelected = _isSameDay(currentBarDate, selectedDate);
-              int? steps = weekData[index];
+
+              int? steps = weekStepsData[index];
+              int? time = weekTimeData[index];
+              double? distance = weekDistanceData[index];
 
               return GestureDetector(
                 onTap: () => onDaySelected(currentBarDate),
-                child: _buildChartBar(steps, isSelected),
+                child: _buildStackedChartBar(steps, time, distance, isSelected),
               );
             }),
           ),
+
           const SizedBox(height: 8),
-          Container(height: 1, width: double.infinity, color: Colors.black),
+          Container(height: 1, width: double.infinity, color: Colors.black26),
           const SizedBox(height: 8),
+
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _ChartLabel("L"), _ChartLabel("M"), _ChartLabel("M"), _ChartLabel("J"),
               _ChartLabel("V"), _ChartLabel("S"), _ChartLabel("D"),
             ],
-          )
+          ),
+          const SizedBox(height: 24),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildLegendItem(const Color(0xFF4A90E2), "Pas"),
+              if (isStravaLinked) ...[
+                _buildLegendItem(const Color(0xFFF28B30), "Temps"),
+                _buildLegendItem(const Color(0xFFD678D2), "Distance"),
+              ],
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildChartBar(int? steps, bool isSelected) {
+  Widget _buildStackedChartBar(int? steps, int? time, double? distance, bool isSelected) {
     const double barWidth = 28.0;
     const double totalHeight = 160.0;
 
-    if (steps == null || steps == 0) {
+    final int segmentsCount = isStravaLinked ? 3 : 1;
+    final double segmentMaxHeight = totalHeight / segmentsCount;
+
+    bool hasSteps = steps != null && steps > 0;
+    bool hasTime = time != null && time > 0;
+    bool hasDist = distance != null && distance > 0;
+
+    bool isEmpty = !hasSteps;
+    if (isStravaLinked) {
+      isEmpty = isEmpty && !hasTime && !hasDist;
+    }
+
+    if (isEmpty) {
       return Container(
         width: barWidth,
         height: totalHeight,
@@ -63,21 +107,12 @@ class InteractiveChartWidget extends StatelessWidget {
       );
     }
 
-    double fillPercentage = (steps / 10000).clamp(0.0, 1.0);
-    double barHeight = totalHeight * fillPercentage;
-    if (barHeight < 10) {
-      barHeight = 10;
-    }
-
-    Color barColor = const Color(0xFF4CAF50);
-    if (steps < 4000) {
-      barColor = const Color(0xFFFF6B35);
-    } else if (steps < 8000) {
-      barColor = const Color(0xFFFFD93D);
-    }
+    double stepsPct = ((steps ?? 0) / (goalSteps > 0 ? goalSteps : 1)).clamp(0.0, 1.0);
+    double timePct = ((time ?? 0) / (goalTime > 0 ? goalTime : 1)).clamp(0.0, 1.0);
+    double distPct = ((distance ?? 0) / (goalDistance > 0 ? goalDistance : 1)).clamp(0.0, 1.0);
 
     return Opacity(
-      opacity: isSelected ? 1.0 : 0.25,
+      opacity: isSelected ? 1.0 : 0.4,
       child: Container(
         width: barWidth,
         height: totalHeight,
@@ -85,12 +120,46 @@ class InteractiveChartWidget extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.transparent),
         ),
-        child: Container(
-          height: barHeight,
-          width: barWidth,
-          color: barColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (isStravaLinked) ...[
+              Container(
+                width: barWidth,
+                height: distPct * segmentMaxHeight,
+                color: const Color(0xFFD678D2),
+              ),
+              Container(
+                width: barWidth,
+                height: timePct * segmentMaxHeight,
+                color: const Color(0xFFF28B30),
+              ),
+            ],
+            Container(
+              width: barWidth,
+              height: stepsPct * segmentMaxHeight,
+              color: const Color(0xFF4A90E2),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildLegendItem(Color color, String label) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 
@@ -106,8 +175,12 @@ class _ChartLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 24,
-      child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+      width: 28,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+      ),
     );
   }
 }
