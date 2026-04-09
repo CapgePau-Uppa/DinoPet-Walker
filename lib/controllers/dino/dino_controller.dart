@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/models/activity/sport_activity.dart';
 import 'package:dinopet_walker/models/dino/dino_pet.dart';
 import 'package:dinopet_walker/models/dino/dino_type.dart';
 import 'package:dinopet_walker/models/daily_steps.dart';
@@ -49,7 +50,30 @@ class DinoController extends ChangeNotifier {
 
   Future<void> addSteps(int steps) async {
     if (_dinoPet == null) return;
-    _dinoPet!.addSteps(steps);
+    _dinoPet!.addXp(steps);
+    notifyListeners();
+    await _dinoPetService.saveDinoPet(_dinoPet!);
+  }
+
+  // Calcule et ajoute au dino le score des nouvelles activités Strava.
+  Future<void> addNewStravaActivities(List<SportActivity> activities) async {
+    if (_dinoPet == null) return;
+
+    final savedActivities = Set<String>.from(_dinoPet!.stravaActivitiesIds);
+    final newActivities = activities
+        .where((a) => !savedActivities.contains(a.id))
+        .toList();
+
+    if (newActivities.isEmpty) return;
+
+    int totalXp = 0;
+    for (final act in newActivities) {
+      final score = act.durationInMinutes * 10 + (act.distanceInKm * 100).round();
+      totalXp += score;
+      _dinoPet!.stravaActivitiesIds.add(act.id);
+    }
+
+    _dinoPet!.addXp(totalXp);
     notifyListeners();
     await _dinoPetService.saveDinoPet(_dinoPet!);
   }
@@ -57,7 +81,7 @@ class DinoController extends ChangeNotifier {
   void resetDino() {
     if (_dinoPet == null) return;
     _dinoPet!.level = 1;
-    _dinoPet!.xpSteps = 0;
+    _dinoPet!.xp = 0;
     notifyListeners();
   }
 }

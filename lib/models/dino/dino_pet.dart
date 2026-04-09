@@ -8,16 +8,19 @@ class DinoPet {
   final String id;
   final DinoType type;
   int level;
-  int xpSteps;
+  int xp;
   DateTime adoptedDate;
+  List<String> stravaActivitiesIds; 
 
   DinoPet({
     required this.id,
     required this.type,
     this.level = 1,
-    this.xpSteps = 0,
+    this.xp = 0,
     DateTime? adoptedDate,
-  }) : adoptedDate = adoptedDate ?? DateTime.now();
+    List<String>? stravaActivitiesIds,
+  }) : adoptedDate = adoptedDate ?? DateTime.now(),
+       stravaActivitiesIds = stravaActivitiesIds ?? [];
 
   factory DinoPet.fromFirestore(String id, Map<String, dynamic> data) {
     final dinoType = availableDinos.firstWhere(
@@ -28,9 +31,9 @@ class DinoPet {
       id: id,
       type: dinoType,
       level: data['level'] as int? ?? 1,
-      xpSteps: data['xpSteps'] as int? ?? 0,
-      adoptedDate:
-          (data['adoptedDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      xp: data['xp'] as int? ?? 0,
+      adoptedDate: (data['adoptedDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      stravaActivitiesIds: List<String>.from(data['stravaActivitiesIds'] ?? []),
     );
   }
 
@@ -38,39 +41,20 @@ class DinoPet {
     return {
       'typeId': type.id,
       'level': level,
-      'xpSteps': xpSteps,
+      'xp': xp,
       'adoptedDate': Timestamp.fromDate(adoptedDate),
+      'stravaActivitiesIds': stravaActivitiesIds,
     };
   }
 
-  static int getStepsRequiredForLevel(int level) {
-    const int baseSteps = 5000;
-    const double coefficientOfDifficulty = 1.08;
-    return (baseSteps * pow(coefficientOfDifficulty, level)).round();
-  }
+  int get xpRequiredForNextLevel =>
+      level >= 50 ? 0 : getXpRequiredForLevel(level + 1);
 
-  int get stepsRequiredForNextLevel =>
-      level >= 50 ? 0 : getStepsRequiredForLevel(level + 1);
-
-  double get progressToNextLevel {
-    if (level >= 50) return 100.0;
-    final required = stepsRequiredForNextLevel;
-    return (xpSteps / required * 100).clamp(0, 100);
-  }
-
-  int getTotalStepsCollected() {
-    int total = xpSteps;
-    for (int i = 2; i <= level; i++) {
-      total += getStepsRequiredForLevel(i);
-    }
-    return total;
-  }
-
-  void addSteps(int steps) {
+  void addXp(int amount) {
     if (level >= 50) return;
-    xpSteps += steps;
-    while (xpSteps >= stepsRequiredForNextLevel && level < 50) {
-      xpSteps -= stepsRequiredForNextLevel;
+    xp += amount;
+    while (xp >= xpRequiredForNextLevel && level < 50) {
+      xp -= xpRequiredForNextLevel;
       level++;
     }
   }
@@ -83,4 +67,18 @@ class DinoPet {
   }
 
   String getCurrentAsset() => type.getAsset(currentStage, level);
+
+  int getTotalXpCollected() {
+    int total = xp;
+    for (int i = 2; i <= level; i++) {
+      total += getXpRequiredForLevel(i);
+    }
+    return total;
+  }
+
+  int getXpRequiredForLevel(int level) {
+    const int baseSteps = 5000;
+    const double coefficientOfDifficulty = 1.05;
+    return (baseSteps * pow(coefficientOfDifficulty, level)).round();
+  }
 }

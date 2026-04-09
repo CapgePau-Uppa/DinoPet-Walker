@@ -13,8 +13,14 @@ List<SingleChildWidget> get providers => [
     create: (ctx) => HomeController(dinoController: ctx.read<DinoController>()),
     update: (ctx, dino, previous) => previous!..dinoController = dino,
   ),
+  ChangeNotifierProxyProvider<DinoController, ActivityController>(
+    create: (ctx) =>
+        ActivityController(dinoController: ctx.read<DinoController>()),
+    update: (ctx, dinoController, previous) =>
+        previous!..dinoController = dinoController,
+  ),
 
   ChangeNotifierProvider(create: (_) => StatisticsController()),
   ChangeNotifierProvider(create: (_) => UserController()),
-  ChangeNotifierProvider(create: (_) => ActivityController()),
+  
 ];
