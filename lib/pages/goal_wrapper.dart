@@ -21,10 +21,15 @@ class _GoalWrapperState extends State<GoalWrapper> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<HomeController>().loadGoal();
+      final homeController = context.read<HomeController>();
+      final dinoController = context.read<DinoController>();
+      final activityController = context.read<ActivityController>();
+
+      await homeController.loadGoal();
+
       if (mounted) {
-        await context.read<DinoController>().loadDinoPet();
-        await context.read<ActivityController>().loadActivities();
+        await dinoController.loadDinoPet();
+        await activityController.loadActivities();
       }
     });
   }
