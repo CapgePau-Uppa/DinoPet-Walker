@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:dinopet_walker/utils/nature_helper.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ActivityController extends ChangeNotifier {
   final StravaService _stravaService = StravaService();
   final _storage = const FlutterSecureStorage();
+
+  DinoController dinoController;
+
+  ActivityController({required this.dinoController});
 
   Nature get dinoNature => NatureHelper.getNatureFromSportType(dominantSport);
 
@@ -110,6 +115,8 @@ class ActivityController extends ChangeNotifier {
             .where((a) => a.type != 'Walk')
             .toList();
       }
+
+      await dinoController.addNewStravaActivities(_activities);
 
       _todayActivities = activities
           .where(

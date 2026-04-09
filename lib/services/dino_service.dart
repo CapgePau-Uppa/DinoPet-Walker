@@ -12,7 +12,7 @@ class DinoPetService {
   DinoPet createNewDinoPet(DinoType type, {int initialSteps = 0}) {
     final dino = DinoPet(id: _uid!,type: type,);
     if (initialSteps > 0) {
-      dino.addSteps(initialSteps);
+      dino.addXp(initialSteps);
     }
     return dino;
   }
