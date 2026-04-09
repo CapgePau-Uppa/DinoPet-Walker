@@ -120,4 +120,13 @@ class UserService {
       'lastStreakUpdate': date,
     });
   }
+
+  Future<void> updateHasSeenStravaOnboarding(bool hasSeen) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'hasSeenStravaOnboarding': hasSeen,
+    });
+  }
 }

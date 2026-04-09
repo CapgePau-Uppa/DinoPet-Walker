@@ -166,8 +166,8 @@ class _StatistiquesScreenState extends State<StatisticsScreen> {
                         weekTimeData: activityController.weekTimeData,
                         weekDistanceData: activityController.weekDistanceData,
                         goalSteps: homeController.goalSteps,
-                        goalTime: homeController.goalTime,
-                        goalDistance: homeController.goalDistance.toDouble(),
+                        goalTime: homeController.goalTime ?? 0,
+                        goalDistance: homeController.goalDistance ?? 0,
                         weekStartDate: statController.currentWeekStart,
                         selectedDate: statController.selectedDate,
                         onDaySelected: (cliquedDate) {
