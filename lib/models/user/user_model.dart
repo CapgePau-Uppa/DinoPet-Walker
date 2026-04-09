@@ -5,6 +5,7 @@ class UserModel {
   final String username;
   final String email;
   final String? phone;
+  final bool hasSeenStravaOnboarding;
   final int? goalSteps;
   final int? goalTime;
   final int? goalDistance;
@@ -18,6 +19,7 @@ class UserModel {
     required this.username,
     required this.email,
     this.phone,
+    this.hasSeenStravaOnboarding = false,
     this.goalSteps,
     this.goalTime,
     this.goalDistance,
@@ -33,6 +35,7 @@ class UserModel {
       username: data['username'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
+      hasSeenStravaOnboarding: data['hasSeenStravaOnboarding'] ?? false,
       goalSteps: data['goalSteps'] as int?,
       goalTime: data['goalTime'] as int?,
       goalDistance: data['goalDistance'] as int?,
@@ -48,6 +51,7 @@ class UserModel {
       'username': username,
       'email': email,
       'phone': phone,
+      'hasSeenStravaOnboarding': hasSeenStravaOnboarding,
       'goalSteps': goalSteps,
       'goalTime': goalTime,
       'goalDistance': goalDistance,

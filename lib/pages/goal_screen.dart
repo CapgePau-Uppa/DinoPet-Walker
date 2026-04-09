@@ -86,10 +86,10 @@ class _GoalScreenState extends State<GoalScreen> {
         _selectedTarget = homeController.goalSteps;
         break;
       case GoalType.time:
-        _selectedTarget = homeController.goalTime;
+        _selectedTarget = homeController.goalTime ?? 30;
         break;
       case GoalType.distance:
-        _selectedTarget = homeController.goalDistance;
+        _selectedTarget = homeController.goalDistance ?? 4;
         break;
     }
 
@@ -128,7 +128,7 @@ class _GoalScreenState extends State<GoalScreen> {
     Toast.show(
       context: context,
       message: "Objectif défini avec succès !",
-      icon: Icons.check_circle_outline,
+      icon: Icons.check_circle,
       color: const Color(0xFF4CAF50),
     );
   }

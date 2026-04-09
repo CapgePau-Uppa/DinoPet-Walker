@@ -9,7 +9,7 @@ class InteractiveChartWidget extends StatelessWidget {
 
   final int goalSteps;
   final int goalTime;
-  final double goalDistance;
+  final int goalDistance;
 
   final DateTime weekStartDate;
   final DateTime selectedDate;

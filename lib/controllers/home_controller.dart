@@ -14,8 +14,8 @@ class HomeController extends ChangeNotifier {
   int _goalSteps = 10000;
   bool _isInitialized = false;
 
-  int _goalTime = 30;
-  int _goalDistance = 5;
+  int? _goalTime;
+  int? _goalDistance;
 
   bool isGoalSet = false;
   bool isLoadingGoal = true;
@@ -23,10 +23,13 @@ class HomeController extends ChangeNotifier {
   int _streak = 0;
   int get streak => _streak;
 
+  bool _hasSeenStravaOnboarding = false;
+  bool get hasSeenStravaOnboarding => _hasSeenStravaOnboarding;
+
   int get currentSteps => _currentSteps;
   int get goalSteps => _goalSteps;
-  int get goalTime => _goalTime;
-  int get goalDistance => _goalDistance;
+  int? get goalTime => _goalTime;
+  int? get goalDistance => _goalDistance;
 
   HomeController({required this.dinoController});
 
@@ -53,19 +56,31 @@ class HomeController extends ChangeNotifier {
         if (user.goalDistance != null) {
           await prefs.setInt('goalDistance', user.goalDistance!);
         }
+        _hasSeenStravaOnboarding = user.hasSeenStravaOnboarding;
+        await prefs.setBool('hasSeenStravaOnboarding', _hasSeenStravaOnboarding);
       }
     }
 
     if (isGoalSet) {
       _goalSteps = prefs.getInt('goalSteps') ?? 10000;
-      _goalTime = prefs.getInt('goalTime') ?? 30;
-      _goalDistance = prefs.getInt('goalDistance') ?? 5;
+      _goalTime = prefs.getInt('goalTime');
+      _goalDistance = prefs.getInt('goalDistance');
+      _hasSeenStravaOnboarding = prefs.getBool('hasSeenStravaOnboarding') ?? false;
     }
 
     _streak = await _streakService.checkAndIncrementStreak(_currentSteps, _goalSteps);
 
     isLoadingGoal = false;
     notifyListeners();
+  }
+
+  Future<void> completeStravaOnboarding() async {
+    _hasSeenStravaOnboarding = true;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSeenStravaOnboarding', true);
+    _userService.updateHasSeenStravaOnboarding(_hasSeenStravaOnboarding);
   }
 
   Future<void> _updateStreak() async {
