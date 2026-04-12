@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dinopet_walker/data/dino_data.dart';
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:dinopet_walker/models/dino/dino_type.dart';
 import 'package:dinopet_walker/models/dino/life_stage.dart';
 
@@ -66,7 +67,8 @@ class DinoPet {
     return LifeStage.adult;
   }
 
-  String getCurrentAsset() => type.getAsset(currentStage, level);
+  String getCurrentAsset([Nature nature = Nature.terrestre]) =>
+      type.getAsset(currentStage, level, nature);
 
   int getTotalXpCollected() {
     int total = xp;

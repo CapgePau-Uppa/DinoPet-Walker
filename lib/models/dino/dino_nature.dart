@@ -1,5 +1,5 @@
 enum Nature {
-  neutral,
+  terrestre,
   aquatic, 
   runner,    
   cyclist,   
@@ -17,7 +17,7 @@ extension DinoNature on Nature {
       case Nature.mountain: return 'Montagnard';
       case Nature.warrior:  return 'Guerrier';
       case Nature.explorer: return 'Explorateur';
-      case Nature.neutral:  return 'Neutre';
+      case Nature.terrestre:  return 'Terrestre';
     }
   }
 

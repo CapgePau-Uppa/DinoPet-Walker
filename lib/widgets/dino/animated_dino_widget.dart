@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:dinopet_walker/controllers/dino/dino_animation_controller.dart';
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:dinopet_walker/models/dino/dino_pet.dart';
 import 'package:dinopet_walker/models/dino/life_stage.dart';
 import 'package:dinopet_walker/models/star_particle.dart';
@@ -9,11 +10,13 @@ import 'package:flutter/material.dart';
 class AnimatedDinoWidget extends StatefulWidget {
   final DinoPet dinoPet;
   final VoidCallback? onStageEvolved;
+  final Nature nature;
 
   const AnimatedDinoWidget({
     super.key,
     required this.dinoPet,
     this.onStageEvolved,
+    this.nature = Nature.terrestre,
   });
 
   @override
@@ -219,7 +222,7 @@ class _AnimatedDinoWidgetState extends State<AnimatedDinoWidget>
       child: ClipOval(
         child: Center(
           child: Image.asset(
-            dino.getCurrentAsset(),
+            dino.getCurrentAsset(widget.nature),
             width: imgDinoDimension,
             height: imgDinoDimension,
             fit: BoxFit.contain,
