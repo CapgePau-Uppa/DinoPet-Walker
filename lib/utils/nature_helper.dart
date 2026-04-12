@@ -2,7 +2,7 @@ import 'package:dinopet_walker/models/dino/dino_nature.dart';
 
 class NatureHelper {
   static Nature getNatureFromSportType(String? sportType) {
-    if (sportType == null) return Nature.neutral;
+    if (sportType == null) return Nature.terrestre;
 
     switch (sportType) {
       case 'Swim':
@@ -34,7 +34,7 @@ class NatureHelper {
         return Nature.explorer;
 
       default:
-        return Nature.neutral;
+        return Nature.terrestre;
     }
   }
 }
