@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         Positioned(
                           top: 280 - 150,
                           child: AnimatedDinoWidget(
+                            nature: dinoNature,
                             dinoPet: currentDino,
                             onStageEvolved: () {},
                           ),
