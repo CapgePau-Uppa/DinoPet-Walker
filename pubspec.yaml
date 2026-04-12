@@ -84,6 +84,9 @@ flutter:
     - assets/.env
     - assets/images/
     - assets/images/dinos/blue_dinos/baby/
+    - assets/images/dinos/blue_dinos/baby/aquatic/
+    - assets/images/dinos/blue_dinos/baby/mountain/
+    - assets/images/dinos/blue_dinos/baby/cyclist/
     - assets/images/dinos/blue_dinos/child/
     - assets/images/dinos/blue_dinos/ado/
     - assets/images/dinos/blue_dinos/adult/
