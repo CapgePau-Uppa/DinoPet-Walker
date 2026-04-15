@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/controllers/activity/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
+import 'package:dinopet_walker/controllers/map_screen_controller.dart';
 import 'package:dinopet_walker/controllers/user/user_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/statistics_controller.dart';
@@ -22,5 +23,6 @@ List<SingleChildWidget> get providers => [
 
   ChangeNotifierProvider(create: (_) => StatisticsController()),
   ChangeNotifierProvider(create: (_) => UserController()),
+  ChangeNotifierProvider(create: (_) => MapScreenController()),
   
 ];
