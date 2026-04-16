@@ -1,7 +1,8 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:dinopet_walker/controllers/map_screen_controller.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
-import 'package:dinopet_walker/widgets/user_marker.dart';
+import 'package:dinopet_walker/widgets/map/gradient_path.dart';
+import 'package:dinopet_walker/widgets/map/user_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
@@ -204,15 +205,7 @@ class _MapScreenState extends State<MapScreen> {
             userAgentPackageName: 'com.example.dinopet_walker',
             tileProvider: NetworkTileProvider(),
           ),
-          PolylineLayer(
-            polylines: [
-              Polyline(
-                points: controller.dailyPath,
-                strokeWidth: 4.0,
-                color: const Color(0xFF00897B),
-              ),
-            ],
-          ),
+          GradientPath(points: controller.dailyPath),
           MarkerLayer(
             markers: [
               Marker(
