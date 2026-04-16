@@ -190,12 +190,27 @@ class _MapScreenState extends State<MapScreen> {
         mapController: _flutterMapController,
         options: MapOptions(
           initialCenter: controller.userPosition!,
-          initialZoom: 19,
+          initialZoom: 16,
+          minZoom: 12,
+          maxZoom: 19,
+          interactionOptions: const InteractionOptions(
+            flags: InteractiveFlag.all & ~InteractiveFlag.flingAnimation,
+          ),
         ),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.dinopet_walker',
+            tileProvider: NetworkTileProvider(),
+          ),
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: controller.dailyPath,
+                strokeWidth: 4.0,
+                color: const Color(0xFF00897B),
+              ),
+            ],
           ),
           MarkerLayer(
             markers: [
