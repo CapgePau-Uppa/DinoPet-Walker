@@ -199,7 +199,8 @@ class _MapScreenState extends State<MapScreen> {
         ),
         children: [
           TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            urlTemplate:
+                'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=cle',
             userAgentPackageName: 'com.example.dinopet_walker',
             tileProvider: NetworkTileProvider(),
           ),
