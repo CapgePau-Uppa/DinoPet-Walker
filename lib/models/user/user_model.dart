@@ -13,6 +13,10 @@ class UserModel {
   final String? lastStreakUpdate;
   final DateTime? createdAt;
   final String? dinoPetId; 
+  final double? latitude;
+  final double? longitude;
+  final int? dailySteps;
+  final DateTime? locationUpdatedAt;
 
   UserModel({
     required this.uid,
@@ -27,6 +31,10 @@ class UserModel {
     this.lastStreakUpdate,
     this.createdAt,
     this.dinoPetId,
+    this.latitude,
+    this.longitude,
+    this.dailySteps,
+    this.locationUpdatedAt,
   });
 
   factory UserModel.fromFirestore(String uid, Map<String, dynamic> data) {
@@ -43,6 +51,10 @@ class UserModel {
       lastStreakUpdate: data['lastStreakUpdate'] as String?,
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
       dinoPetId: data['dinoPetId'] as String?,
+      latitude: (data['latitude'] as num?)?.toDouble(),
+      longitude: (data['longitude'] as num?)?.toDouble(),
+      dailySteps: data['dailySteps'] as int?,
+      locationUpdatedAt: (data['locationUpdatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -59,6 +71,11 @@ class UserModel {
       'lastStreakUpdate': lastStreakUpdate,
       'createdAt': FieldValue.serverTimestamp(),
       if (dinoPetId != null) 'dinoPetId': dinoPetId,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+      if (dailySteps != null) 'dailySteps': dailySteps,
+      if (locationUpdatedAt != null)
+        'locationUpdatedAt': FieldValue.serverTimestamp(),
     };
   }
 }

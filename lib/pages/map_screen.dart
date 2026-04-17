@@ -1,10 +1,12 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:dinopet_walker/controllers/map_screen_controller.dart';
+import 'package:dinopet_walker/widgets/map/other_user.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/map/gradient_path.dart';
 import 'package:dinopet_walker/widgets/map/user_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 
@@ -213,6 +215,14 @@ class _MapScreenState extends State<MapScreen> {
                 width: 60,
                 height: 60,
                 child: const UserMarker(),
+              ),
+              ...controller.otherUsers.map(
+                (user) => Marker(
+                  point: LatLng(user.latitude!, user.longitude!),
+                  width: 100,
+                  height: 70,
+                  child: OtherUser(user: user),
+                ),
               ),
             ],
           ),

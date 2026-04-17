@@ -23,6 +23,11 @@ List<SingleChildWidget> get providers => [
 
   ChangeNotifierProvider(create: (_) => StatisticsController()),
   ChangeNotifierProvider(create: (_) => UserController()),
-  ChangeNotifierProvider(create: (_) => MapScreenController()),
+  ChangeNotifierProxyProvider<HomeController, MapScreenController>(
+    create: (ctx) => MapScreenController(
+      currentSteps: ctx.read<HomeController>().currentSteps,
+    ),
+    update: (ctx, home, previous) => previous!..updateSteps(home.currentSteps),
+  ),
   
 ];
