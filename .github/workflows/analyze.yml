@@ -34,6 +34,7 @@ jobs:
           echo "STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }}" >> assets/.env
           echo "STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }}" >> assets/.env
           echo "STRAVA_REDIRECT_URI=${{ secrets.STRAVA_REDIRECT_URI }}" >> assets/.env
+          echo "MAPTILER_API_KEY=${{ secrets.MAPTILER_API_KEY }}" >> assets/.env
 
       # Télécharger toutes les dépendances nécessaires
       - name: Installation des dépendances

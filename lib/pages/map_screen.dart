@@ -5,6 +5,7 @@ import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/map/gradient_path.dart';
 import 'package:dinopet_walker/widgets/map/user_marker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -203,7 +204,7 @@ class _MapScreenState extends State<MapScreen> {
         children: [
           TileLayer(
             urlTemplate:
-                'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=cle',
+                'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=${dotenv.env['MAPTILER_API_KEY']}',
             userAgentPackageName: 'com.example.dinopet_walker',
             tileProvider: NetworkTileProvider(),
           ),
