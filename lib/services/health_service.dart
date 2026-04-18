@@ -19,15 +19,7 @@ class HealthService {
   Future<void> initialize() async {
     // initialiser le plugin et établir la connexion avec health connect
     await _health.configure();
-    // demander l'autorisation d'acceder aux données 
-    final agree = await _health.requestAuthorization(
-      [HealthDataType.STEPS],
-      permissions: [HealthDataAccess.READ],
-    );
-    if (!agree) {
-      //print('permissionsrefusées');
-      return;
-    }
+    
     // charger les données sauvegardées en bdd
     await _loadSavedData();
 

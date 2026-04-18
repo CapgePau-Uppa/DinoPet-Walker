@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../controllers/home_controller.dart';
 import '../../controllers/dino/dino_controller.dart';
+import 'package:dinopet_walker/sqlite/tracking_database_helper.dart';
 
 class DebugMenu extends StatelessWidget {
   const DebugMenu({super.key});
@@ -45,6 +46,17 @@ class DebugMenu extends StatelessWidget {
                 onPressed: () => dinoController.resetDino(),
                 icon: const Icon(Icons.refresh),
                 label: const Text("Reset Dino"),
+              ),
+
+              const SizedBox(height: 20),
+
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final db = await TrackingDatabaseHelper.instance.database;
+                  await db.delete('track_points');
+                },
+                icon: const Icon(Icons.map_outlined),
+                label: const Text("Reset Tracking"),
               ),
             ],
           ),

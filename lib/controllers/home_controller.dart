@@ -1,9 +1,9 @@
 import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
+import 'package:dinopet_walker/services/permission_service.dart';
 import 'package:dinopet_walker/services/health_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/services/streak_service.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends ChangeNotifier {
@@ -35,6 +35,7 @@ class HomeController extends ChangeNotifier {
 
   final UserService _userService = UserService();
   final StreakService _streakService = StreakService();
+  final PermissionService _permissionService = PermissionService();
 
   Future<void> loadGoal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -129,7 +130,7 @@ class HomeController extends ChangeNotifier {
     if (_isInitialized) return;
     _isInitialized = true;
 
-    await Permission.activityRecognition.request();
+    await _permissionService.requestAll();
 
     _healthService = HealthService();
     _healthService.stepsStream.listen((difference) async {
