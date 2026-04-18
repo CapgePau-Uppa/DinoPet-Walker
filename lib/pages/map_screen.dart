@@ -27,7 +27,7 @@ class _MapScreenState extends State<MapScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _init());
   }
 
-  Future<void> _init() async {
+  Future<void> _init({bool showToast = false}) async {
     setState(() => _loading = true);
 
     final error = await context.read<MapScreenController>().init();
@@ -35,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
     if (!mounted) return;
     setState(() => _loading = false);
 
-    if (error != null) {
+    if (error != null && showToast) {
       Toast.show(
         context: context,
         message: error,
@@ -151,7 +151,7 @@ class _MapScreenState extends State<MapScreen> {
 
                           PrimaryButton(
                             label: 'Réessayer',
-                            onPressed: _init,
+                            onPressed:() => _init(showToast: true),
                             width: double.infinity,
                           ),
 
