@@ -10,18 +10,10 @@ class LocationService {
         return (null, 'La géolocalisation est désactivée sur cet appareil.');
       }
 
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          return (null, 'Permission de localisation refusée.');
-        }
-      }
-      if (permission == LocationPermission.deniedForever) {
-        return (
-          null,
-          'Permission refusée définitivement.\nRéactivez la permession dans les paramètres de l\'application.',
-        );
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return (null, 'Permission de localisation refusée.');
       }
 
       final position = await Geolocator.getCurrentPosition();
