@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:dinopet_walker/models/user/user_model.dart';
 import 'package:dinopet_walker/services/auth_service.dart';
-import 'package:dinopet_walker/services/location_service.dart';
-import 'package:dinopet_walker/services/tracking_service.dart';
-import 'package:dinopet_walker/services/location_sharing_service.dart';
+import 'package:dinopet_walker/services/map/location_service.dart';
+import 'package:dinopet_walker/services/map/tracking_service.dart';
+import 'package:dinopet_walker/services/map/location_sharing_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
