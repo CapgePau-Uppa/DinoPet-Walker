@@ -14,7 +14,10 @@ class ActivityController extends ChangeNotifier {
 
   ActivityController({required this.dinoController});
 
-  Nature get dinoNature => NatureHelper.getNatureFromSportType(dominantSport);
+  Nature get dinoNature {
+    if (!_isStravaLinked) return Nature.terrestre;
+    return NatureHelper.getNatureFromSportType(dominantSport);
+  }
 
   bool isLoading = true;
 
@@ -40,6 +43,7 @@ class ActivityController extends ChangeNotifier {
   List<double> get weekDistanceData => _weekDistanceData;
 
   String? get dominantSport {
+    if (!_isStravaLinked) return null;
     if (_activities.isEmpty) return null;
 
     final now = DateTime.now();
@@ -98,6 +102,7 @@ class ActivityController extends ChangeNotifier {
 
     String? token = await _storage.read(key: 'strava_access_token');
     _isStravaLinked = token != null;
+    dinoController.setStravaMode(_isStravaLinked); 
 
     if (isStravaLinked) {
       final now = DateTime.now();
