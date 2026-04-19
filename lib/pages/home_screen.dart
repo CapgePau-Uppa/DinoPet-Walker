@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 import '../widgets/home/user_header.dart';
 import '../widgets/home/gauge_widget.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -73,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           Align(
             alignment: Alignment.topCenter,
             child: ClipPath(
-              clipper: HeaderClipper(), 
+              clipper: HeaderClipper(),
               child: Container(
-                height: size.height * 0.38, 
+                height: size.height * 0.38,
                 width: size.width,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -132,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           maxValue: homeController.goalSteps,
                         ),
                         Positioned(
-                          top: 280 - 150,
+                          top: size.height * 0.18,
                           child: AnimatedDinoWidget(
                             nature: dinoNature,
                             dinoPet: currentDino,
@@ -146,8 +145,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       nature: dinoNature,
                       typeName: currentDino.type.name,
                       currentStage: currentDino.currentStage.getName,
-                      totalSteps: currentDino.getTotalXpCollected(),
                     ),
+
+                    SizedBox(height: size.height * 0.03),
                   ],
                 ),
               ),
