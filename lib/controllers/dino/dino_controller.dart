@@ -12,6 +12,9 @@ class DinoController extends ChangeNotifier {
   DinoPet? _dinoPet;
   DinoPet? get dinoPet => _dinoPet;
 
+  bool _isStravaMode = false;
+  bool get isStravaMode => _isStravaMode;
+
   bool isLoading = true;
 
   final DinoPetService _dinoPetService = DinoPetService();
@@ -50,32 +53,52 @@ class DinoController extends ChangeNotifier {
 
   Future<void> addSteps(int steps) async {
     if (_dinoPet == null) return;
+    if (_isStravaMode) return;
     _dinoPet!.addXp(steps);
     notifyListeners();
     await _dinoPetService.saveDinoPet(_dinoPet!);
   }
 
-  // Calcule et ajoute au dino le score des nouvelles activités Strava.
+  // Convertir une activité Strava en points (xp) équivalent aux pas.
+  int _activityToXp(SportActivity act) {
+    if (act.distanceInKm > 0) {
+      return (act.distanceInKm * 1000).round();
+    }
+    return act.durationInMinutes * 100;
+  }
+
+  // Ajoute au dino le score des nouvelles activités Strava.
   Future<void> addNewStravaActivities(List<SportActivity> activities) async {
     if (_dinoPet == null) return;
 
     final savedActivities = Set<String>.from(_dinoPet!.stravaActivitiesIds);
+    final today = DateTime.now();
+
     final newActivities = activities
         .where((a) => !savedActivities.contains(a.id))
+        .where(
+          (a) =>
+              a.date.year == today.year &&
+              a.date.month == today.month &&
+              a.date.day == today.day,
+        )
         .toList();
 
     if (newActivities.isEmpty) return;
 
     int totalXp = 0;
     for (final act in newActivities) {
-      final score = act.durationInMinutes * 10 + (act.distanceInKm * 100).round();
-      totalXp += score;
+      totalXp += _activityToXp(act);
       _dinoPet!.stravaActivitiesIds.add(act.id);
     }
 
     _dinoPet!.addXp(totalXp);
     notifyListeners();
     await _dinoPetService.saveDinoPet(_dinoPet!);
+  }
+
+  void setStravaMode(bool value) {
+    _isStravaMode = value;
   }
 
   void resetDino() {

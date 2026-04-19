@@ -37,6 +37,33 @@ class HomeController extends ChangeNotifier {
   final StreakService _streakService = StreakService();
   final PermissionService _permissionService = PermissionService();
 
+  Future<void> init() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
+    await _permissionService.requestAll();
+
+    _healthService = HealthService();
+    _healthService.stepsStream.listen((difference) async {
+      if (difference > 0) {
+        _currentSteps += difference;
+        if (!dinoController.isStravaMode) {
+          await dinoController.addSteps(difference);
+        }
+      } else {
+        _currentSteps = _healthService.todaySteps;
+      }
+      _updateStreak();
+      notifyListeners();
+    });
+
+    await _healthService.initialize();
+
+    _currentSteps = _healthService.todaySteps;
+    _updateStreak();
+    notifyListeners();
+  }
+
   Future<void> loadGoal() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -124,31 +151,6 @@ class HomeController extends ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goalDistance', newDistance);
-  }
-
-  Future<void> init() async {
-    if (_isInitialized) return;
-    _isInitialized = true;
-
-    await _permissionService.requestAll();
-
-    _healthService = HealthService();
-    _healthService.stepsStream.listen((difference) async {
-      if (difference > 0) {
-        _currentSteps += difference;
-        await dinoController.addSteps(difference);
-      } else {
-        _currentSteps = _healthService.todaySteps;
-      }
-      _updateStreak();
-      notifyListeners();
-    });
-
-    await _healthService.initialize();
-
-    _currentSteps = _healthService.todaySteps;
-    _updateStreak();
-    notifyListeners();
   }
 
   Future<void> addSteps(int steps) async {
