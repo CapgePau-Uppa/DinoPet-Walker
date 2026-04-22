@@ -49,3 +49,6 @@ android/app/google-services.json
 
 # Variables (secrets)
 assets/.env
+
+# Keystore
+release.keystore
