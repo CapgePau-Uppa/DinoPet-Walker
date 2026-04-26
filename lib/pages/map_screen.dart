@@ -224,7 +224,10 @@ class _MapScreenState extends State<MapScreen> {
                     point: LatLng(user.latitude!, user.longitude!),
                     width: 100,
                     height: 70,
-                    child: OtherUser(user: user),
+                    child: OtherUser(
+                      user: user,
+                      mapController: _flutterMapController, 
+                    ),
                   ),
                 ),
               ],
