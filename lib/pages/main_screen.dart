@@ -45,9 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   void onTap(int index) {
     if (index == 3) {
       final mapController = context.read<MapScreenController>();
-      if (mapController.status == MapStatus.error) {
-        mapController.init();
-      }
+      mapController.init();
     }
     setState(() {
       currentIndex = index;

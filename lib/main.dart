@@ -1,5 +1,6 @@
 import 'package:dinopet_walker/services/app_links_service.dart';
 import 'package:dinopet_walker/pages/auth/auth_wrapper.dart';
+import 'package:dinopet_walker/services/map/background_tracking_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,6 +12,8 @@ void main() async{
   // Charger les variables dans .env
   await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp();
+
+  BackgroundTrackingService.init();
 
   runApp(
     MultiProvider(

@@ -6,6 +6,7 @@ import 'package:dinopet_walker/widgets/map/gradient_path.dart';
 import 'package:dinopet_walker/widgets/map/user_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -189,54 +190,59 @@ class _MapScreenState extends State<MapScreen> {
       );
     }
 
-    return Scaffold(
-      body: FlutterMap(
-        mapController: _flutterMapController,
-        options: MapOptions(
-          initialCenter: controller.userPosition!,
-          initialZoom: 16,
-          minZoom: 12,
-          maxZoom: 19,
-          interactionOptions: const InteractionOptions(
-            flags: InteractiveFlag.all & ~InteractiveFlag.flingAnimation,
+    return WithForegroundTask(
+      child: Scaffold(
+        body: FlutterMap(
+          mapController: _flutterMapController,
+          options: MapOptions(
+            initialCenter: controller.userPosition!,
+            initialZoom: 16,
+            minZoom: 12,
+            maxZoom: 19,
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.all & ~InteractiveFlag.flingAnimation,
+            ),
           ),
-        ),
-        children: [
-          TileLayer(
-            urlTemplate:
-                'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=${dotenv.env['MAPTILER_API_KEY']}',
-            userAgentPackageName: 'com.example.dinopet_walker',
-            tileProvider: NetworkTileProvider(),
-          ),
-          GradientPath(points: controller.dailyPath),
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: controller.userPosition!,
-                width: 60,
-                height: 60,
-                child: const UserMarker(),
-              ),
-              ...controller.otherUsers.map(
-                (user) => Marker(
-                  point: LatLng(user.latitude!, user.longitude!),
-                  width: 100,
-                  height: 70,
-                  child: OtherUser(user: user),
+          children: [
+            TileLayer(
+              urlTemplate:
+                  'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=${dotenv.env['MAPTILER_API_KEY']}',
+              userAgentPackageName: 'com.example.dinopet_walker',
+              tileProvider: NetworkTileProvider(),
+            ),
+            GradientPath(points: controller.dailyPath),
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: controller.userPosition!,
+                  width: 60,
+                  height: 60,
+                  child: const UserMarker(),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            _flutterMapController.move(controller.userPosition!, 19),
-        backgroundColor: const Color(0xFF004D40),
-        foregroundColor: Colors.white,
-        elevation: 6,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: const Icon(Icons.my_location),
+                ...controller.otherUsers.map(
+                  (user) => Marker(
+                    point: LatLng(user.latitude!, user.longitude!),
+                    width: 100,
+                    height: 70,
+                    child: OtherUser(
+                      user: user,
+                      mapController: _flutterMapController, 
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () =>
+              _flutterMapController.move(controller.userPosition!, 19),
+          backgroundColor: const Color(0xFF004D40),
+          foregroundColor: Colors.white,
+          elevation: 6,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: const Icon(Icons.my_location),
+        ),
       ),
     );
   }

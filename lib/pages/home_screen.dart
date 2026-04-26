@@ -2,6 +2,7 @@ import 'package:dinopet_walker/controllers/activity/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/user/user_controller.dart';
+import 'package:dinopet_walker/services/permission_service.dart';
 import 'package:dinopet_walker/utils/theme_helper.dart';
 import 'package:dinopet_walker/widgets/clippers/bowl_clipper.dart';
 import 'package:dinopet_walker/widgets/clippers/header_clipper.dart';
@@ -29,9 +30,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<HomeController>().init();
       context.read<UserController>().getCurrentUser();
+
+      if (mounted) {
+        await PermissionService().requestAll();
+      }
     });
   }
 

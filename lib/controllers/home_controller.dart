@@ -1,5 +1,4 @@
 import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
-import 'package:dinopet_walker/services/permission_service.dart';
 import 'package:dinopet_walker/services/health_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/services/streak_service.dart';
@@ -35,13 +34,10 @@ class HomeController extends ChangeNotifier {
 
   final UserService _userService = UserService();
   final StreakService _streakService = StreakService();
-  final PermissionService _permissionService = PermissionService();
 
   Future<void> init() async {
     if (_isInitialized) return;
     _isInitialized = true;
-
-    await _permissionService.requestAll();
 
     _healthService = HealthService();
     _healthService.stepsStream.listen((difference) async {
