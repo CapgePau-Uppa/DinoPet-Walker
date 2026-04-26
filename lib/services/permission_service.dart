@@ -1,3 +1,4 @@
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:health/health.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -21,6 +22,19 @@ class PermissionService {
       [HealthDataType.STEPS],
       permissions: [HealthDataAccess.READ],
     );
+
+    // Batterie 
+    if (!await FlutterForegroundTask.isIgnoringBatteryOptimizations) {
+      await FlutterForegroundTask.requestIgnoreBatteryOptimization();
+    }
+
+    // Notifications
+    final notifStatus =
+        await FlutterForegroundTask.checkNotificationPermission();
+    if (notifStatus != NotificationPermission.granted) {
+      await FlutterForegroundTask.requestNotificationPermission();
+    }
+
   }
 
 }
