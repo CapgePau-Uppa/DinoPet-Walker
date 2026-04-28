@@ -2,6 +2,7 @@ import 'package:dinopet_walker/controllers/activity/activity_controller.dart';
 import 'package:dinopet_walker/controllers/dino/dino_controller.dart';
 import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/user/user_controller.dart';
+import 'package:dinopet_walker/pages/inventory_screen.dart';
 import 'package:dinopet_walker/utils/theme_helper.dart';
 import 'package:dinopet_walker/widgets/clippers/bowl_clipper.dart';
 import 'package:dinopet_walker/widgets/clippers/header_clipper.dart';
@@ -66,7 +67,63 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       key: _homeKey,
       backgroundColor: const Color(0xFFF5F7FA),
       endDrawer: kDebugMode ? const DebugMenu() : null,
-
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+              parent: ModalRoute.of(context)?.animation ??
+                  AlwaysStoppedAnimation(1.0),
+              curve: Curves.elasticOut,
+            ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const InventoryScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      final tween = Tween(begin: begin, end: end);
+                      final offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4CAF50),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF4CAF50).withValues(alpha: 0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.backpack_outlined,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Align(
