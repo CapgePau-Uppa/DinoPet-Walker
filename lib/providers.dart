@@ -6,6 +6,7 @@ import 'package:dinopet_walker/controllers/home_controller.dart';
 import 'package:dinopet_walker/controllers/statistics_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'controllers/inventory_controller.dart';
 
 List<SingleChildWidget> get providers => [
   ChangeNotifierProvider(create: (_) => DinoController()),
@@ -29,5 +30,6 @@ List<SingleChildWidget> get providers => [
     ),
     update: (ctx, home, previous) => previous!..updateSteps(home.currentSteps),
   ),
+  ChangeNotifierProvider(create: (_) => InventoryController()),
   
 ];
