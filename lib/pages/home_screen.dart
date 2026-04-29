@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/home/user_header.dart';
 import '../widgets/home/gauge_widget.dart';
+import 'inventory_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,6 +72,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       key: _homeKey,
       backgroundColor: const Color(0xFFF5F7FA),
       endDrawer: kDebugMode ? const DebugMenu() : null,
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const InventoryScreen(),
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF1B4965),
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: const Icon(Icons.backpack, color: Colors.white, size: 28),
+      ),
 
       body: Stack(
         children: [
@@ -152,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       currentStage: currentDino.currentStage.getName,
                     ),
 
-                    SizedBox(height: size.height * 0.03),
+                    SizedBox(height: size.height * 0.06),
                   ],
                 ),
               ),
