@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 
@@ -22,6 +23,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final MapController _flutterMapController = MapController();
   bool _loading = true;
+  bool _permissionDenied = false;
 
   @override
   void initState() {
@@ -32,9 +34,21 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _init({bool showToast = false}) async {
     setState(() => _loading = true);
 
-    final error = await context.read<MapScreenController>().init();
+    final controller = context.read<MapScreenController>();
+    final error = await controller.init();
 
     if (!mounted) return;
+
+    if (error != null) {
+      final locationStatus = await Permission.location.status;
+
+      if (!mounted) return;
+
+      setState(() {
+        _permissionDenied = locationStatus.isPermanentlyDenied;
+      });
+    }
+
     setState(() => _loading = false);
 
     if (error != null && showToast) {
@@ -44,6 +58,18 @@ class _MapScreenState extends State<MapScreen> {
         icon: Icons.location_off,
         color: const Color(0xFFC94A4A),
       );
+    }
+  }
+
+  Future<void> _requestPermission() async {
+    final status = await Permission.location.request();
+
+    if (!mounted) return;
+
+    if (status.isPermanentlyDenied) {
+      setState(() => _permissionDenied = true);
+    } else {
+      await _init(showToast: true);
     }
   }
 
@@ -110,9 +136,7 @@ class _MapScreenState extends State<MapScreen> {
                               color: Color(0xFF2D3436),
                             ),
                           ),
-
                           const SizedBox(height: 16),
-
                           RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
@@ -148,36 +172,21 @@ class _MapScreenState extends State<MapScreen> {
                               ],
                             ),
                           ),
-
                           const SizedBox(height: 30),
-
-                          PrimaryButton(
-                            label: 'Réessayer',
-                            onPressed:() => _init(showToast: true),
-                            width: double.infinity,
-                          ),
-
-                          const SizedBox(height: 12),
-
-                          TextButton.icon(
-                            onPressed: () {
-                              AppSettings.openAppSettings(
+                          if (_permissionDenied)
+                            PrimaryButton(
+                              label: 'Paramètres',
+                              onPressed: () => AppSettings.openAppSettings(
                                 type: AppSettingsType.location,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.settings_outlined,
-                              size: 20,
-                              color: Colors.blueGrey,
-                            ),
-                            label: const Text(
-                              "Paramètres de l'appareil",
-                              style: TextStyle(
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.bold,
                               ),
+                              width: double.infinity,
+                            )
+                          else
+                            PrimaryButton(
+                              label: 'Autoriser',
+                              onPressed: _requestPermission,
+                              width: double.infinity,
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -226,7 +235,7 @@ class _MapScreenState extends State<MapScreen> {
                     height: 70,
                     child: OtherUser(
                       user: user,
-                      mapController: _flutterMapController, 
+                      mapController: _flutterMapController,
                     ),
                   ),
                 ),
@@ -235,12 +244,17 @@ class _MapScreenState extends State<MapScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () =>
-              _flutterMapController.move(controller.userPosition!, 19),
+          onPressed: () {
+            if (controller.userPosition != null) {
+              _flutterMapController.move(controller.userPosition!, 19);
+            }
+          },
           backgroundColor: const Color(0xFF004D40),
           foregroundColor: Colors.white,
           elevation: 6,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: const Icon(Icons.my_location),
         ),
       ),
