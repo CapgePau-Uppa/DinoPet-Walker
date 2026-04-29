@@ -37,4 +37,19 @@ class PermissionService {
 
   }
 
+  // Vérifier spécifiquement les deux permissions pour Home screen
+  Future<Map<String, bool>> checkHomePermissions() async {
+    final activity = await Permission.activityRecognition.isGranted;
+
+    await _health.configure();
+    final health =
+        await _health.hasPermissions(
+          [HealthDataType.STEPS],
+          permissions: [HealthDataAccess.READ],
+        ) ??
+        false;
+
+    return {'activity': activity, 'health': health};
+  }
+
 }
