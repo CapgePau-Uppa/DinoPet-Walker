@@ -1,7 +1,6 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:dinopet_walker/controllers/map_screen_controller.dart';
+import 'package:dinopet_walker/pages/map_permission_screen.dart';
 import 'package:dinopet_walker/widgets/map/other_user.dart';
-import 'package:dinopet_walker/widgets/common/primary_button.dart';
 import 'package:dinopet_walker/widgets/map/gradient_path.dart';
 import 'package:dinopet_walker/widgets/map/user_marker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
+import 'package:app_settings/app_settings.dart'; 
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -20,7 +20,7 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   final MapController _flutterMapController = MapController();
   bool _loading = true;
   bool _permissionDenied = false;
@@ -28,25 +28,43 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => _init());
   }
 
-  Future<void> _init({bool showToast = false}) async {
-    setState(() => _loading = true);
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _init();
+    }
+  }
+
+  Future<void> _init({bool showToast = false}) async {
     final controller = context.read<MapScreenController>();
+
+    if (controller.userPosition == null) {
+      setState(() => _loading = true);
+    }
+
     final error = await controller.init();
 
     if (!mounted) return;
 
     if (error != null) {
       final locationStatus = await Permission.location.status;
-
       if (!mounted) return;
 
       setState(() {
-        _permissionDenied = locationStatus.isPermanentlyDenied;
+        _permissionDenied = !locationStatus.isGranted;
       });
+    } else {
+      setState(() => _permissionDenied = false);
     }
 
     setState(() => _loading = false);
@@ -61,16 +79,8 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  Future<void> _requestPermission() async {
-    final status = await Permission.location.request();
-
-    if (!mounted) return;
-
-    if (status.isPermanentlyDenied) {
-      setState(() => _permissionDenied = true);
-    } else {
-      await _init(showToast: true);
-    }
+  void _openSettings() {
+    AppSettings.openAppSettings(type: AppSettingsType.location);
   }
 
   @override
@@ -81,121 +91,10 @@ class _MapScreenState extends State<MapScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    if (controller.status == MapStatus.error) {
-      return Scaffold(
-        backgroundColor: const Color(0xFFF7F9FB),
-        body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(28),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFE8F5E9), Color(0xFFC8E6C9)],
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.location_off_rounded,
-                        size: 70,
-                        color: Color(0xFF2E7D32),
-                      ),
-                    ),
-
-                    const SizedBox(height: 40),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 28,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Oups ! Localisation introuvable',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF2D3436),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
-                                height: 1.5,
-                              ),
-                              children: [
-                                const TextSpan(
-                                  text:
-                                      "Nous n'arrivons pas a vous localiser.\n",
-                                ),
-                                const TextSpan(text: "Assurez vous que le "),
-                                const TextSpan(
-                                  text: "GPS est activé",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const TextSpan(text: " et que "),
-                                const TextSpan(
-                                  text: "l'accès est autorisé",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: " pour cette application.",
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          if (_permissionDenied)
-                            PrimaryButton(
-                              label: 'Paramètres',
-                              onPressed: () => AppSettings.openAppSettings(
-                                type: AppSettingsType.location,
-                              ),
-                              width: double.infinity,
-                            )
-                          else
-                            PrimaryButton(
-                              label: 'Autoriser',
-                              onPressed: _requestPermission,
-                              width: double.infinity,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+    if (controller.status == MapStatus.error || _permissionDenied) {
+      return MapPermissionScreen(
+        isPermanentlyDenied: true, 
+        onRetry: _openSettings,
       );
     }
 

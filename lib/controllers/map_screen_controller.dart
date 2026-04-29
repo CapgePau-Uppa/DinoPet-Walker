@@ -45,8 +45,10 @@ class MapScreenController extends ChangeNotifier {
   }
 
   Future<String?> init() async {
-    _status = MapStatus.loading;
-    notifyListeners();
+    if (_status != MapStatus.success) {
+      _status = MapStatus.loading;
+      notifyListeners();
+    }
 
     await _trackingService.cleanPastDays();
 
