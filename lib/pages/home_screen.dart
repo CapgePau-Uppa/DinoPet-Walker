@@ -145,14 +145,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 220),
+                    const SizedBox(height: 330),
                     DinoDetailsWidget(
                       nature: dinoNature,
                       typeName: currentDino.type.name,
                       currentStage: currentDino.currentStage.getName,
                     ),
-
-                    SizedBox(height: size.height * 0.03),
                   ],
                 ),
               ),
