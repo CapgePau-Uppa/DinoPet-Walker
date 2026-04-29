@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/user/user_controller.dart';
+import 'package:dinopet_walker/utils/connectivity_helper.dart';
 import 'package:dinopet_walker/utils/date_formatter.dart';
 import 'package:dinopet_walker/widgets/common/confirm_password_dialog.dart';
 import 'package:dinopet_walker/widgets/common/form_label.dart';
@@ -44,7 +45,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.dispose();
   }
 
+  
+
   Future<void> _save() async {
+
+    if (!await ConnectivityHelper.hasInternet()) {
+      if (!mounted) return;
+      Toast.show(
+        context: context,
+        message: "Connexion internet requise",
+        icon: Icons.wifi_off,
+        color: const Color(0xFFC94A4A),
+      );
+      return;
+    }
+    
     final userController = context.read<UserController>();
 
     // Mise a jour de username
