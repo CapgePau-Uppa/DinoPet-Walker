@@ -93,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       Toast.show(
         context: context,
         message: error,
-        icon: Icons.highlight_off,
+        icon: Icons.wifi_off,
         color: const Color(0xFFC94A4A),
       );
     } else {
