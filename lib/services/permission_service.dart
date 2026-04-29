@@ -5,7 +5,9 @@ import 'package:permission_handler/permission_handler.dart';
 class PermissionService {
   final Health _health = Health();
 
-  // Demander toutes les autorisations nécessaires.
+  /*
+  // Demander toutes les autorisations nécessaires. 
+  // On n'utilise plus cette fonction pour le moment
   Future<void> requestAll() async {
     // Activité physique
     await Permission.activityRecognition.request();
@@ -35,6 +37,43 @@ class PermissionService {
       await FlutterForegroundTask.requestNotificationPermission();
     }
 
+  }*/
+
+  // Vérifier spécifiquement les deux permissions pour Home screen
+  Future<Map<String, bool>> checkHomePermissions() async {
+    final activity = await Permission.activityRecognition.isGranted;
+
+    await _health.configure();
+    final health =
+        await _health.hasPermissions(
+          [HealthDataType.STEPS],
+          permissions: [HealthDataAccess.READ],
+        ) ??
+        false;
+
+    return {'activity': activity, 'health': health};
+  }
+
+  // Vérifier la permission obligatoire pour Map screen
+  Future<Map<String, bool>> checkMapPermissions() async {
+    final location = await Permission.location.isGranted;
+    return {'location': location};
+  }
+
+  // Vérifier les permessions nécessaires pour le suivi en arrière plan (pas obligatoires pour Map screen)
+  Future<Map<String, bool>> checkWarningPermissions() async {
+    final batteryOk =
+        await FlutterForegroundTask.isIgnoringBatteryOptimizations;
+
+    final notifStatus =
+        await FlutterForegroundTask.checkNotificationPermission();
+    final notifOk = notifStatus == NotificationPermission.granted;
+
+    return {'battery': batteryOk, 'notification': notifOk};
+  }
+
+  Future<void> requestBattery() async {
+    await FlutterForegroundTask.requestIgnoreBatteryOptimization();
   }
 
 }
