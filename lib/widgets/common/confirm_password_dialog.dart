@@ -143,8 +143,11 @@ class _ConfirmPasswordDialogState extends State<ConfirmPasswordDialog> {
                       Expanded(
                         child: TextButton(
                           onPressed: () async {
-                            if (!await ConnectivityHelper.hasInternet()) {
-                              if (!context.mounted) return;
+                            final hasInternet = await ConnectivityHelper.hasInternet();
+                            
+                            if (!context.mounted) return; 
+
+                            if (!hasInternet) {
                               Toast.show(
                                 context: context,
                                 message: "Pas de connexion internet",
@@ -153,6 +156,7 @@ class _ConfirmPasswordDialogState extends State<ConfirmPasswordDialog> {
                               );
                               return;
                             }
+
                             Navigator.pop(context, _controller.text);
                           },
                           style: TextButton.styleFrom(

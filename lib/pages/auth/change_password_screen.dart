@@ -24,9 +24,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
 
   void _submit() async {
+    final hasInternet = await ConnectivityHelper.hasInternet();
 
-    if (!await ConnectivityHelper.hasInternet()) {
-      if (!mounted) return;
+    if (!mounted) return;
+
+    if (!hasInternet) {
       Toast.show(
         context: context,
         message: "Connexion internet requise",
@@ -35,7 +37,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       );
       return;
     }
-    
+
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
 
@@ -45,7 +47,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       confirmPassword: confirmPasswordController.text.trim(),
     );
 
-    if (!mounted) return;
+    if (!mounted) return; 
 
     setState(() => _loading = false);
 

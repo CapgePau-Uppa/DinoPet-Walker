@@ -48,9 +48,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   
 
   Future<void> _save() async {
+    final hasInternet = await ConnectivityHelper.hasInternet();
+    
+    if (!mounted) return;
 
-    if (!await ConnectivityHelper.hasInternet()) {
-      if (!mounted) return;
+    if (!hasInternet) {
       Toast.show(
         context: context,
         message: "Connexion internet requise",
