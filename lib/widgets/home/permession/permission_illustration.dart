@@ -16,7 +16,7 @@ class PermissionIllustration extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const Icon(Icons.lock_open_rounded, size: 70, color: Color(0xFF2E7D32)),
+        Image.asset('assets/images/cracked_egg.png', width: 120, height: 120)
       ],
     );
   }
