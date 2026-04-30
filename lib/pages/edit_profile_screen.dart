@@ -10,6 +10,7 @@ import 'package:dinopet_walker/widgets/fields/username_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:dinopet_walker/widgets/common/primary_button.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -24,6 +25,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+  String _fullPhoneNumber = '';
+  String _initialCountryCode = 'FR';
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +38,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final userController = context.read<UserController>();
     usernameController.text = userController.username;
     emailController.text = userController.email;
-    phoneController.text = userController.phone;
+
+    final savedPhone = userController.phone;
+    if (savedPhone.isNotEmpty) {
+      _fullPhoneNumber = savedPhone;
+      _initialCountryCode = _countryCodeFromPhone(savedPhone);
+      phoneController.text = _localNumberFromPhone(savedPhone);
+    }
   }
 
   @override
@@ -111,8 +121,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       return;
     }
 
-    if (phoneController.text.isNotEmpty) {
-      await userController.updatePhone(phoneController.text);
+    if (_fullPhoneNumber.isNotEmpty) {
+      await userController.updatePhone(_fullPhoneNumber);
       if (!mounted) return;
     }
 
@@ -122,6 +132,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       icon: Icons.check_circle,
       color: const Color(0xFF4CAF50),
     );
+  }
+
+  String _countryCodeFromPhone(String fullNumber) {
+    final sorted = List<Country>.of(countries)..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+
+    for (final country in sorted) {
+      if (fullNumber.startsWith('+${country.dialCode}')) return country.code;
+    }
+    return 'FR';
+  }
+
+  String _localNumberFromPhone(String fullNumber) {
+    final sorted = List<Country>.of(countries)..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+
+    for (final country in sorted) {
+      final prefix = '+${country.dialCode}';
+      if (fullNumber.startsWith(prefix)) {
+        return fullNumber.substring(prefix.length);
+      }
+    }
+    return fullNumber;
   }
 
   @override
@@ -162,7 +193,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 FormLabel(text: "Numéro de téléphone"),
                 PhoneField(
                   controller: phoneController,
+                  initialCountryCode: _initialCountryCode,
                   fillColor: const Color(0xFF1B3A2D).withValues(alpha: 0.05),
+                  onChanged: (phone) {
+                    _fullPhoneNumber = phone.completeNumber;
+                  },
+                  onCountryChanged: (country) {
+                    _fullPhoneNumber = '+${country.dialCode}${phoneController.text}';
+                  },
                 ),
 
                 const SizedBox(height: 40),
