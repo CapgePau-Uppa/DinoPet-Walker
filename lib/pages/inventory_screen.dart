@@ -20,17 +20,15 @@ class _InventoryScreenState extends State<InventoryScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(_onTabChanged);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        context.read<InventoryController>().selectTab(_tabController.index);
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<InventoryController>().initialize();
     });
-  }
-
-  void _onTabChanged() {
-    if (!_tabController.indexIsChanging) {
-      context.read<InventoryController>().selectTab(_tabController.index);
-    }
   }
 
   @override
@@ -44,30 +42,43 @@ class _InventoryScreenState extends State<InventoryScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        title: const Text('Mon Inventaire'),
-        backgroundColor: const Color(0xFF4CAF50),
-        foregroundColor: Colors.white,
+        toolbarHeight: 75,
+        backgroundColor: Colors.white,
         elevation: 0,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          indicatorWeight: 3,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
-          tabs: const [
-            Tab(
-              icon: Icon(Icons.restaurant_outlined),
-              text: 'Nourriture',
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        leading: Center(
+          child: Container(
+            height: 50,
+            width: 50,
+            decoration: const BoxDecoration(
+              color: Color(0xFFEDFFEA),
+              shape: BoxShape.circle,
             ),
-            Tab(
-              icon: Icon(Icons.checkroom_outlined),
-              text: 'Accessoires',
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                size: 24,
+                color: Color(0xFF007984),
+              ),
+              onPressed: () => Navigator.pop(context),
             ),
-            Tab(
-              icon: Icon(Icons.emoji_events_outlined),
-              text: 'Trophées',
-            ),
-          ],
+          ),
+        ),
+        title: const Text(
+          'Mon Inventaire',
+          style: TextStyle(
+            color: Color(0xFF007984),
+            fontWeight: FontWeight.w900,
+            fontSize: 25,
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey.withValues(alpha: 0.1),
+            height: 4.0,
+          ),
         ),
       ),
       body: Consumer<InventoryController>(
@@ -75,13 +86,14 @@ class _InventoryScreenState extends State<InventoryScreen>
           if (controller.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: Color(0xFF4CAF50),
+                color: Color(0xFF007984),
               ),
             );
           }
 
           return Column(
             children: [
+              _buildTabBar(),
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
@@ -102,40 +114,70 @@ class _InventoryScreenState extends State<InventoryScreen>
     );
   }
 
-  Widget _buildFoodTab(InventoryController controller) {
-    final items = controller.currentTabItems
-        .where((item) => item.type == ItemType.food)
-        .toList();
+  Widget _buildTabBar() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF1F2F6),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFCED6E0).withValues(alpha: 0.4),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TabBar(
+        controller: _tabController,
+        indicator: BoxDecoration(
+          color: const Color(0xFF007984),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelColor: Colors.white,
+        labelStyle: const TextStyle(
+          fontWeight: FontWeight.w800,
+          fontSize: 13,
+        ),
+        unselectedLabelColor: const Color(0xFF999999),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        ),
+        dividerColor: Colors.transparent,
+        padding: const EdgeInsets.all(6),
+        tabs: const [
+          Tab(text: '🍖 Nourriture'),
+          Tab(text: '🎁 Accessoires'),
+          Tab(text: '🏆 Trophées'),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildFoodTab(InventoryController controller) {
+    final items = controller.allFoodItems;
     if (items.isEmpty) {
       return _buildEmptyState('Aucun aliment', 'Gagnez des aliments en marchant!');
     }
-
-    return _buildItemsGrid(items);
+    return _buildItemsGrid(items.cast<InventoryItem>());
   }
 
   Widget _buildAccessoriesTab(InventoryController controller) {
-    final items = controller.currentTabItems
-        .where((item) => item.type == ItemType.accessory)
-        .toList();
-
+    final items = controller.allAccessories;
     if (items.isEmpty) {
-      return _buildEmptyState('Aucun accessoires', 'Équipez votre dino!');
+      return _buildEmptyState('Aucun accessoire', 'Équipez votre dino!');
     }
-
-    return _buildItemsGrid(items);
+    return _buildItemsGrid(items.cast<InventoryItem>());
   }
 
   Widget _buildTrophiesTab(InventoryController controller) {
-    final items = controller.currentTabItems
-        .where((item) => item.type == ItemType.trophy)
-        .toList();
-
+    final items = controller.allTrophies;
     if (items.isEmpty) {
       return _buildEmptyState('Aucun trophée', 'Atteignez des objectifs!');
     }
-
-    return _buildItemsGrid(items);
+    return _buildItemsGrid(items.cast<InventoryItem>());
   }
 
   Widget _buildItemsGrid(List<InventoryItem> items) {
@@ -146,13 +188,13 @@ class _InventoryScreenState extends State<InventoryScreen>
     }
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.9,
         ),
         itemCount: paginatedItems.length,
         itemBuilder: (context, index) {
@@ -201,76 +243,174 @@ class _InventoryScreenState extends State<InventoryScreen>
   void _showItemDialog(BuildContext context, InventoryItem item) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: Row(
-          children: [
-            Text(
-              item.emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                item.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Stack(
+                    children: [
+                      Opacity(
+                        opacity: item.isUnlocked ? 1.0 : 0.5,
+                        child: Text(
+                          item.emoji,
+                          style: const TextStyle(
+                            fontSize: 48,
+                          ),
+                        ),
+                      ),
+                      if (!item.isUnlocked)
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red[600],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              '🔒',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF333333),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFECE9E6),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            item.getRarityLabel(),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF2C2C2C),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (item.isUnlocked)
+                Text(
+                  item.description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF757575),
+                  ),
+                )
+              else
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.orange[50],
+                    border: Border.all(color: Colors.orange[300]!),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.lock, color: Colors.orange[600], size: 20),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              'Item verrouillé',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFFCC6600),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Pour débloquer: ${item.unlockCondition}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF996600),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF757575),
+                        side: const BorderSide(color: Color(0xFFE0E0E0)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text('Fermer'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  if (item.type == ItemType.accessory && item.isUnlocked)
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context
+                              .read<InventoryController>()
+                              .toggleAccessoryEquipped(item.id);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF007984),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: const Text('Équiper'),
+                      ),
+                    ),
+                ],
               ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: item.getRarityColor().withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: item.getRarityColor()),
-              ),
-              child: Text(
-                item.getRarityLabel(),
-                style: TextStyle(
-                  color: item.getRarityColor(),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              item.description,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFF757575),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fermer'),
+            ],
           ),
-          if (item.type == ItemType.accessory)
-            ElevatedButton(
-              onPressed: () {
-                context
-                    .read<InventoryController>()
-                    .toggleAccessoryEquipped(item.id);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50),
-              ),
-              child: const Text('Équiper'),
-            ),
-        ],
+        ),
       ),
     );
   }

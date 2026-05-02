@@ -3,6 +3,7 @@ import 'package:dinopet_walker/models/inventory/accessory_item.dart';
 import 'package:dinopet_walker/models/inventory/trophy_item.dart';
 import 'package:dinopet_walker/models/inventory/inventory_item.dart';
 import 'package:dinopet_walker/services/inventory_service.dart';
+import 'package:dinopet_walker/data/inventory_catalog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,10 +24,92 @@ class InventoryController extends ChangeNotifier {
   // Constantes
   static const int itemsPerPage = 10;
 
-  // Getters
-  List<FoodItem> get foodItems => _foodItems;
-  List<AccessoryItem> get accessories => _accessories;
-  List<TrophyItem> get trophies => _trophies;
+  // Getters - Items débloqués seulement
+  List<FoodItem> get unlockedFoodItems => _foodItems;
+  List<AccessoryItem> get unlockedAccessories => _accessories;
+  List<TrophyItem> get unlockedTrophies => _trophies;
+
+  // Getters - Tous les items (débloqués + verrouillés)
+  List<FoodItem> get allFoodItems {
+    return InventoryCatalog.allFoodItems.map((catalogItem) {
+      FoodItem? unlocked;
+      try {
+        unlocked = _foodItems.firstWhere((item) => item.id == catalogItem.id);
+      } catch (_) {
+        unlocked = null;
+      }
+      
+      if (unlocked != null) {
+        return FoodItem(
+          id: catalogItem.id,
+          name: catalogItem.name,
+          description: catalogItem.description,
+          emoji: catalogItem.emoji,
+          rarity: catalogItem.rarity,
+          quantity: unlocked.quantity,
+          xpBonus: unlocked.xpBonus,
+          acquiredAt: unlocked.acquiredAt,
+          isUnlocked: true,
+          unlockCondition: catalogItem.unlockCondition,
+        );
+      }
+      return catalogItem;
+    }).toList();
+  }
+
+  List<AccessoryItem> get allAccessories {
+    return InventoryCatalog.allAccessoryItems.map((catalogItem) {
+      AccessoryItem? unlocked;
+      try {
+        unlocked = _accessories.firstWhere((item) => item.id == catalogItem.id);
+      } catch (_) {
+        unlocked = null;
+      }
+      
+      if (unlocked != null) {
+        return AccessoryItem(
+          id: catalogItem.id,
+          name: catalogItem.name,
+          description: catalogItem.description,
+          emoji: catalogItem.emoji,
+          rarity: catalogItem.rarity,
+          equipped: unlocked.equipped,
+          acquiredAt: unlocked.acquiredAt,
+          isUnlocked: true,
+          unlockCondition: catalogItem.unlockCondition,
+        );
+      }
+      return catalogItem;
+    }).toList();
+  }
+
+  List<TrophyItem> get allTrophies {
+    return InventoryCatalog.allTrophyItems.map((catalogItem) {
+      TrophyItem? unlocked;
+      try {
+        unlocked = _trophies.firstWhere((item) => item.id == catalogItem.id);
+      } catch (_) {
+        unlocked = null;
+      }
+      
+      if (unlocked != null) {
+        return TrophyItem(
+          id: catalogItem.id,
+          name: catalogItem.name,
+          description: catalogItem.description,
+          emoji: catalogItem.emoji,
+          rarity: catalogItem.rarity,
+          achievement: unlocked.achievement,
+          progress: unlocked.progress,
+          progressMax: unlocked.progressMax,
+          acquiredAt: unlocked.acquiredAt,
+          isUnlocked: true,
+          unlockCondition: catalogItem.unlockCondition,
+        );
+      }
+      return catalogItem;
+    }).toList();
+  }
 
   int get currentPage => _currentPage;
   int get selectedTabIndex => _selectedTabIndex;
@@ -34,11 +117,11 @@ class InventoryController extends ChangeNotifier {
   List<InventoryItem> get currentTabItems {
     switch (_selectedTabIndex) {
       case 0:
-        return _foodItems;
+        return allFoodItems.cast<InventoryItem>();
       case 1:
-        return _accessories;
+        return allAccessories.cast<InventoryItem>();
       case 2:
-        return _trophies;
+        return allTrophies.cast<InventoryItem>();
       default:
         return [];
     }
@@ -75,10 +158,27 @@ class InventoryController extends ChangeNotifier {
         await _initializeDefaultInventory(user.uid);
         await loadInventory();
       }
+
+      // Vérifier et débloquer les items selon le niveau actuel
+      final level = await _getDinoLevel();
+      if (level != null) {
+        await checkAndUnlockItems(level);
+      }
     }
 
     isLoading = false;
     notifyListeners();
+  }
+
+  /// Récupérer le niveau actuel du dino
+  Future<int?> _getDinoLevel() async {
+    try {
+      final dino = await _inventoryService.loadDinoLevel();
+      return dino?.level;
+    } catch (e) {
+      debugPrint('Erreur récupération niveau: $e');
+      return null;
+    }
   }
 
   /// Initialiser l'inventaire par défaut avec des items de base
@@ -117,13 +217,29 @@ class InventoryController extends ChangeNotifier {
 
     final defaultTrophies = [
       TrophyItem(
-        id: 'first_steps_starter',
-        name: 'Premiers Pas',
-        description: 'Atteindre 1000 pas',
-        emoji: '👣',
-        rarity: ItemRarity.common,
-        achievement: 'first_steps',
+        id: 'regulier_streak',
+        name: 'Régulier',
+        description: 'Streak 7 jours',
+        emoji: '🔥',
+        rarity: ItemRarity.rare,
+        achievement: 'streak_7_days',
       ),
+      TrophyItem(
+        id: 'marathonien',
+        name: 'Marathonien',
+        description: '50km marché',
+        emoji: '🏃',
+        rarity: ItemRarity.epic,
+        achievement: 'walked_50km',
+      ),
+       TrophyItem(
+         id: 'athlete_strava',
+         name: 'Athlète Strava',
+         description: '10 activités Strava',
+         emoji: '⭐',
+         rarity: ItemRarity.epic,
+         achievement: 'strava_activities_10',
+       ),
     ];
 
     try {
@@ -212,6 +328,62 @@ class InventoryController extends ChangeNotifier {
 
     await _inventoryService.addTrophyItem(user.uid, item);
     await loadInventory();
+  }
+
+  /// Vérifier et débloquer les items selon le niveau actuel
+  Future<void> checkAndUnlockItems(int currentLevel) async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    // Items à débloquer selon le niveau
+    final itemsToUnlock = <Map<String, dynamic>>[];
+
+    if (currentLevel >= 5) {
+      itemsToUnlock.add({
+        'id': 'acc_chapeau',
+        'name': 'Chapeau',
+        'emoji': '🎩',
+        'description': 'Un chapeau élégant',
+        'rarity': ItemRarity.common,
+      });
+    }
+
+    if (currentLevel >= 10) {
+      itemsToUnlock.add({
+        'id': 'acc_lunettes',
+        'name': 'Lunettes',
+        'emoji': '👓',
+        'description': 'Des lunettes stylées',
+        'rarity': ItemRarity.rare,
+      });
+    }
+
+    if (currentLevel >= 25) {
+      itemsToUnlock.add({
+        'id': 'acc_costume',
+        'name': 'Costume Spécial',
+        'emoji': '🦖',
+        'description': 'Un costume épique',
+        'rarity': ItemRarity.epic,
+      });
+    }
+
+    // Ajouter les items s'ils ne sont pas déjà présents
+    for (final itemData in itemsToUnlock) {
+      final exists = _accessories.any((a) => a.id == itemData['id']);
+      if (!exists) {
+        final newItem = AccessoryItem(
+          id: itemData['id'],
+          name: itemData['name'],
+          description: itemData['description'],
+          emoji: itemData['emoji'],
+          rarity: itemData['rarity'],
+          equipped: false,
+          acquiredAt: DateTime.now(),
+        );
+        await addAccessoryItem(newItem);
+      }
+    }
   }
 
   /// Équiper/Dés-équiper un accessoire

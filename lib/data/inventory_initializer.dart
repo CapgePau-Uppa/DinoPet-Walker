@@ -11,36 +11,36 @@ class InventoryInitializer {
     Function(AccessoryItem) addAccessory,
     Function(TrophyItem) addTrophy,
   ) async {
-    // Items de nourriture initiaux
-    final initialFoodItems = [
-      FoodItem(
-        id: 'apple_basic',
-        name: 'Pomme',
-        description: 'Une pomme juteuse et nutritive',
-        emoji: '🍎',
-        rarity: ItemRarity.common,
-        quantity: 3,
-        xpBonus: 50,
-      ),
-      FoodItem(
-        id: 'banana_basic',
-        name: 'Banane',
-        description: 'Une banane énergétique',
-        emoji: '🍌',
-        rarity: ItemRarity.common,
-        quantity: 2,
-        xpBonus: 60,
-      ),
-      FoodItem(
-        id: 'meat_basic',
-        name: 'Viande',
-        description: 'De la viande succulente',
-        emoji: '🍖',
-        rarity: ItemRarity.uncommon,
-        quantity: 1,
-        xpBonus: 100,
-      ),
-    ];
+     // Items de nourriture initiaux
+     final initialFoodItems = [
+       FoodItem(
+         id: 'apple_basic',
+         name: 'Pomme',
+         description: 'Une pomme juteuse et nutritive',
+         emoji: '🍎',
+         rarity: ItemRarity.common,
+         quantity: 3,
+         xpBonus: 50,
+       ),
+       FoodItem(
+         id: 'banana_basic',
+         name: 'Banane',
+         description: 'Une banane énergétique',
+         emoji: '🍌',
+         rarity: ItemRarity.common,
+         quantity: 2,
+         xpBonus: 60,
+       ),
+       FoodItem(
+         id: 'meat_basic',
+         name: 'Viande',
+         description: 'De la viande succulente',
+         emoji: '🍖',
+         rarity: ItemRarity.rare,
+         quantity: 1,
+         xpBonus: 100,
+       ),
+     ];
 
     // Accessoires initiaux
     final initialAccessories = [
@@ -54,17 +54,25 @@ class InventoryInitializer {
       ),
     ];
 
-    // Trophées initiaux
-    final initialTrophies = [
-      TrophyItem(
-        id: 'first_steps',
-        name: 'Premiers Pas',
-        description: 'Atteindre 1000 pas',
-        emoji: '👣',
-        rarity: ItemRarity.common,
-        achievement: 'first_steps',
-      ),
-    ];
+     // Trophées initiaux
+     final initialTrophies = [
+       TrophyItem(
+         id: 'regulier_streak',
+         name: 'Régulier',
+         description: 'Streak 7 jours',
+         emoji: '🔥',
+         rarity: ItemRarity.rare,
+         achievement: 'streak_7_days',
+       ),
+       TrophyItem(
+         id: 'marathonien',
+         name: 'Marathonien',
+         description: '50km marché',
+         emoji: '🏃',
+         rarity: ItemRarity.epic,
+         achievement: 'walked_50km',
+       ),
+     ];
 
     // Ajouter tous les items
     for (var food in initialFoodItems) {
@@ -99,15 +107,15 @@ class InventoryInitializer {
         quantity: 1,
         xpBonus: 60,
       ),
-      'meat': FoodItem(
-        id: 'meat_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Viande',
-        description: 'De la viande succulente',
-        emoji: '🍖',
-        rarity: ItemRarity.uncommon,
-        quantity: 1,
-        xpBonus: 100,
-      ),
+       'meat': FoodItem(
+         id: 'meat_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Viande',
+         description: 'De la viande succulente',
+         emoji: '🍖',
+         rarity: ItemRarity.rare,
+         quantity: 1,
+         xpBonus: 100,
+       ),
       'orange': FoodItem(
         id: 'orange_${DateTime.now().millisecondsSinceEpoch}',
         name: 'Orange',
@@ -117,42 +125,42 @@ class InventoryInitializer {
         quantity: 1,
         xpBonus: 55,
       ),
-      'strawberry': FoodItem(
-        id: 'strawberry_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Fraise',
-        description: 'Une fraise sucrée',
-        emoji: '🍓',
-        rarity: ItemRarity.uncommon,
-        quantity: 1,
-        xpBonus: 75,
-      ),
-      'grapes': FoodItem(
-        id: 'grapes_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Raisins',
-        description: 'Des raisins délicieux',
-        emoji: '🍇',
-        rarity: ItemRarity.uncommon,
-        quantity: 1,
-        xpBonus: 70,
-      ),
-      'watermelon': FoodItem(
-        id: 'watermelon_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Pastèque',
-        description: 'Une pastèque rafraîchissante',
-        emoji: '🍉',
-        rarity: ItemRarity.rare,
-        quantity: 1,
-        xpBonus: 150,
-      ),
-      'cake': FoodItem(
-        id: 'cake_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Gâteau',
-        description: 'Un gâteau délicieux',
-        emoji: '🍰',
-        rarity: ItemRarity.epic,
-        quantity: 1,
-        xpBonus: 200,
-      ),
+       'strawberry': FoodItem(
+         id: 'strawberry_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Fraise',
+         description: 'Une fraise sucrée',
+         emoji: '🍓',
+         rarity: ItemRarity.rare,
+         quantity: 1,
+         xpBonus: 75,
+       ),
+       'grapes': FoodItem(
+         id: 'grapes_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Raisins',
+         description: 'Des raisins délicieux',
+         emoji: '🍇',
+         rarity: ItemRarity.rare,
+         quantity: 1,
+         xpBonus: 70,
+       ),
+       'watermelon': FoodItem(
+         id: 'watermelon_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Pastèque',
+         description: 'Une pastèque rafraîchissante',
+         emoji: '🍉',
+         rarity: ItemRarity.epic,
+         quantity: 1,
+         xpBonus: 150,
+       ),
+       'cake': FoodItem(
+         id: 'cake_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Gâteau',
+         description: 'Un gâteau délicieux',
+         emoji: '🍰',
+         rarity: ItemRarity.epic,
+         quantity: 1,
+         xpBonus: 200,
+       ),
     };
 
     return foods[type] ??
@@ -177,34 +185,34 @@ class InventoryInitializer {
         emoji: '🎩',
         rarity: ItemRarity.common,
       ),
-      'crown': AccessoryItem(
-        id: 'crown_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Couronne',
-        description: 'Une couronne royale',
-        emoji: '👑',
-        rarity: ItemRarity.rare,
-      ),
-      'glasses': AccessoryItem(
-        id: 'glasses_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Lunettes de Soleil',
-        description: 'Des lunettes cool',
-        emoji: '😎',
-        rarity: ItemRarity.uncommon,
-      ),
-      'bow': AccessoryItem(
-        id: 'bow_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Nœud Papillon',
-        description: 'Un nœud papillon élégant',
-        emoji: '🎀',
-        rarity: ItemRarity.uncommon,
-      ),
-      'flower_crown': AccessoryItem(
-        id: 'flower_crown_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Couronne de Fleurs',
-        description: 'Une couronne fleurie',
-        emoji: '🌸',
-        rarity: ItemRarity.epic,
-      ),
+       'crown': AccessoryItem(
+         id: 'crown_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Couronne',
+         description: 'Une couronne royale',
+         emoji: '👑',
+         rarity: ItemRarity.rare,
+       ),
+       'glasses': AccessoryItem(
+         id: 'glasses_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Lunettes de Soleil',
+         description: 'Des lunettes cool',
+         emoji: '😎',
+         rarity: ItemRarity.rare,
+       ),
+       'bow': AccessoryItem(
+         id: 'bow_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Nœud Papillon',
+         description: 'Un nœud papillon élégant',
+         emoji: '🎀',
+         rarity: ItemRarity.rare,
+       ),
+       'flower_crown': AccessoryItem(
+         id: 'flower_crown_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Couronne de Fleurs',
+         description: 'Une couronne fleurie',
+         emoji: '🌸',
+         rarity: ItemRarity.epic,
+       ),
     };
 
     return accessories[type] ??
@@ -220,46 +228,30 @@ class InventoryInitializer {
   /// Obtenir un trophée par type
   static TrophyItem createTrophyItem(String type) {
     final trophies = {
-      'first_steps': TrophyItem(
-        id: 'first_steps_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Premiers Pas',
-        description: 'Atteindre 1000 pas',
-        emoji: '👣',
-        rarity: ItemRarity.common,
-        achievement: 'first_steps',
-      ),
-      'marathon': TrophyItem(
-        id: 'marathon_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Marathonien',
-        description: 'Parcourir 50 km',
-        emoji: '🏃',
-        rarity: ItemRarity.rare,
-        achievement: 'marathon',
-      ),
       'regular': TrophyItem(
         id: 'regular_${DateTime.now().millisecondsSinceEpoch}',
         name: 'Régulier',
-        description: 'Maintenir une série de 7 jours',
+        description: 'Streak 7 jours',
         emoji: '🔥',
         rarity: ItemRarity.rare,
         achievement: 'regular',
       ),
-      'strava_master': TrophyItem(
-        id: 'strava_master_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Maître Strava',
-        description: 'Compléter 10 activités Strava',
-        emoji: '⭐',
+      'marathon': TrophyItem(
+        id: 'marathon_${DateTime.now().millisecondsSinceEpoch}',
+        name: 'Marathonien',
+        description: '50km marché',
+        emoji: '🏃',
         rarity: ItemRarity.epic,
-        achievement: 'strava_master',
+        achievement: 'marathon',
       ),
-      'level_10': TrophyItem(
-        id: 'level_10_${DateTime.now().millisecondsSinceEpoch}',
-        name: 'Niveau 10',
-        description: 'Atteindre le niveau 10',
-        emoji: '📈',
-        rarity: ItemRarity.epic,
-        achievement: 'level_10',
-      ),
+       'athlete_strava': TrophyItem(
+         id: 'athlete_strava_${DateTime.now().millisecondsSinceEpoch}',
+         name: 'Athlète Strava',
+         description: '10 activités Strava',
+         emoji: '⭐',
+         rarity: ItemRarity.epic,
+         achievement: 'athlete_strava',
+       ),
     };
 
     return trophies[type] ??

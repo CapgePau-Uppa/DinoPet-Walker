@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class DinoController extends ChangeNotifier {
   DinoPet? _dinoPet;
+  DinoPet? get dino => _dinoPet;
   DinoPet? get dinoPet => _dinoPet;
 
   bool _isStravaMode = false;

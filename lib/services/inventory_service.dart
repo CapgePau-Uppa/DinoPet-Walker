@@ -3,10 +3,27 @@ import 'package:dinopet_walker/models/inventory/food_item.dart';
 import 'package:dinopet_walker/models/inventory/accessory_item.dart';
 import 'package:dinopet_walker/models/inventory/trophy_item.dart';
 import 'package:dinopet_walker/models/inventory/inventory_item.dart';
+import 'package:dinopet_walker/models/dino/dino_pet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class InventoryService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// Charger le niveau actuel du dino
+  Future<DinoPet?> loadDinoLevel() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return null;
+
+      final doc = await _firestore.collection('users').doc(user.uid).collection('dino').doc('pet').get();
+      if (!doc.exists) return null;
+      return DinoPet.fromFirestore(doc.id, doc.data()!);
+    } catch (e) {
+      debugPrint('Erreur chargement niveau dino: $e');
+      return null;
+    }
+  }
 
   /// Charger l'inventaire complet pour un utilisateur
   Future<Map<String, List<InventoryItem>>> loadInventory(String uid) async {
@@ -70,7 +87,7 @@ class InventoryService {
         'lastUpdated': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      print('Erreur sauvegarde inventaire: $e');
+      debugPrint('Erreur sauvegarde inventaire: $e');
     }
   }
 

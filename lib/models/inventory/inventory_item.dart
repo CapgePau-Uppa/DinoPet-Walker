@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum ItemType { food, accessory, trophy }
 
-enum ItemRarity { common, uncommon, rare, epic, legendary }
+enum ItemRarity { common, rare, epic }
 
 abstract class InventoryItem {
   final String id;
@@ -12,6 +12,8 @@ abstract class InventoryItem {
   final ItemRarity rarity;
   final String emoji;
   final DateTime acquiredAt;
+  final bool isUnlocked;
+  final String unlockCondition;
 
   InventoryItem({
     required this.id,
@@ -21,20 +23,18 @@ abstract class InventoryItem {
     required this.rarity,
     required this.emoji,
     DateTime? acquiredAt,
+    this.isUnlocked = true,
+    this.unlockCondition = '',
   }) : acquiredAt = acquiredAt ?? DateTime.now();
 
   Color getRarityColor() {
     switch (rarity) {
       case ItemRarity.common:
         return const Color(0xFF757575); // Gris
-      case ItemRarity.uncommon:
-        return const Color(0xFF4CAF50); // Vert
       case ItemRarity.rare:
         return const Color(0xFF2196F3); // Bleu
       case ItemRarity.epic:
         return const Color(0xFF9C27B0); // Violet
-      case ItemRarity.legendary:
-        return const Color(0xFFFF9800); // Orange
     }
   }
 
@@ -42,14 +42,10 @@ abstract class InventoryItem {
     switch (rarity) {
       case ItemRarity.common:
         return 'Courant';
-      case ItemRarity.uncommon:
-        return 'Peu courant';
       case ItemRarity.rare:
         return 'Rare';
       case ItemRarity.epic:
         return 'Épique';
-      case ItemRarity.legendary:
-        return 'Légendaire';
     }
   }
 

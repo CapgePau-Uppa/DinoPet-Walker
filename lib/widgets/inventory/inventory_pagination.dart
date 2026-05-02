@@ -85,7 +85,7 @@ class _InventoryPaginationState extends State<InventoryPagination>
                     ),
                     decoration: BoxDecoration(
                       color: widget.controller.canGoPrevious
-                          ? const Color(0xFF4CAF50)
+                          ? const Color(0xFF007984)
                           : const Color(0xFFE0E0E0),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -136,7 +136,7 @@ class _InventoryPaginationState extends State<InventoryPagination>
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF4CAF50),
+                    color: Color(0xFF007984),
                   ),
                 ),
               ),
@@ -161,7 +161,7 @@ class _InventoryPaginationState extends State<InventoryPagination>
                     ),
                     decoration: BoxDecoration(
                       color: widget.controller.canGoNext
-                          ? const Color(0xFF4CAF50)
+                          ? const Color(0xFF007984)
                           : const Color(0xFFE0E0E0),
                       borderRadius: BorderRadius.circular(8),
                     ),
