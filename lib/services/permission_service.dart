@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:health/health.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -41,15 +43,24 @@ class PermissionService {
 
   // Vérifier spécifiquement les deux permissions pour Home screen
   Future<Map<String, bool>> checkHomePermissions() async {
-    final activity = await Permission.activityRecognition.isGranted;
+    bool activity = false;
+    bool health = false;
 
-    await _health.configure();
-    final health =
-        await _health.hasPermissions(
-          [HealthDataType.STEPS],
-          permissions: [HealthDataAccess.READ],
-        ) ??
-        false;
+    if (Platform.isAndroid) {
+      activity = await Permission.activityRecognition.isGranted;
+
+      await _health.configure();
+      health =
+          await _health.hasPermissions(
+            [HealthDataType.STEPS],
+            permissions: [HealthDataAccess.READ],
+          ) ??
+          false;
+
+    } else if (Platform.isIOS) {
+      activity = true;
+      health = true;
+    }
 
     return {'activity': activity, 'health': health};
   }
