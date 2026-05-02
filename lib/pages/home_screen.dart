@@ -9,6 +9,8 @@ import 'package:dinopet_walker/widgets/clippers/header_clipper.dart';
 import 'package:dinopet_walker/widgets/home/debug_menu.dart';
 import 'package:dinopet_walker/widgets/dino/dino_details_widget.dart';
 import 'package:dinopet_walker/widgets/dino/animated_dino_widget.dart';
+import 'package:dinopet_walker/services/permission_service.dart';
+import 'package:dinopet_walker/pages/home_permission_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
