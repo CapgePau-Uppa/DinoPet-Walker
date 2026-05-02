@@ -21,8 +21,16 @@ class AppLinksService {
 
   // Gérer les liens ouverts au niveau de l'app
   void _handleLink(Uri uri, GlobalKey<NavigatorState> navigatorKey) async {
-    final oobCode = uri.queryParameters['oobCode'];
-    final mode = uri.queryParameters['mode'];
+    Uri linkUri = uri;
+
+    // Si le lien passe par firebaseapp.com avec link imbriqué
+    final innerLink = uri.queryParameters['link'];
+    if (innerLink != null) {
+      linkUri = Uri.parse(Uri.decodeComponent(innerLink));
+    }
+
+    final oobCode = linkUri.queryParameters['oobCode'];
+    final mode = linkUri.queryParameters['mode'];
 
     if (oobCode == null) return;
 
@@ -48,7 +56,7 @@ class AppLinksService {
           (route) => false,
         );
       } catch (e) {
-        //
+        debugPrint('erreur verifyEmail: $e');
       }
       return;
     }
@@ -72,7 +80,7 @@ class AppLinksService {
 
         final newEmail = await _authService.applyEmailChange(
           oobCode: oobCode,
-          continueUrlRaw: uri.queryParameters['continueUrl'],
+          continueUrlRaw: linkUri.queryParameters['continueUrl'],
         );
 
         if (newEmail != null) {
@@ -84,7 +92,7 @@ class AppLinksService {
           (route) => false,
         );
       } catch (e) {
-        //
+        debugPrint('erreur verifyAndChangeEmail: $e');
       }
       return;
     }
