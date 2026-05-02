@@ -3,7 +3,6 @@ import 'package:dinopet_walker/services/health_service.dart';
 import 'package:dinopet_walker/services/user_service.dart';
 import 'package:dinopet_walker/services/streak_service.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends ChangeNotifier {
@@ -35,6 +34,31 @@ class HomeController extends ChangeNotifier {
 
   final UserService _userService = UserService();
   final StreakService _streakService = StreakService();
+
+  Future<void> init() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
+    _healthService = HealthService();
+    _healthService.stepsStream.listen((difference) async {
+      if (difference > 0) {
+        _currentSteps += difference;
+        if (!dinoController.isStravaMode) {
+          await dinoController.addSteps(difference);
+        }
+      } else {
+        _currentSteps = _healthService.todaySteps;
+      }
+      _updateStreak();
+      notifyListeners();
+    });
+
+    await _healthService.initialize();
+
+    _currentSteps = _healthService.todaySteps;
+    _updateStreak();
+    notifyListeners();
+  }
 
   Future<void> loadGoal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -123,31 +147,6 @@ class HomeController extends ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('goalDistance', newDistance);
-  }
-
-  Future<void> init() async {
-    if (_isInitialized) return;
-    _isInitialized = true;
-
-    await Permission.activityRecognition.request();
-
-    _healthService = HealthService();
-    _healthService.stepsStream.listen((difference) async {
-      if (difference > 0) {
-        _currentSteps += difference;
-        await dinoController.addSteps(difference);
-      } else {
-        _currentSteps = _healthService.todaySteps;
-      }
-      _updateStreak();
-      notifyListeners();
-    });
-
-    await _healthService.initialize();
-
-    _currentSteps = _healthService.todaySteps;
-    _updateStreak();
-    notifyListeners();
   }
 
   Future<void> addSteps(int steps) async {

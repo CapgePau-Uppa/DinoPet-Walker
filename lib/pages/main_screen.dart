@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/controllers/map_screen_controller.dart';
 import 'package:dinopet_walker/pages/home_screen.dart';
 import 'package:dinopet_walker/pages/map_screen.dart';
 import 'package:dinopet_walker/pages/settings_screen.dart';
@@ -5,6 +6,7 @@ import 'package:dinopet_walker/pages/statistics_screen.dart';
 import 'package:dinopet_walker/widgets/common/bottom_navbar.dart';
 import 'package:dinopet_walker/widgets/common/my_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'activity_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -41,6 +43,10 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void onTap(int index) {
+    if (index == 3) {
+      final mapController = context.read<MapScreenController>();
+      mapController.init();
+    }
     setState(() {
       currentIndex = index;
     });

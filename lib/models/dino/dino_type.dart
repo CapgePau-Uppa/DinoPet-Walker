@@ -1,3 +1,4 @@
+import 'package:dinopet_walker/models/dino/dino_nature.dart';
 import 'package:dinopet_walker/models/dino/life_stage.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,7 @@ class DinoType {
   final String description;
   final Color outColor;
   final Color innerColor;
-  final Map<LifeStage, Map<int, String>> assetPaths;
+  final Map<LifeStage, Map<int, Map<Nature, String>>> assetPaths;
 
   const DinoType({
     required this.id,
@@ -18,21 +19,21 @@ class DinoType {
     required this.assetPaths,
   });
 
-  String getAsset(LifeStage stage, int level) {
+  String getAsset(LifeStage stage,int level, [Nature nature = Nature.terrestre,]) {
     final stageAssets = assetPaths[stage];
     if (stageAssets == null || stageAssets.isEmpty) {
-      return assetPaths[LifeStage.baby]!.values.first;
+      final babyLevels = assetPaths[LifeStage.baby]!.values.first;
+      return babyLevels[Nature.terrestre] ?? babyLevels.values.first;
     }
 
-    if (stageAssets.containsKey(level)) {
-      return stageAssets[level]!;
-    }
-
-    // Récupère le dernier asset disponible pour ce niveau ou le premier du stade
     final availableLevels = stageAssets.keys.toList()..sort();
-    return stageAssets[availableLevels.lastWhere(
+    final matchedLevel = availableLevels.lastWhere(
       (lvl) => lvl <= level,
       orElse: () => availableLevels.first,
-    )]!;
+    );
+
+    final natureMap = stageAssets[matchedLevel]!;
+
+    return natureMap[nature] ?? natureMap[Nature.terrestre] ?? natureMap.values.first;
   }
 }

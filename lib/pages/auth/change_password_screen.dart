@@ -1,4 +1,5 @@
 import 'package:dinopet_walker/controllers/auth/change_password_controller.dart';
+import 'package:dinopet_walker/utils/connectivity_helper.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
 import 'package:dinopet_walker/widgets/fields/password_field.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
 
   void _submit() async {
+    final hasInternet = await ConnectivityHelper.hasInternet();
+
+    if (!mounted) return;
+
+    if (!hasInternet) {
+      Toast.show(
+        context: context,
+        message: "Connexion internet requise",
+        icon: Icons.wifi_off,
+        color: const Color(0xFFC94A4A),
+      );
+      return;
+    }
+
     FocusScope.of(context).unfocus();
     setState(() => _loading = true);
 
@@ -32,7 +47,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       confirmPassword: confirmPasswordController.text.trim(),
     );
 
-    if (!mounted) return;
+    if (!mounted) return; 
 
     setState(() => _loading = false);
 

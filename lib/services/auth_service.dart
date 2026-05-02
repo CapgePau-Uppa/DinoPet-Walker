@@ -216,4 +216,9 @@ class AuthService {
     }
   }
 
+  // Pour écouter la déconnexion 
+  Stream<User?> authStateChanges() {
+    return _firebaseInstance.authStateChanges();
+  }
+
 }
