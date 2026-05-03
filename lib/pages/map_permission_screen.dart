@@ -1,7 +1,8 @@
-import 'package:dinopet_walker/widgets/home/permession/permission_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
+import '../widgets/home/permession/permission_tile.dart';
 import '../widgets/common/primary_button.dart';
+import '../services/permission_service.dart';
 
 class MapPermissionScreen extends StatelessWidget {
   final bool isPermanentlyDenied;
@@ -100,14 +101,18 @@ class MapPermissionScreen extends StatelessWidget {
                 const Spacer(),
 
                 PrimaryButton(
-                  label: isPermanentlyDenied
-                      ? 'Paramètres'
-                      : 'Autoriser',
+                  label: isPermanentlyDenied ? 'Paramètres' : 'Autoriser',
                   onPressed: isPermanentlyDenied
-                      ? () => AppSettings.openAppSettings(
-                          type: AppSettingsType.location,
-                        )
-                      : onRetry,
+                      ? () => AppSettings.openAppSettings()
+                      : () async {
+                    await PermissionService().requestMapPermissions();
+
+                    final statuses = await PermissionService().checkMapPermissions();
+
+                    if (statuses['location'] == true) {
+                      onRetry();
+                    }
+                  },
                   width: double.infinity,
                 ),
 
@@ -141,4 +146,3 @@ class MapPermissionScreen extends StatelessWidget {
     );
   }
 }
-

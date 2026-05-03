@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:health/health.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -67,8 +68,16 @@ class PermissionService {
 
   // Vérifier la permission obligatoire pour Map screen
   Future<Map<String, bool>> checkMapPermissions() async {
-    final location = await Permission.location.isGranted;
+    final location = await Permission.locationWhenInUse.isGranted;
     return {'location': location};
+  }
+
+  Future<void> requestMapPermissions() async {
+    try {
+      await Permission.locationWhenInUse.request();
+    } catch (e) {
+      debugPrint("Erreur Localisation : $e");
+    }
   }
 
   // Vérifier les permessions nécessaires pour le suivi en arrière plan (pas obligatoires pour Map screen)
