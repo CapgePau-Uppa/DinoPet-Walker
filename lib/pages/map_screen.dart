@@ -12,7 +12,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:app_settings/app_settings.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
