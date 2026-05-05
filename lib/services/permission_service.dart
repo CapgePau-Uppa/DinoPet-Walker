@@ -82,18 +82,22 @@ class PermissionService {
 
   // Vérifier les permessions nécessaires pour le suivi en arrière plan (pas obligatoires pour Map screen)
   Future<Map<String, bool>> checkWarningPermissions() async {
-    final batteryOk =
-        await FlutterForegroundTask.isIgnoringBatteryOptimizations;
+    bool batteryOk = true;
+    bool notifOk = true;
 
-    final notifStatus =
-        await FlutterForegroundTask.checkNotificationPermission();
-    final notifOk = notifStatus == NotificationPermission.granted;
+    if (Platform.isAndroid) {
+      batteryOk = await FlutterForegroundTask.isIgnoringBatteryOptimizations;
+      final notifStatus = await FlutterForegroundTask.checkNotificationPermission();
+      notifOk = notifStatus == NotificationPermission.granted;
+    }
 
     return {'battery': batteryOk, 'notification': notifOk};
   }
 
   Future<void> requestBattery() async {
-    await FlutterForegroundTask.requestIgnoreBatteryOptimization();
+    if (Platform.isAndroid) {
+      await FlutterForegroundTask.requestIgnoreBatteryOptimization();
+    }
   }
 
 }
