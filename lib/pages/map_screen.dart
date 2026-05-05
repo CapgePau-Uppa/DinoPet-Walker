@@ -78,9 +78,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     }
   }
 
-  void _openSettings() {
-    AppSettings.openAppSettings(type: AppSettingsType.location);
-  }
 
   @override
   Widget build(BuildContext context) {

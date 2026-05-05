@@ -1,15 +1,15 @@
 # DinoPet-Walker
-TER project topic for the year 2026
-
+***
 
 ## Project Explanation
+***
 
 **DinoPet Walker** is a fun mobile step-tracking application that transforms your daily physical activity into an interactive experience with a virtual dinosaur pet. The more you walk, the more your dino grows and evolves!
 
 ## Features
-
+***
 ### Activity Tracking
-- Real-time step count retrieval via pedometer
+- Step counting via health APIs (Google Fit for Android, HealthKit for iOS)
 - Daily progress visualization via a three-zone gauge
 - Weekly/monthly history and statistics
 
@@ -29,13 +29,13 @@ TER project topic for the year 2026
 - GPS visualization of your movements
 - Social aspect: Discover other nearby DinoPet users
 
-### Security
+### Authentication & User Management
 - Secure authentication to protect your data
 - Personalized profile with configurable goals
 - Password reset
 
 ## Installation
-
+***
 ### Prerequisites
 
 #### Required Software
@@ -54,8 +54,8 @@ TER project topic for the year 2026
 
 #### Physical Device Required
  **Important**: The pedometer does **NOT** work on emulators. You **MUST** use a real smartphone:
-- Android 6.0 (API 23) or higher
-- OR iPhone with iOS 12 or higher
+- Android 10 (API 29) or higher
+- OR iPhone with iOS 15 or higher
 
 #### Required Accounts
 - **Google Account** (for Firebase)
@@ -68,6 +68,14 @@ TER project topic for the year 2026
 git clone https://github.com/CapgePau-Uppa/DinoPet-Walker.git
 cd DinoPet-Walker
 ```
+
+> #### Important: Required Configuration Files
+> For security reasons, environment variables and database credentials are not included in this public repository. **The application will not compile or run without them.**
+>
+> Please contact the project authors to obtain the following files:
+> - The `.env` file (contains API keys, like MapTiler) -> `assets/`.
+> - `google-services.json` (Firebase Android) -> Place it in `android/app/`.
+> - `GoogleService-Info.plist` (Firebase iOS) -> Place it in `ios/Runner/`.
 
 #### 2. Install dependencies
 ```bash
@@ -105,7 +113,7 @@ Open `android/app/src/main/AndroidManifest.xml` and verify these permissions are
 4. When prompted on your phone, tap "Allow USB debugging"
 5. Verify connection:
 ```bash
-   flutter devices
+flutter devices
 ```
    You should see your device listed.
 
@@ -115,7 +123,7 @@ flutter run
 ```
 
 ## Installation from Release (Pre-built App)
-
+***
 ### Android Installation (.apk)
 
 1. **Download the APK**:
@@ -168,6 +176,10 @@ Once Homebrew is installed, it will enable us to install Flutter on the Mac with
 ```
 brew install flutter
 ```
+and this one for CocoaPods (Flutter dependency manager for iOS):
+```
+brew install cocoapods
+```
 
 #### III. Configure the Project in Xcode
 
@@ -202,21 +214,44 @@ This command will install the application on your iPhone
 Important Note on the 7-Day Limit: Because you are using a free Apple Developer account, the application certificate is only valid for 7 days. After this period, the app will no longer open. To continue using it, simply plug your iPhone back into your Mac, open your Terminal, and repeat Step IV (flutter run --release) to refresh the certificate.
 
 ## Architecture
-
+***
 ### Project Structure
 ```
 lib/
-├── core/              # Global configuration
-├── models/            # Data classes
-├── services/          # Communication with Firebase (AuthService, FirestoreService)
-├── providers/         # State management
-├── screens/           # Main screens
+├── animations/        # Custom animations
+├── controllers/       # Logic and state management
+│   ├── activity/
 │   ├── auth/
-│   ├── home/
-│   ├── stats/
-│   └── map/
-├── widgets/           # Reusable components
-└── utils/             # Helper functions
+│   ├── dino/
+│   └── user/
+├── data/              
+├── models/            # Data classes
+│   ├── activity/
+│   ├── dino/
+│   └── user/
+├── pages/             # UI pages
+│   ├── auth/
+├── services/          # API calls, database interactions
+│   ├── map/
+├── providers/         # State management
+├── sqlite/            # SQLite database helpers
+│   ├── dao/
+├── utils/             # Utility functions
+└── widgets/           # Reusable UI components
 ```
 
 ### Technologies Used
+- **Frontend:** Flutter (Mobile Framework) & Dart (Programming Language)
+- **Backend & Database:** Firebase (Authentication, Firestore, Cloud Messaging) & SQLite (for local data storage)
+- **Hardware & Sensors:**
+    - Native pedometer APIs (Android/iOS) for background step counting.
+    - GPS chip for positioning on the interactive map.
+
+## Team & Authors
+***
+
+This project was developed as part of the 2026 TER (Travail d'Étude et de Recherche) at [UPPA](https://www.univ-pau.fr/) (Université de Pau et des Pays de l'Adour).
+
+* **Loïc QUESSETTE**
+* **Missipsa BOUHADAD**
+* **Anas BENCHARKI**
