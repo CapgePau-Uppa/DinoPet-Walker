@@ -15,7 +15,7 @@ void main() async{
   // Charger les variables dans .env
   await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp();
-!
+
   BackgroundTrackingService.init();
 
   runApp(
