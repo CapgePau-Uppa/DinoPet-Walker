@@ -6,21 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/providers.dart';
-
-// 🔥 1. NE PAS OUBLIER L'IMPORT !
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
-  // 🔥 2. LA LIGNE MAGIQUE INDISPENSABLE POUR IOS
   FlutterForegroundTask.initCommunicationPort();
 
   // Charger les variables dans .env
   await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp();
-
-  // Ton init est au parfait endroit !
+!
   BackgroundTrackingService.init();
 
   runApp(
