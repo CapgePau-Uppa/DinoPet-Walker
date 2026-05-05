@@ -9,9 +9,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_foreground_task/ui/with_foreground_task.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dinopet_walker/widgets/common/toast.dart';
-import 'package:app_settings/app_settings.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -23,6 +23,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   final MapController _flutterMapController = MapController();
   bool _loading = true;
+  bool _isPermanentlyDenied = false;
 
   @override
   void initState() {
@@ -48,6 +49,14 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   Future<void> _init({bool showToast = false}) async {
     final controller = context.read<MapScreenController>();
 
+    final isPermDenied = await Permission.locationWhenInUse.isPermanentlyDenied;
+
+    if (mounted) {
+      setState(() {
+        _isPermanentlyDenied = isPermDenied;
+      });
+    }
+
     if (controller.userPosition == null) {
       setState(() => _loading = true);
     }
@@ -68,9 +77,6 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     }
   }
 
-  void _openSettings() {
-    AppSettings.openAppSettings(type: AppSettingsType.location);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +88,8 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
     if (controller.status == MapStatus.error || controller.locationDenied) {
       return MapPermissionScreen(
-        isPermanentlyDenied: true,
-        onRetry: _openSettings,
+        isPermanentlyDenied: _isPermanentlyDenied,
+        onRetry: () => _init(),
       );
     }
 
