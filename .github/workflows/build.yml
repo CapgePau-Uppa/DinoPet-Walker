@@ -1,0 +1,66 @@
+name: Flutter Build Apk
+
+on:
+  push:
+    branches:
+      - main
+      - feat/build-pipeline # juste pour tester    
+  pull_request:
+    branches:
+      - main    
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # Récupère le code source du repo sur la machine virtuelle
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      # Installe Flutter sur la machine virtuelle
+      - name: Installation de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      # Génère le fichier .env depuis github secrets
+      - name: Créer le fichier .env
+        run: |
+          mkdir -p assets
+          echo "STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }}" >> assets/.env
+          echo "STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }}" >> assets/.env
+          echo "STRAVA_REDIRECT_URI=${{ secrets.STRAVA_REDIRECT_URI }}" >> assets/.env
+          echo "MAPTILER_API_KEY=${{ secrets.MAPTILER_API_KEY }}" >> assets/.env
+
+      # Génère le fichier google-services.json depuis github secrets
+      - name: Créer le fichier google-services.json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > android/app/google-services.json
+
+      # Recrée le keystore depuis le secret
+      - name: Créer le keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
+
+      # Télécharge toutes les dépendances nécessaires
+      - name: Installation des dépendances
+        run: flutter pub get
+
+      # Build Apk signé en release
+      - name: Build APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: flutter build apk --release
+
+      # Rend l'APK téléchargeable depuis GitHub Actions
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 10

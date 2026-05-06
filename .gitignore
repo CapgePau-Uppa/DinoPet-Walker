@@ -46,6 +46,11 @@ app.*.map.json
 
 # Firebase
 android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+.firebase/
 
 # Variables (secrets)
 assets/.env
+
+# Keystore
+release.keystore

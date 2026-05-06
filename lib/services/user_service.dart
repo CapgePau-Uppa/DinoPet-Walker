@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dinopet_walker/models/user_model.dart';
+import 'package:dinopet_walker/models/user/user_model.dart';
 import 'package:dinopet_walker/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,7 +23,7 @@ class UserService {
         .get();
 
     // s'il existe on ne fait rien
-    if (user.exists) return; 
+    if (user.exists) return;
 
     final userModel = UserModel(
       uid: currentUser.uid,
@@ -83,7 +83,7 @@ class UserService {
     });
   }
 
-  // mettre a jour le nom d'utilisateur 
+  // mettre a jour le nom d'utilisateur
   Future<void> updateUsername(String newUsername) async {
     final uid = getCurrentAthenticatedUser()?.uid;
     if (uid == null) return;
@@ -101,13 +101,32 @@ class UserService {
 
   // mettre a jour le téléphone après changement
   Future<void> updatePhone(String? phone) async {
-  final uid = getCurrentAthenticatedUser()?.uid;
-  if (uid == null) return;
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
 
-  if (phone != null && phone.isNotEmpty) {
+    if (phone != null && phone.isNotEmpty) {
+      await _firestoreInstance.collection('users').doc(uid).update({
+        'phone': phone,
+      });
+    }
+  }
+
+  Future<void> updateStreak(int newStreak, String date) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+
     await _firestoreInstance.collection('users').doc(uid).update({
-      'phone': phone,
+      'streak': newStreak,
+      'lastStreakUpdate': date,
     });
   }
-}
+
+  Future<void> updateHasSeenStravaOnboarding(bool hasSeen) async {
+    final uid = getCurrentAthenticatedUser()?.uid;
+    if (uid == null) return;
+
+    await _firestoreInstance.collection('users').doc(uid).update({
+      'hasSeenStravaOnboarding': hasSeen,
+    });
+  }
 }

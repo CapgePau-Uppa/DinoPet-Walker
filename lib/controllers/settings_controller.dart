@@ -16,7 +16,12 @@ class SettingsController {
       await _authService.signOut();
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('goalSteps');
+      await prefs.remove('goalTime');
+      await prefs.remove('goalDistance');
       await prefs.remove('isGoalSet');
+      await prefs.remove('streak');
+      await prefs.remove('lastStreakUpdate');
+      await prefs.remove('hasSeenStravaOnboarding');
       return null;
     } catch (e) {
       return "Connexion requise";

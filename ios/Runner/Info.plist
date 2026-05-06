@@ -64,6 +64,10 @@
 	<string>Nous avons besoin de lire vos pas pour faire évoluer votre DinoPet.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Nous avons besoin d'accéder à Apple Santé pour synchroniser vos pas avec DinoPet.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Nous avons besoin de votre localisation pour suivre vos promenades avec votre DinoPet.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>DinoPet continue de suivre votre position en arrière-plan pour calculer la distance de votre promenade, même si le téléphone est verrouillé.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Cette application utilise le podomètre pour compter vos pas quotidiens.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -72,6 +76,7 @@
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
