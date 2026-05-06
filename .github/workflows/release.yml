@@ -1,13 +1,13 @@
-name: Flutter Build APK on Pull Request
+name: Flutter Release
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  build:
-    name: Build APK
+  release:
+    name: Build and Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           flutter-version: '3.x'
           channel: 'stable'
 
-      # Génère le fichier .env depuis les vars/secrets github
+      # Génère le fichier .env depuis les variables et secrets github
       - name: Créer le fichier .env
         run: |
           mkdir -p assets
@@ -45,10 +45,32 @@ jobs:
       - name: Installation des dépendances
         run: flutter pub get
 
-      # Build Apk signé en release
+      # Build APK signé en release
       - name: Build APK
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ vars.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: flutter build apk --release
+
+      # Extrait la version depuis pubspec.yaml
+      - name: Extraire la version
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+
+      # Crée le tag git depuis la version du pubspec
+      - name: Créer le tag
+        run: |
+          git tag ${{ steps.version.outputs.version }}
+          git push origin ${{ steps.version.outputs.version }}
+
+      # Crée la release GitHub et attache l'APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          files: build/app/outputs/flutter-apk/app-release.apk
+          name: "Release ${{ steps.version.outputs.version }}"
+          generate_release_notes: true
